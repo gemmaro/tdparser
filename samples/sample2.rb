@@ -12,7 +12,7 @@ class MyParser
 
   def expr1
     (rule(:expr2) - (((token("+") | token("-")) - rule(:expr2)) * 0)) >> proc { |x|
-      x[1].inject(x[0]) { |n,y|
+      x[1].inject(x[0]) { |n, y|
         case y[0]
         when "+"
           n + y[1]

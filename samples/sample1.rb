@@ -11,7 +11,7 @@ class MyParser
   def expr
     (token(/\d+/) - (((token("+") | token("-")) - token(/\d+/)) * 0)) >> proc { |x|
       n = x[0].to_i
-      x[1].inject(n) { |acc,i|
+      x[1].inject(n) { |acc, i|
         case i[0]
         when "-"
           acc - i[1].to_i

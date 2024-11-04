@@ -36,9 +36,9 @@ puts(parser.rule3.to_s)
 
 N = 10
 Benchmark.bm { |x|
-  buff = ["1","2"]
+  buff = ["1", "2"]
   b = ["b"]
-  for i in [5,10,15]
+  for i in [5, 10, 15]
     puts("--")
     x.report { N.times { $r1 = parser.rule1.parse((buff * i) + (b * i)) } }
     x.report { N.times { $r2 = parser.rule2.parse((buff * i) + (b * i)) } }

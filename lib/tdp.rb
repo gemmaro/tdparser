@@ -149,15 +149,15 @@ module TDParser
     end
 
     def -(r)
-      ConcatParser.new(self,r)
+      ConcatParser.new(self, r)
     end
 
     def +(r)
-      ParallelParser.new(self,r)
+      ParallelParser.new(self, r)
     end
 
     def |(r)
-      ChoiceParser.new(self,r).optimize(true)
+      ChoiceParser.new(self, r).optimize(true)
     end
 
     def *(range)
@@ -167,19 +167,19 @@ module TDParser
         n = range
         range = nil
       end
-      IterationParser.new(self,n,range)
+      IterationParser.new(self, n, range)
     end
 
     def >>(act)
-      ActionParser.new(self,act)
+      ActionParser.new(self, act)
     end
 
     def /(label)
-      LabelParser.new(self,label)
+      LabelParser.new(self, label)
     end
 
     def %(stack)
-      StackParser.new(self,stack)
+      StackParser.new(self, stack)
     end
 
     def >(symbol)
@@ -240,7 +240,7 @@ module TDParser
       res = nil
       case @symbol
       when Symbol, String
-        res = @context.__send__(@symbol,*@options).call(tokens, buff)
+        res = @context.__send__(@symbol, *@options).call(tokens, buff)
       when Parser
         res = @symbol.call(tokens, buff)
       end
@@ -270,7 +270,7 @@ module TDParser
     def call(tokens, buff)
       t = tokens.shift
       buff.unshift(t)
-      if ( @symbol.__send__(@equality,t) || t.__send__(@equality,@symbol) )
+      if ( @symbol.__send__(@equality, t) || t.__send__(@equality, @symbol) )
         Sequence[t]
       else
         nil
@@ -308,7 +308,7 @@ module TDParser
 
     def same?(r)
       super(r) &&
-      @parsers.zip(r.parsers).all? { |x,y| x.same?(y) }
+      @parsers.zip(r.parsers).all? { |x, y| x.same?(y) }
     end
 
     def to_s
@@ -440,7 +440,7 @@ module TDParser
         r21 = r2.parsers[0]
         r22 = r2.parsers[1]
         if r11.same?(r21)
-          share,r12,r22, = shared_sequence(r12, r22)
+          share, r12, r22, = shared_sequence(r12, r22)
           if share
             return [r11 - share, r12, r22]
           else
@@ -462,13 +462,13 @@ module TDParser
         act2 = r2.action
         r2 = r2.parsers[0]
       end
-      share,r12,r22, = shared_sequence(r1, r2)
+      share, r12, r22, = shared_sequence(r1, r2)
       if share
         r = share - (r12 + r22)
         if act1
           if act2
             r = r >> Proc.new { |x|
-              y0,y1,*ys = x.pop()
+              y0, y1, *ys = x.pop()
               if y0
                 act1.call(x.push(*y0))
               else
@@ -477,7 +477,7 @@ module TDParser
             }
           else
             r = r >> Proc.new { |x|
-              y0,y1,*ys = x.pop()
+              y0, y1, *ys = x.pop()
               if y0
                 act1.call(x.push(*y0))
               end
@@ -486,7 +486,7 @@ module TDParser
         else
           if act2
             r = r >> Proc.new { |x|
-              y0,y1,*ys = x.pop()
+              y0, y1, *ys = x.pop()
               if y1
                 act2.call(x.push(*y1))
               end
@@ -594,7 +594,7 @@ module TDParser
   class NegativeParser < CompositeParser
     def call(tokens, buff)
       b = prepare(buff)
-      r = @parsers[0].call(tokens,b)
+      r = @parsers[0].call(tokens, b)
       rev = b.reverse
       recover(b, tokens)
       if  r.nil?
@@ -678,7 +678,7 @@ module TDParser
   class ReferenceParser < Parser
     def __backref__(xs, eqsym)
       x = xs.shift()
-      xs.inject(token(x, eqsym)) { |acc,x|
+      xs.inject(token(x, eqsym)) { |acc, x|
         case x
         when Sequence
           acc - __backref__(x, eqsym)
@@ -706,7 +706,7 @@ module TDParser
       if (ys.nil? || ys.empty?)
         nil
       else
-        __backref__(ys.dup(), @equality).call(tokens,buff)
+        __backref__(ys.dup(), @equality).call(tokens, buff)
       end
     end
 
@@ -734,7 +734,7 @@ module TDParser
       if (ys.nil? || ys.empty?)
         nil
       else
-        __backref__(ys.dup(), @equality).call(tokens,buff)
+        __backref__(ys.dup(), @equality).call(tokens, buff)
       end
     end
 
@@ -854,34 +854,34 @@ module TDParser
 
   def leftrec(*rules, &act)
     f = Proc.new { |x|
-      x[1].inject(x[0]) { |acc,y|
-        act.call(Sequence[acc,*y])
+      x[1].inject(x[0]) { |acc, y|
+        act.call(Sequence[acc, *y])
       }
     }
     base = rules.shift()
-    rules.collect { |r| (base - (r * 0)) >> f }.inject(fail()) { |acc,r| r | acc }
+    rules.collect { |r| (base - (r * 0)) >> f }.inject(fail()) { |acc, r| r | acc }
   end
 
   def rightrec(*rules, &act)
     f = Proc.new { |x|
-      x[0].reverse.inject(x[1]) { |acc,y|
+      x[0].reverse.inject(x[1]) { |acc, y|
         ys = y.dup()
         ys.push(acc)
         act.call(Sequence[*ys])
       }
     }
     base = rules.pop()
-    rules.collect { |r| ((r * 0) - base) >> f }.inject(fail()) { |acc,r| r | acc }
+    rules.collect { |r| ((r * 0) - base) >> f }.inject(fail()) { |acc, r| r | acc }
   end
 
   def chainl(base, *infixes, &act)
-    infixes.inject(base) { |acc,r|
+    infixes.inject(base) { |acc, r|
       leftrec(acc, r - acc, &act)
     }
   end
 
   def chainr(base, *infixes, &act)
-    infixes.inject(base) { |acc,r|
+    infixes.inject(base) { |acc, r|
       rightrec(acc - r, acc, &act)
     }
   end
@@ -903,7 +903,7 @@ module TDParser
     def g_method_missing(sym, *args)
       arg0 = args[0]
       sym = sym.to_s()
-      if (sym[-1,1] == "=")
+      if (sym[-1, 1] == "=")
         case arg0
         when Parser
           self.class.instance_eval {
