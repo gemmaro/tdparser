@@ -11,7 +11,7 @@ class MyParser
   include TDPUtils
 
   def expr1
-    (rule(:expr2) - (((token("+")|token("-")) - rule(:expr2))*0)) >> proc{|x|
+    (rule(:expr2) - (((token("+") | token("-")) - rule(:expr2)) * 0)) >> proc{|x|
       x[1].inject(x[0]){|n,y|
         case y[0]
         when "+"
@@ -24,7 +24,7 @@ class MyParser
   end
 
   def expr2
-    (rule(:prim) - (((token("*")|token("/")) - rule(:prim))*0)) >> proc{|x|
+    (rule(:prim) - (((token("*") | token("/")) - rule(:prim)) * 0)) >> proc{|x|
       n = x[0]
       x[1].inject(x[0]){|n,y|
         case y[0]

@@ -859,7 +859,7 @@ module TDParser
       }
     }
     base = rules.shift()
-    rules.collect{|r| (base - (r*0)) >> f}.inject(fail()){|acc,r| r | acc}
+    rules.collect{|r| (base - (r * 0)) >> f}.inject(fail()){|acc,r| r | acc}
   end
 
   def rightrec(*rules, &act)
@@ -871,7 +871,7 @@ module TDParser
       }
     }
     base = rules.pop()
-    rules.collect{|r| ((r*0) - base) >> f}.inject(fail()){|acc,r| r | acc}
+    rules.collect{|r| ((r * 0) - base) >> f}.inject(fail()){|acc,r| r | acc}
   end
 
   def chainl(base, *infixes, &act)

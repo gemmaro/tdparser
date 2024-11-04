@@ -26,7 +26,7 @@ parser = TDParser.define{|g|
      empty()).optimize()
 
   g.rule3 =
-    (((token("1") - token("2") - rule3 - (token("a")|token("b"))) >> f) |
+    (((token("1") - token("2") - rule3 - (token("a") | token("b"))) >> f) |
      empty())
 }
 
@@ -40,8 +40,8 @@ Benchmark.bm{|x|
   b = ["b"]
   for i in [5,10,15]
     puts("--")
-    x.report{ N.times{ $r1 = parser.rule1.parse((buff*i) + (b*i)) } }
-    x.report{ N.times{ $r2 = parser.rule2.parse((buff*i) + (b*i)) } }
-    x.report{ N.times{ $r3 = parser.rule3.parse((buff*i) + (b*i)) } }
+    x.report{ N.times{ $r1 = parser.rule1.parse((buff * i) + (b * i)) } }
+    x.report{ N.times{ $r2 = parser.rule2.parse((buff * i) + (b * i)) } }
+    x.report{ N.times{ $r3 = parser.rule3.parse((buff * i) + (b * i)) } }
   end
 }

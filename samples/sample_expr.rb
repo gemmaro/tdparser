@@ -13,7 +13,7 @@ parser = TDParser.define{|g|
   g.div = "/"
 
   g.expr1 =
-    chainl(prim, mult|div, plus|minus){|x|
+    chainl(prim, mult | div, plus | minus){|x|
       case x[1]
       when "+"
         x[0] + x[2]

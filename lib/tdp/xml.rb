@@ -66,7 +66,7 @@ module TDPXML
 
     def element(elem=String, &inner)
       if inner
-        crule = inner.call()|empty()
+        crule = inner.call() | empty()
       else
         crule = empty()
       end
@@ -120,7 +120,7 @@ module TDPXML
 
     def doctype(name=String, &inner)
       if (inner)
-        crule = inner.call()|empty()
+        crule = inner.call() | empty()
       else
         crule = empty()
       end

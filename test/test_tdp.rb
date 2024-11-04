@@ -22,7 +22,7 @@ class Calculator
   include TDPUtils
 
   def expr1
-    (rule(:expr2) - (((token("+")|token("-")) - rule(:expr2))*0)) >> proc{|x|
+    (rule(:expr2) - (((token("+") | token("-")) - rule(:expr2)) * 0)) >> proc{|x|
       x[1].inject(x[0]){|n,y|
         case y[0]
         when "+"
@@ -35,7 +35,7 @@ class Calculator
   end
 
   def expr2
-    (rule(:prim) - (((token("*")|token("/")) - rule(:prim))*0)) >> proc{|x|
+    (rule(:prim) - (((token("*") | token("/")) - rule(:prim)) * 0)) >> proc{|x|
       x[1].inject(x[0]){|n,y|
         case y[0]
         when "*"
@@ -67,7 +67,7 @@ Calculator2 = TDParser.define{|g|
   g.div = "/"
 
   g.expr1 =
-    chainl(prim, mult|div, plus|minus){|x|
+    chainl(prim, mult | div, plus | minus){|x|
       case x[1]
       when "+"
         x[0] + x[2]
@@ -99,7 +99,7 @@ LeftResursiveCalculator = TDParser.define{|g|
   g.div = "/"
 
   g.expr1 =
-    ((g.plus|g.minus) - g.expr1) >> proc{|x|
+    ((g.plus | g.minus) - g.expr1) >> proc{|x|
       n = x[0]
       x[1].each{|y|
 	case y[0]
@@ -114,7 +114,7 @@ LeftResursiveCalculator = TDParser.define{|g|
   g.expr1 |= g.expr2
 
   g.expr2 =
-    ((g.mult|g.div) - g.expr2) >> proc{|x|
+    ((g.mult | g.div) - g.expr2) >> proc{|x|
       n = x[0]
       x[1].each{|y|
 	case y[0]
@@ -187,19 +187,19 @@ class TestTDParser < Test::Unit::TestCase
 
   def test_sequence7()
     abc = "abc"
-    rule = (any() - any() - (empty()|any())) >> proc{|arg| arg }
+    rule = (any() - any() - (empty() | any())) >> proc{|arg| arg }
     assert_equal(["a","b",nil], rule.parse(Tokens.new(abc)))
   end
 
   def test_sequence8()
     abc = "abc"
-    rule = (any() - any() - (any()|empty())) >> proc{|arg| arg }
+    rule = (any() - any() - (any() | empty())) >> proc{|arg| arg }
     assert_equal(["a","b","c"], rule.parse(Tokens.new(abc)))
   end
 
   def test_sequence9()
     abc = "abc"
-    rule = (any() - any() - any() - (any()|empty())) >> proc{|arg| arg }
+    rule = (any() - any() - any() - (any() | empty())) >> proc{|arg| arg }
     assert_equal(["a","b","c",nil], rule.parse(Tokens.new(abc)))
   end
 
@@ -243,87 +243,87 @@ class TestTDParser < Test::Unit::TestCase
 
   def test_generator1()
     generator = TDParser::TokenGenerator.new{|x| ["a","b","c"].each{|e| x.yield(e)} }
-    rule = (any() - any() - any() - (any()|empty())) >> proc{|arg| arg }
+    rule = (any() - any() - any() - (any() | empty())) >> proc{|arg| arg }
     assert_equal(["a","b","c",nil], rule.parse(generator))
   end
 
   def test_generator2()
-    rule = (any() - any() - any() - (any()|empty())) >> proc{|arg| arg }
+    rule = (any() - any() - any() - (any() | empty())) >> proc{|arg| arg }
     result = rule.parse{|x| ["a","b","c"].each{|e| x.yield(e)} }
     assert_equal(["a","b","c",nil], result)
   end
 
   def test_iteration1()
     abc = "abcabc"
-    rule = ((token("a") - (token("b")|token("B")) - (token("c")|token("C")))*0) >> proc{|arg| arg.join() }
+    rule = ((token("a") - (token("b") | token("B")) - (token("c") | token("C"))) * 0) >> proc{|arg| arg.join() }
     assert_equal(abc, rule.parse(Tokens.new(abc)))
   end
 
   def test_iteration2()
     abc = "aBcabc"
-    rule = ((token("a") - (token("b")|token("B")) - (token("c")|token("C")))*0) >> proc{|arg| arg.join() }
+    rule = ((token("a") - (token("b") | token("B")) - (token("c") | token("C"))) * 0) >> proc{|arg| arg.join() }
     assert_equal(abc, rule.parse(Tokens.new(abc)))
   end
 
   def test_iteration3()
     abc = ""
-    rule = ((token("a") - (token("b")|token("B")) - (token("c")|token("C")))*0) >> proc{|arg| arg.join() }
+    rule = ((token("a") - (token("b") | token("B")) - (token("c") | token("C"))) * 0) >> proc{|arg| arg.join() }
     assert_equal(abc, rule.parse(Tokens.new(abc)))
   end
 
   def test_iteration4()
     abc = ""
-    rule = ((token("a") - (token("b")|token("B")) - (token("c")|token("C")))*1) >> proc{|arg| arg.join() }
+    rule = ((token("a") - (token("b") | token("B")) - (token("c") | token("C"))) * 1) >> proc{|arg| arg.join() }
     assert_equal(nil, rule.parse(Tokens.new(abc)))
   end
 
   def test_iteration5()
     abc = "aBCAbc"
-    rule = ((token("a") - (token("b")|token("B")) - (token("c")|token("C")))*0) >> proc{|arg| arg.join() }
+    rule = ((token("a") - (token("b") | token("B")) - (token("c") | token("C"))) * 0) >> proc{|arg| arg.join() }
     assert_equal("aBC", rule.parse(Tokens.new(abc)))
     assert_equal("A", rule.peek())
   end
 
   def test_iteration6()
     abc = "aBCaBcd"
-    rule = ((token("a") - (token("b")|token("B")) - (token("c")|token("C")))*0) >> proc{|arg| arg.join() }
+    rule = ((token("a") - (token("b") | token("B")) - (token("c") | token("C"))) * 0) >> proc{|arg| arg.join() }
     assert_equal("aBCaBc", rule.parse(Tokens.new(abc)))
     assert_equal("d", rule.peek())
   end
 
   def test_iteration7()
     buff = ["a","b","b","b","c"]
-    rule = (token("a") - (token("b")*1) - token("c")) >> proc{|x| x}
+    rule = (token("a") - (token("b") * 1) - token("c")) >> proc{|x| x}
     assert_equal(["a", [["b"],["b"],["b"]], "c"], rule.parse(buff))
   end
 
   def test_iteration8()
     buff = ["a","b","b","b","c"]
-    rule = (token("a") - (token("b")*4) - token("c")) >> proc{|x| x}
+    rule = (token("a") - (token("b") * 4) - token("c")) >> proc{|x| x}
     assert_equal(nil, rule.parse(buff))
   end
 
   def test_iteration9()
     buff = ["a","b","c"]
-    rule = (token("a") - (token("b")*(2..4)) - token("c")) >> proc{|x| x}
+    rule = (token("a") - (token("b") * (2..4)) - token("c")) >> proc{|x| x}
     assert_equal(nil, rule.parse(buff))
   end
 
   def test_iteration10()
     buff = ["a","b","b","b","c"]
-    rule = (token("a") - (token("b")*(2..4)) - token("c")) >> proc{|x| x}
+    rule = (token("a") - (token("b") * (2..4)) - token("c")) >> proc{|x| x}
     assert_equal(["a", [["b"], ["b"], ["b"]], "c"], rule.parse(buff))
   end
 
   def test_iteration11()
     buff = ["a","b","a","b","c"]
-    rule = (((token("a") - token("b"))*1) - token("c")) >> proc{|x| x}
+    rule = (((token("a") - token("b")) * 1) - token("c")) >> proc{|x| x}
     assert_equal([[["a", "b"],["a","b"]], "c"], rule.parse(buff))
   end
 
   def test_iteration12()
     buff = ["c"]
-    rule = (token("c") - ((token("a") - token("b"))*1)) >> proc{|x| x}
+    rule = (token("c") - ((token("a") - token("b")) * 1)) >> proc{|x| x}
     assert_equal(nil, rule.parse(buff))
   end
 
@@ -334,44 +334,44 @@ class TestTDParser < Test::Unit::TestCase
 
   def test_reference1()
     buff = ["a","b","c"]
-    rule = ((token("a")/:a) - (token("b")/:b) - (token("c")/:c)) >> proc{|x| [x[:a],x[:b],x[:c]]}
+    rule = ((token("a") / :a) - (token("b") / :b) - (token("c") / :c)) >> proc{|x| [x[:a],x[:b],x[:c]]}
     assert_equal([["a"],["b"],["c"]], rule.parse(buff))
   end
 
   def test_reference2()
     buff = ["a","b","c"]
-    rule = (((token("a") - token("b"))/:n) - token("c")) >> proc{|x| x[:n]}
+    rule = (((token("a") - token("b")) / :n) - token("c")) >> proc{|x| x[:n]}
     assert_equal(["a","b"], rule.parse(buff))
   end
 
   def test_reference3()
     buff = ["a","b","c"]
     stack = []
-    rule = (((token("a") - token("b"))%stack) - (token("c")%stack)) >> proc{|x| x}
+    rule = (((token("a") - token("b")) % stack) - (token("c") % stack)) >> proc{|x| x}
     assert_equal(["a","b","c"], rule.parse(buff))
     assert_equal([["a","b"],["c"]], stack)
   end
 
   def test_backref1()
     buff = ["a","b","a"]
-    rule = ((token(/\w/)/:x) - token("b") - backref(:x)) >> proc{|x| x}
+    rule = ((token(/\w/) / :x) - token("b") - backref(:x)) >> proc{|x| x}
     assert_equal(["a","b","a"], rule.parse(buff))
   end
 
   def test_backref2()
     buff = ["a","b","c"]
-    rule = ((token(/\w/)/:x) - token("b") - backref(:x)) >> proc{|x| x}
+    rule = ((token(/\w/) / :x) - token("b") - backref(:x)) >> proc{|x| x}
     assert_equal(nil, rule.parse(buff))
   end
 
   def test_backref3()
     buff = ["a","b","a","b","a","b"]
-    rule = (((token(/\w/) - token(/\w/))/:x) - (backref(:x)*0)) >> proc{|x| x}
+    rule = (((token(/\w/) - token(/\w/)) / :x) - (backref(:x) * 0)) >> proc{|x| x}
     assert_equal(["a","b",[["a","b"],["a","b"]]], rule.parse(buff))
   end
 
   def test_backref4()
-    rule = (((token(/\w/) - token(/\w/))/:x) - ((token("-")|backref(:x))*0)) >> proc{|x| x}
+    rule = (((token(/\w/) - token(/\w/)) / :x) - ((token("-") | backref(:x)) * 0)) >> proc{|x| x}
     assert_equal(["a","b",[["a","b"],["a","b"]]],
                  rule.parse(["a","b","a","b","a","b"]))
     assert_equal(["a","b",[["-"],["a","b"]]],
@@ -381,26 +381,26 @@ class TestTDParser < Test::Unit::TestCase
   def test_stackref1()
     buff = ["a","b","a"]
     stack = []
-    rule = ((token(/\w/)%stack) - token("b") - stackref(stack)) >> proc{|x| x}
+    rule = ((token(/\w/) % stack) - token("b") - stackref(stack)) >> proc{|x| x}
     assert_equal(["a","b","a"], rule.parse(buff))
   end
 
   def test_stackref2()
     buff = ["a","b","c"]
     stack = []
-    rule = ((token(/\w/)%stack) - token("b") - stackref(stack)) >> proc{|x| x}
+    rule = ((token(/\w/) % stack) - token("b") - stackref(stack)) >> proc{|x| x}
     assert_equal(nil, rule.parse(buff))
   end
 
   def test_stackref3()
     buff = ["a","b","a","b","a","b"]
     stack = []
-    rule = (((token(/\w/) - token(/\w/))%stack) - ((stackref(stack)%stack)*0)) >> proc{|x| x}
+    rule = (((token(/\w/) - token(/\w/)) % stack) - ((stackref(stack) % stack) * 0)) >> proc{|x| x}
     assert_equal(["a","b",[["a","b"],["a","b"]]], rule.parse(buff))
 
     buff = ["a","b","a","b","a","b"]
     stack = []
-    rule = (((token(/\w/) - token(/\w/))%stack) - (stackref(stack)*0)) >> proc{|x| x}
+    rule = (((token(/\w/) - token(/\w/)) % stack) - (stackref(stack) * 0)) >> proc{|x| x}
     assert_equal(["a","b",[["a","b"]]], rule.parse(buff))
   end
 
@@ -468,20 +468,20 @@ class TestTDParser < Test::Unit::TestCase
   end
 
   def test_condition1()
-    rule = (condition{|m|m["n"]=20} - condition{|m|m["n"]}) >> Proc.new{|x| x}
+    rule = (condition{|m|m["n"] = 20} - condition{|m|m["n"]}) >> Proc.new{|x| x}
     assert_equal([20,20], rule.parse([]))
   end
 
   def test_condition2()
-    rule = (condition{|m|m["n"]=20} - condition{|m|m["n"]>20}) >> Proc.new{|x| x}
+    rule = (condition{|m|m["n"] = 20} - condition{|m|m["n"] > 20}) >> Proc.new{|x| x}
     assert_equal(nil, rule.parse([]))
   end
 
   def test_condition3()
     rule =
-      (condition{|m|m["n"]=20} -
-        ((token("a") - condition{|m|m["n"]>20}) |
-         (token("b") - condition{|m|m["n"]>10}))) >> Proc.new{|x| x}
+      (condition{|m|m["n"] = 20} -
+        ((token("a") - condition{|m|m["n"] > 20}) |
+         (token("b") - condition{|m|m["n"] > 10}))) >> Proc.new{|x| x}
     assert_equal(nil, rule.parse(["a"]))
     assert_equal([20,"b",true], rule.parse(["b"]))
   end
@@ -502,10 +502,10 @@ class TestTDParser < Test::Unit::TestCase
   end
 
   def test_define()
-    assert_equal(1+10,     Calculator2.parse("1+10"))
-    assert_equal(2-(1*20)+18,   Calculator2.parse("2 - 1 * 20 + 18"))
-    assert_equal(2-(1-20), Calculator2.parse("2 - (1 - 20)"))
-    assert_equal(1+2-3,    Calculator2.parse("1 + 2 - 3"))
+    assert_equal(1 + 10,     Calculator2.parse("1+10"))
+    assert_equal(2 - (1 * 20) + 18,   Calculator2.parse("2 - 1 * 20 + 18"))
+    assert_equal(2 - (1 - 20), Calculator2.parse("2 - (1 - 20)"))
+    assert_equal(1 + 2 - 3,    Calculator2.parse("1 + 2 - 3"))
   end
 
   def test_tokenizer()
