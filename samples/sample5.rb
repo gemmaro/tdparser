@@ -14,7 +14,7 @@ parser = TDParser.define { |g|
 
   g.expr1 =
     (g.expr2 - (((g.plus | g.minus) - g.expr2) * 0)) >> proc { |x|
-      x[1].inject(x[0]) { |n,y|
+      x[1].inject(x[0]) { |n, y|
         case y[0]
         when "+"
           n + y[1]
@@ -26,7 +26,7 @@ parser = TDParser.define { |g|
 
   g.expr2 =
     (g.prim - (((g.mult | g.div) - g.prim) * 0)) >> proc { |x|
-      x[1].inject(x[0]) { |n,y|
+      x[1].inject(x[0]) { |n, y|
         case y[0]
         when "*"
           n * y[1]

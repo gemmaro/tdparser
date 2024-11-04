@@ -12,7 +12,7 @@ class MyParser
 
   def expr1
     (rule(:expr2) - (((token("+") | token("-")) - rule(:expr2)) * 0)) >> proc { |x|
-      x[1].inject(x[0]) { |n,y|
+      x[1].inject(x[0]) { |n, y|
         case y[0]
         when "+"
           n + y[1]
@@ -26,7 +26,7 @@ class MyParser
   def expr2
     (rule(:prim) - (((token("*") | token("/")) - rule(:prim)) * 0)) >> proc { |x|
       n = x[0]
-      x[1].inject(x[0]) { |n,y|
+      x[1].inject(x[0]) { |n, y|
         case y[0]
         when "*"
           n * y[1]
@@ -65,7 +65,7 @@ class FastParser < MyParser
   end
 
   def parse(str)
-    tokens = str.split(/(?:\s+)|([\(\)\+\-\*\/])/).select { |x| x != "" }
+    tokens = str.split(%r{(?:\s+)|([()+\-*/])}).select { |x| x != "" }
     expr1.parse(tokens)
   end
 end

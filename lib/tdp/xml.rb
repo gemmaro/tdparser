@@ -26,7 +26,7 @@ module TDPXML
         if !ary.is_a?(Array)
           return false
         end
-        each_with_index { |v,idx|
+        each_with_index { |v, idx|
           case ary[idx]
           when v
           else
@@ -45,7 +45,7 @@ module TDPXML
         if !h.is_a?(Hash)
           return false
         end
-        each { |k,v|
+        each { |k, v|
           case h[k]
           when v
           else
@@ -76,7 +76,7 @@ module TDPXML
         node = REXML::Element.new()
         node.name = name
         node.attributes.merge!(attrs)
-        [node,x[1]]
+        [node, x[1]]
       }
     end
 
@@ -88,7 +88,7 @@ module TDPXML
 
     def pi
       token(XArray[:processing_instruction, String, String]) >> Proc.new { |x|
-        REXML::Instruction.new(x[0][1],x[0][2])
+        REXML::Instruction.new(x[0][1], x[0][2])
       }
     end
 
@@ -106,7 +106,7 @@ module TDPXML
 
     def xmldecl
       token(XArray[:xmldecl]) >> Proc.new { |x|
-        REXML::XMLDecl.new(x[0][1],x[0][2], x[0][3])
+        REXML::XMLDecl.new(x[0][1], x[0][2], x[0][3])
       }
     end
 
