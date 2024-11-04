@@ -6,28 +6,28 @@ translator = TDParser.define{|g|
   extend TDPXML::XMLParser
 
   g.xml =
-    element("a"){
+    (element("a"){
       element("b"){
         g.xmlseq
       } >> dom_constructor{|node| node.children() }
-    } >> dom_constructor{|node| node.name = "AB"; node } |
-    element(String){
+    } >> dom_constructor{|node| node.name = "AB"; node }) |
+    (element(String){
       g.xmlseq
     } >> dom_constructor{|node|
            node.name = node.name.upcase()
            node
-         } |
-    doctype{
+         }) |
+    (doctype{
       g.xmlseq
-    } >> dom_constructor{|node| node} |
-    text >> Proc.new{|x| x[0]} |
-    elementdecl >> Proc.new{|x| x[0]} |
-    xmldecl >> Proc.new{|x| x[0]} |
-    comment >> Proc.new{|x| x[0]} |
-    any_node() >> Proc.new{|x| x[0] }
+    } >> dom_constructor{|node| node}) |
+    (text >> Proc.new{|x| x[0]}) |
+    (elementdecl >> Proc.new{|x| x[0]}) |
+    (xmldecl >> Proc.new{|x| x[0]}) |
+    (comment >> Proc.new{|x| x[0]}) |
+    (any_node() >> Proc.new{|x| x[0] })
 
   g.xmlseq =
-    g.xml()*0 >> Proc.new{|x| x[0].collect{|y| y[0]}} |
+    ((g.xml()*0) >> Proc.new{|x| x[0].collect{|y| y[0]}}) |
 
   def translate(src)
     gen = TDPXML::XMLParser::XMLTokenGenerator.new(src)

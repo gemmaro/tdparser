@@ -3,8 +3,6 @@
 # Top-down parser for embedded in a ruby script.
 #
 
-require "enumerator"
-
 module TDParser
   class ParserException < RuntimeError
   end
@@ -135,11 +133,11 @@ module TDParser
     #  call(*args)
     #end
 
-    def optimize(default=false)
+    def optimize(_default=false)
       self.dup()
     end
 
-    def ==(r)
+    def ==(_r)
       false
     end
 
@@ -254,7 +252,7 @@ module TDParser
     end
 
     def to_s()
-      "#{@symbol.to_s}"
+      "#{@symbol}"
     end
   end
 
@@ -290,7 +288,7 @@ module TDParser
   class CompositeParser < Parser
     attr_accessor :parsers
 
-    def initialize(*parsers, &b)
+    def initialize(*parsers)
       @parsers = parsers
     end
 
@@ -339,7 +337,7 @@ module TDParser
     end
 
     def to_s()
-      "(#{@parsers[0].to_s()} <action>)"
+      "(#{@parsers[0]} <action>)"
     end
   end
 
@@ -363,7 +361,7 @@ module TDParser
     end
 
     def to_s()
-      "(#{@parsers[0].to_s()}/#{@label})"
+      "(#{@parsers[0]}/#{@label})"
     end
   end
 
@@ -385,7 +383,7 @@ module TDParser
       (@stack == r.stack)
     end
 
-    def same?(r)
+    def same?(_r)
       false
     end
 
@@ -395,10 +393,6 @@ module TDParser
   end
 
   class ConcatParser < CompositeParser
-    def initialize(r1, r2)
-      super(r1, r2)
-    end
-
     def call(tokens, buff)
       if( (x = @parsers[0].call(tokens, buff)).nil? )
         nil
@@ -416,15 +410,11 @@ module TDParser
     end
 
     def to_s()
-      "(#{@parsers[0].to_s()} #{@parsers[1].to_s()})"
+      "(#{@parsers[0]} #{@parsers[1]})"
     end
   end
 
   class ChoiceParser < CompositeParser
-    def initialize(r1, r2)
-      super(r1, r2)
-    end
-
     def call(tokens, buff)
       b = prepare(buff)
       if( (x = @parsers[0].call(tokens, b)).nil? )
@@ -437,7 +427,7 @@ module TDParser
     end
 
     def to_s()
-      "(#{@parsers[0].to_s()} | #{@parsers[1].to_s()})"
+      "(#{@parsers[0]} | #{@parsers[1]})"
     end
 
     def shared_sequence(r1, r2)
@@ -511,10 +501,6 @@ module TDParser
   end
 
   class ParallelParser < CompositeParser
-    def initialize(r1, r2)
-      super(r1, r2)
-    end
-
     def call(tokens, buff)
       b = prepare(buff)
       if( (x = @parsers[0].call(tokens, b)).nil? )
@@ -527,7 +513,7 @@ module TDParser
     end
 
     def to_s()
-      "(#{@parsers[0].to_s()} + #{@parsers[1].to_s()})"
+      "(#{@parsers[0]} + #{@parsers[1]})"
     end
   end
 
@@ -592,7 +578,7 @@ module TDParser
     end
 
     def to_s()
-      "(#{@parsers[0].to_s()})*#{@range ? @range.to_s : @min.to_s}"
+      "(#{@parsers[0]})*#{@range ? @range.to_s : @min.to_s}"
     end
 
     def ==(r)
@@ -603,10 +589,6 @@ module TDParser
   end
 
   class NegativeParser < CompositeParser
-    def initialize(parser)
-      super(parser)
-    end
-
     def call(tokens, buff)
       b = prepare(buff)
       r = @parsers[0].call(tokens,b)
@@ -625,7 +607,7 @@ module TDParser
   end
 
   class FailParser < Parser
-    def call(tokens, buff)
+    def call(_tokens, _buff)
       nil
     end
 
@@ -639,7 +621,7 @@ module TDParser
   end
 
   class EmptyParser < Parser
-    def call(tokens, buff)
+    def call(_tokens, _buff)
       Sequence[nil]
     end
 
@@ -647,13 +629,13 @@ module TDParser
       "<empty>"
     end
 
-    def ==(r)
+    def ==(_r)
       true
     end
   end
 
   class AnyParser < Parser
-    def call(tokens, buff)
+    def call(tokens, _buff)
       t = tokens.shift
       if (t.nil?)
         nil
@@ -666,13 +648,13 @@ module TDParser
       "<any>"
     end
 
-    def ==(r)
+    def ==(_r)
       true
     end
   end
 
   class NoneParser < Parser
-    def call(tokens, buff)
+    def call(tokens, _buff)
       t = tokens.shift
       if (t.nil?)
         Sequence[nil]
@@ -685,7 +667,7 @@ module TDParser
       "<none>"
     end
 
-    def ==(r)
+    def ==(_r)
       true
     end
   end
@@ -703,7 +685,7 @@ module TDParser
       }
     end
 
-    def same?(r)
+    def same?(_r)
       false
     end
   end
@@ -759,7 +741,7 @@ module TDParser
 
     def ==(r)
       super(r) &&
-      (@stack.object_id == r.stack.object_id) &&
+      (@stack.equal?(r.stack)) &&
       (@equality == r.equality)
     end
   end
@@ -771,7 +753,7 @@ module TDParser
       @condition = condition
     end
 
-    def call(tokens, buff)
+    def call(_tokens, buff)
       if (res = @condition.call(buff.map))
         Sequence[res]
       else
@@ -788,7 +770,7 @@ module TDParser
       (@condition == r.condition)
     end
 
-    def same?(r)
+    def same?(_r)
       false
     end
   end
@@ -800,7 +782,7 @@ module TDParser
       @state = s
     end
 
-    def call(tokens, buff)
+    def call(_tokens, buff)
       if (buff.map[:state] == @state)
         Sequence[@state]
       else
@@ -817,7 +799,7 @@ module TDParser
       (@state == r.state)
     end
 
-    def same?(r)
+    def same?(_r)
       false
     end
   end
@@ -874,7 +856,7 @@ module TDParser
       }
     }
     base = rules.shift()
-    rules.collect{|r| base - r*0 >> f}.inject(fail()){|acc,r| r | acc}
+    rules.collect{|r| (base - (r*0)) >> f}.inject(fail()){|acc,r| r | acc}
   end
 
   def rightrec(*rules, &act)
@@ -886,7 +868,7 @@ module TDParser
       }
     }
     base = rules.pop()
-    rules.collect{|r| r*0 - base >> f}.inject(fail()){|acc,r| r | acc}
+    rules.collect{|r| ((r*0) - base) >> f}.inject(fail()){|acc,r| r | acc}
   end
 
   def chainl(base, *infixes, &act)
@@ -940,7 +922,7 @@ module TDParser
     alias method_missing g_method_missing
   end
 
-  def TDParser.define(*args, &block)
+  def TDParser.define(*_args, &block)
     klass = Class.new(Grammar)
     g = klass.new()
     begin
