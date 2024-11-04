@@ -7,7 +7,7 @@ class MyParser
   include TDParser
 
   def expr
-    token(/\d+/) - ((token("+")|token("-")) - token(/\d+/))*0 >> proc{|x|
+    (token(/\d+/) - (((token("+")|token("-")) - token(/\d+/))*0)) >> proc{|x|
       n = x[0].to_i
       x[1].inject(n){|acc,i|
         case i[0]

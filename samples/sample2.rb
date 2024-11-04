@@ -9,7 +9,7 @@ class MyParser
   include TDPUtils
 
   def expr1
-    rule(:expr2) - ((token("+")|token("-")) - rule(:expr2))*0 >> proc{|x|
+    (rule(:expr2) - (((token("+")|token("-")) - rule(:expr2))*0)) >> proc{|x|
       x[1].inject(x[0]){|n,y|
         case y[0]
         when "+"
@@ -22,7 +22,7 @@ class MyParser
   end
 
   def expr2
-    rule(:prim) - ((token("*")|token("/")) - rule(:prim))*0 >> proc{|x|
+    (rule(:prim) - (((token("*")|token("/")) - rule(:prim))*0)) >> proc{|x|
       x[1].inject(x[0]){|n, y|
         case y[0]
         when "*"
@@ -35,8 +35,8 @@ class MyParser
   end
 
   def prim
-    token(:int) >> proc{|x| x[0].value.to_i } |
-    token("(") - rule(:expr1) - token(")") >> proc{|x| x[1] }
+    (token(:int) >> proc{|x| x[0].value.to_i }) |
+    ((token("(") - rule(:expr1) - token(")")) >> proc{|x| x[1] })
   end
 
   def parse(str)

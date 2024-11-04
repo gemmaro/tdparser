@@ -10,8 +10,8 @@ class MyParser
 
   def expr1
     n = nil;
-    (rule(:expr2) >> proc{|x| n = x[0] }) -
-    ((token("+")|token("-")) - rule(:expr2) >> proc{|x|
+    ((rule(:expr2) >> proc{|x| n = x[0] }) -
+    ((((token("+")|token("-")) - rule(:expr2)) >> proc{|x|
       case x[0]
       when "+"
         n += x[1]
@@ -19,13 +19,13 @@ class MyParser
         n -= x[1]
       end
       n
-    })*0 >> proc{ n }
+    })*0)) >> proc{ n }
   end
 
   def expr2
     n = nil;
-    (rule(:prim) >> proc{|x| n = x[0] }) -
-    ((token("*")|token("/")) - rule(:prim) >> proc{|x|
+    ((rule(:prim) >> proc{|x| n = x[0] }) -
+    ((((token("*")|token("/")) - rule(:prim)) >> proc{|x|
       case x[0]
       when "*"
         n *= x[1]
@@ -33,12 +33,12 @@ class MyParser
         n /= x[1]
       end
       n
-    })*0 >> proc{ n }
+    })*0)) >> proc{ n }
   end
 
   def prim
-    token(:int) >> proc{|x| x[0].value.to_i } |
-    token("(") - rule(:expr1) - token(")") >> proc{|x| x[1] }
+    (token(:int) >> proc{|x| x[0].value.to_i }) |
+    ((token("(") - rule(:expr1) - token(")")) >> proc{|x| x[1] })
   end
 
   def parse(str)

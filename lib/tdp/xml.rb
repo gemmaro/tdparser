@@ -68,7 +68,7 @@ module TDPXML
       else
         crule = empty()
       end
-      start_element(elem) - crule - end_element(elem) >> Proc.new{|x|
+      (start_element(elem) - crule - end_element(elem)) >> Proc.new{|x|
         name = x[0][1]
         attrs = x[0][2]
         node = REXML::Element.new()
@@ -122,7 +122,7 @@ module TDPXML
       else
         crule = empty()
       end
-      start_doctype(name) - crule - end_doctype() >> Proc.new{|x|
+      (start_doctype(name) - crule - end_doctype()) >> Proc.new{|x|
         node = REXML::DocType.new(x[0][1..-1])
         [node, x[1]]
       }
@@ -140,19 +140,19 @@ module TDPXML
       }
     end
 
-    def entitydecl(entity=String)
+    def entitydecl(_entity=String)
       token(XArray[:entitydecl, elem]) >> Proc.new{|x|
         REXML::Entity.new(x[0])
       }
     end
 
-    def attlistdecl(decl=String)
+    def attlistdecl(_decl=String)
       token(XArray[:attlistdecl]) >> Proc.new{|x|
         REXML::AttlistDecl.new(x[0][1..-1])
       }
     end
 
-    def notationdecl(decl=String)
+    def notationdecl(_decl=String)
       token(XArray[:notationdecl]) >> Proc.new{|x|
         REXML::NotationDecl.new(*x[0][1..-1])
       }

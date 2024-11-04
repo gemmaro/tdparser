@@ -25,8 +25,8 @@ parser = TDParser.define{|g|
     }
 
   g.prim =
-    token(:int) >> proc{|x| x[0].value.to_i } |
-    token("(") - expr1 - token(")") >> proc{|x| x[1] }
+    (token(:int) >> proc{|x| x[0].value.to_i }) |
+    ((token("(") - expr1 - token(")")) >> proc{|x| x[1] })
 
   def parse(str)
     tokenizer = TDPUtils::StringTokenizer[
