@@ -41,8 +41,8 @@ module TDParser
     end
 
     def shift
-      if( @buffer.empty? )
-        if( self.next? )
+      if  @buffer.empty?
+        if  self.next?
           token = self.next()
         else
           token = nil
@@ -112,7 +112,7 @@ module TDParser
     end
 
     def recover(buff, ts)
-      buff.each{|b| ts.unshift(b)}
+      buff.each { |b| ts.unshift(b) }
     end
   end
   include BufferUtils
@@ -122,7 +122,7 @@ module TDParser
     include TDParser
 
     def to_proc
-      Proc.new{|*x| self.call(*x) }
+      Proc.new { |*x| self.call(*x) }
     end
 
     def to_s
@@ -161,7 +161,7 @@ module TDParser
     end
 
     def *(range)
-      if( range.is_a?(Range) )
+      if  range.is_a?(Range)
         n = range.min
       else
         n = range
@@ -183,7 +183,7 @@ module TDParser
     end
 
     def >(symbol)
-      Parser.new{|tokens, buff|
+      Parser.new { |tokens, buff|
         buff[symbol] = buff.dup()
         self[tokens, buff]
       }
@@ -195,10 +195,10 @@ module TDParser
 
     def parse(tokens=nil, buff=nil, &blk)
       buff ||= TokenBuffer.new()
-      if( blk.nil? )
-        if( tokens.respond_to?(:shift) && tokens.respond_to?(:unshift) )
+      if  blk.nil?
+        if ( tokens.respond_to?(:shift) && tokens.respond_to?(:unshift) )
           @tokens = tokens
-        elsif( tokens.respond_to?(:each) )
+        elsif  tokens.respond_to?(:each)
           @tokens = TokenGenerator.new(tokens)
         else
           @tokens = tokens
@@ -207,7 +207,7 @@ module TDParser
         @tokens = TokenGenerator.new(&blk)
       end
       r = call(@tokens, buff)
-      if( r.nil? )
+      if  r.nil?
         nil
       else
         r[0]
@@ -216,7 +216,7 @@ module TDParser
 
     def peek
       t = @tokens.shift()
-      if( ! t.nil? )
+      if  ! t.nil?
         @tokens.unshift(t)
       end
       t
@@ -270,7 +270,7 @@ module TDParser
     def call(tokens, buff)
       t = tokens.shift
       buff.unshift(t)
-      if( @symbol.__send__(@equality,t) || t.__send__(@equality,@symbol) )
+      if ( @symbol.__send__(@equality,t) || t.__send__(@equality,@symbol) )
         Sequence[t]
       else
         nil
@@ -297,7 +297,7 @@ module TDParser
 
     def optimize(default=false)
       parser = dup()
-      parser.parsers = @parsers.collect{|x| x.optimize(default)}
+      parser.parsers = @parsers.collect { |x| x.optimize(default) }
       parser
     end
 
@@ -308,11 +308,11 @@ module TDParser
 
     def same?(r)
       super(r) &&
-      @parsers.zip(r.parsers).all?{|x,y| x.same?(y)}
+      @parsers.zip(r.parsers).all? { |x,y| x.same?(y) }
     end
 
     def to_s
-      "<composite: #{@parsers.collect{|x| x.to_s()}}>"
+      "<composite: #{@parsers.collect { |x| x.to_s() }}>"
     end
   end
 
@@ -325,7 +325,7 @@ module TDParser
     end
 
     def call(tokens, buff)
-      if( (x = @parsers[0].call(tokens, buff)).nil? )
+      if  (x = @parsers[0].call(tokens, buff)).nil?
         nil
       else
         x = TokenBuffer[*x]
@@ -397,10 +397,10 @@ module TDParser
 
   class ConcatParser < CompositeParser
     def call(tokens, buff)
-      if( (x = @parsers[0].call(tokens, buff)).nil? )
+      if  (x = @parsers[0].call(tokens, buff)).nil?
         nil
       else
-        if( (y = @parsers[1].call(tokens, buff)).nil? )
+        if  (y = @parsers[1].call(tokens, buff)).nil?
           nil
         else
           x + y
@@ -420,7 +420,7 @@ module TDParser
   class ChoiceParser < CompositeParser
     def call(tokens, buff)
       b = prepare(buff)
-      if( (x = @parsers[0].call(tokens, b)).nil? )
+      if  (x = @parsers[0].call(tokens, b)).nil?
         recover(b, tokens)
         @parsers[1].call(tokens, buff)
       else
@@ -467,7 +467,7 @@ module TDParser
         r = share - (r12 + r22)
         if act1
           if act2
-            r = r >> Proc.new{|x|
+            r = r >> Proc.new { |x|
               y0,y1,*ys = x.pop()
               if y0
                 act1.call(x.push(*y0))
@@ -476,7 +476,7 @@ module TDParser
               end
             }
           else
-            r = r >> Proc.new{|x|
+            r = r >> Proc.new { |x|
               y0,y1,*ys = x.pop()
               if y0
                 act1.call(x.push(*y0))
@@ -485,7 +485,7 @@ module TDParser
           end
         else
           if act2
-            r = r >> Proc.new{|x|
+            r = r >> Proc.new { |x|
               y0,y1,*ys = x.pop()
               if y1
                 act2.call(x.push(*y1))
@@ -506,7 +506,7 @@ module TDParser
   class ParallelParser < CompositeParser
     def call(tokens, buff)
       b = prepare(buff)
-      if( (x = @parsers[0].call(tokens, b)).nil? )
+      if  (x = @parsers[0].call(tokens, b)).nil?
         recover(b, tokens)
         Sequence[Sequence[nil, @parsers[1].call(tokens, buff)]]
       else
@@ -533,10 +533,10 @@ module TDParser
       n = @min
       x  = true
       xs = []
-      while( n > 0 )
+      while ( n > 0 )
         n -= 1
         b = prepare(buff)
-        if( (x = r.call(ts, b)).nil? )
+        if  (x = r.call(ts, b)).nil?
           recover(b, ts)
           break
         else
@@ -547,12 +547,12 @@ module TDParser
       if  x.nil?
         nil
       else
-        if( range )
-          range.each{
-            while( true )
+        if  range
+          range.each {
+            while  true
               y = x
               b = prepare(buff)
-              if( (x = r.call(ts, b)).nil? )
+              if  (x = r.call(ts, b)).nil?
                 recover(b, ts)
                 x = y
                 break
@@ -563,10 +563,10 @@ module TDParser
             end
           }
         else
-          while( true )
+          while  true
             y = x
             b = prepare(buff)
-            if( (x = r.call(ts, b)).nil? )
+            if  (x = r.call(ts, b)).nil?
               recover(b, ts)
               x = y
               break
@@ -597,7 +597,7 @@ module TDParser
       r = @parsers[0].call(tokens,b)
       rev = b.reverse
       recover(b, tokens)
-      if( r.nil? )
+      if  r.nil?
         Sequence[Sequence[*rev]]
       else
         nil
@@ -678,7 +678,7 @@ module TDParser
   class ReferenceParser < Parser
     def __backref__(xs, eqsym)
       x = xs.shift()
-      xs.inject(token(x, eqsym)){|acc,x|
+      xs.inject(token(x, eqsym)) { |acc,x|
         case x
         when Sequence
           acc - __backref__(x, eqsym)
@@ -853,35 +853,35 @@ module TDParser
   alias condition condition_rule
 
   def leftrec(*rules, &act)
-    f = Proc.new{|x|
-      x[1].inject(x[0]){|acc,y|
+    f = Proc.new { |x|
+      x[1].inject(x[0]) { |acc,y|
         act.call(Sequence[acc,*y])
       }
     }
     base = rules.shift()
-    rules.collect{|r| (base - (r * 0)) >> f}.inject(fail()){|acc,r| r | acc}
+    rules.collect { |r| (base - (r * 0)) >> f }.inject(fail()) { |acc,r| r | acc }
   end
 
   def rightrec(*rules, &act)
-    f = Proc.new{|x|
-      x[0].reverse.inject(x[1]){|acc,y|
+    f = Proc.new { |x|
+      x[0].reverse.inject(x[1]) { |acc,y|
         ys = y.dup()
         ys.push(acc)
         act.call(Sequence[*ys])
       }
     }
     base = rules.pop()
-    rules.collect{|r| ((r * 0) - base) >> f}.inject(fail()){|acc,r| r | acc}
+    rules.collect { |r| ((r * 0) - base) >> f }.inject(fail()) { |acc,r| r | acc }
   end
 
   def chainl(base, *infixes, &act)
-    infixes.inject(base){|acc,r|
+    infixes.inject(base) { |acc,r|
       leftrec(acc, r - acc, &act)
     }
   end
 
   def chainr(base, *infixes, &act)
-    infixes.inject(base){|acc,r|
+    infixes.inject(base) { |acc,r|
       rightrec(acc - r, acc, &act)
     }
   end
@@ -890,7 +890,7 @@ module TDParser
     include TDParser
 
     def define(&block)
-      instance_eval{
+      instance_eval {
         begin
           alias method_missing g_method_missing
           block.call(self)
@@ -906,13 +906,13 @@ module TDParser
       if (sym[-1,1] == "=")
         case arg0
         when Parser
-          self.class.instance_eval{
-            define_method(sym[0..-2]){ arg0 }
+          self.class.instance_eval {
+            define_method(sym[0..-2]) { arg0 }
           }
         else
           t = token(arg0)
-          self.class.instance_eval{
-            define_method(sym[0..-2]){ t }
+          self.class.instance_eval {
+            define_method(sym[0..-2]) { t }
           }
         end
       elsif (args.size == 0)
@@ -935,7 +935,7 @@ module TDParser
         g.instance_eval(&block)
       end
     ensure
-      g.instance_eval{
+      g.instance_eval {
         undef method_missing
       }
     end

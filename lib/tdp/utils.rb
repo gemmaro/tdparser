@@ -39,15 +39,15 @@ module TDPUtils
 
     def generate(str)
       scanner = StringScanner.new(str)
-      TDParser::TokenGenerator.new{|x|
-        while(!scanner.eos?)
+      TDParser::TokenGenerator.new { |x|
+        while !scanner.eos?
           if @ignore_pattern
-            while(scanner.scan(@ignore_pattern))
+            while scanner.scan(@ignore_pattern)
             end
           end
           sstr = scanner.scan(@scan_pattern)
           if sstr
-            @rule.each{|reg,kind|
+            @rule.each { |reg,kind|
               if (reg =~ sstr)
                 x << Token.new(kind, sstr)
                 yielded = true
@@ -83,7 +83,7 @@ module TDPUtils
       if @terminated
         return nil
       end
-      while(empty?())
+      while empty?()
       end
       super()
     end
