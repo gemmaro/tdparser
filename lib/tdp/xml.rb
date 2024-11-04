@@ -86,7 +86,7 @@ module TDPXML
       }
     end
 
-    def pi()
+    def pi
       token(XArray[:processing_instruction, String, String]) >> Proc.new{|x|
         REXML::Instruction.new(x[0][1],x[0][2])
       }
@@ -104,7 +104,7 @@ module TDPXML
       }
     end
 
-    def xmldecl()
+    def xmldecl
       token(XArray[:xmldecl]) >> Proc.new{|x|
         REXML::XMLDecl.new(x[0][1],x[0][2], x[0][3])
       }
@@ -114,12 +114,12 @@ module TDPXML
       token(XArray[:start_doctype, name])
     end
 
-    def end_doctype()
+    def end_doctype
       token(XArray[:end_doctype])
     end
 
     def doctype(name=String, &inner)
-      if (inner)
+      if inner
         crule = inner.call() | empty()
       else
         crule = empty()
@@ -170,12 +170,12 @@ module TDPXML
       Proc.new{|x|
         node = x[0][0]
         child = x[0][1]
-        if (child.is_a?(Array))
+        if child.is_a?(Array)
           child.each{|c| node.add(c) }
         else
           node.add(child)
         end
-        if (act)
+        if act
           act[node]
         else
           node

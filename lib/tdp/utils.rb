@@ -41,12 +41,12 @@ module TDPUtils
       scanner = StringScanner.new(str)
       TDParser::TokenGenerator.new{|x|
         while(!scanner.eos?)
-          if (@ignore_pattern)
+          if @ignore_pattern
             while(scanner.scan(@ignore_pattern))
             end
           end
           sstr = scanner.scan(@scan_pattern)
-          if (sstr)
+          if sstr
             @rule.each{|reg,kind|
               if (reg =~ sstr)
                 x << Token.new(kind, sstr)
@@ -75,12 +75,12 @@ module TDPUtils
       @terminated = false
     end
 
-    def terminate()
+    def terminate
       @terminated = true
     end
 
-    def shift()
-      if (@terminated)
+    def shift
+      if @terminated
         return nil
       end
       while(empty?())

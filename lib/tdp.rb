@@ -40,7 +40,7 @@ module TDParser
       @enumerator.to_a
     end
 
-    def shift()
+    def shift
       if( @buffer.empty? )
         if( self.next? )
           token = self.next()
@@ -84,7 +84,7 @@ module TDParser
       end
     end
 
-    def state()
+    def state
       @map[:__state__]
     end
 
@@ -92,7 +92,7 @@ module TDParser
       @map[:__state__] = s
     end
 
-    def clear()
+    def clear
       super()
       @map.clear()
     end
@@ -121,11 +121,11 @@ module TDParser
     include BufferUtils
     include TDParser
 
-    def to_proc()
+    def to_proc
       Proc.new{|*x| self.call(*x) }
     end
 
-    def to_s()
+    def to_s
       "??"
     end
 
@@ -189,7 +189,7 @@ module TDParser
       }
     end
 
-    def ~@()
+    def ~@
       NegativeParser.new(self)
     end
 
@@ -214,7 +214,7 @@ module TDParser
       end
     end
 
-    def peek()
+    def peek
       t = @tokens.shift()
       if( ! t.nil? )
         @tokens.unshift(t)
@@ -254,7 +254,7 @@ module TDParser
       (@options == r.options)
     end
 
-    def to_s()
+    def to_s
       "#{@symbol}"
     end
   end
@@ -283,7 +283,7 @@ module TDParser
       (@equality == r.equality)
     end
 
-    def to_s()
+    def to_s
       "#{@symbol}"
     end
   end
@@ -311,7 +311,7 @@ module TDParser
       @parsers.zip(r.parsers).all?{|x,y| x.same?(y)}
     end
 
-    def to_s()
+    def to_s
       "<composite: #{@parsers.collect{|x| x.to_s()}}>"
     end
   end
@@ -339,7 +339,7 @@ module TDParser
       (@action == r.action)
     end
 
-    def to_s()
+    def to_s
       "(#{@parsers[0]} <action>)"
     end
   end
@@ -363,7 +363,7 @@ module TDParser
       (@label == r.label)
     end
 
-    def to_s()
+    def to_s
       "(#{@parsers[0]}/#{@label})"
     end
   end
@@ -390,7 +390,7 @@ module TDParser
       false
     end
 
-    def to_s()
+    def to_s
       "<stack:#{@stack.object_id}>"
     end
   end
@@ -412,7 +412,7 @@ module TDParser
       @parsers[0] - (@parsers[1] - r)
     end
 
-    def to_s()
+    def to_s
       "(#{@parsers[0]} #{@parsers[1]})"
     end
   end
@@ -429,7 +429,7 @@ module TDParser
       end
     end
 
-    def to_s()
+    def to_s
       "(#{@parsers[0]} | #{@parsers[1]})"
     end
 
@@ -439,9 +439,9 @@ module TDParser
         r12 = r1.parsers[1]
         r21 = r2.parsers[0]
         r22 = r2.parsers[1]
-        if (r11.same?(r21))
+        if r11.same?(r21)
           share,r12,r22, = shared_sequence(r12, r22)
-          if (share)
+          if share
             return [r11 - share, r12, r22]
           else
             return [r11, r12, r22]
@@ -454,22 +454,22 @@ module TDParser
     def optimize(default=false)
       r1 = @parsers[0]
       r2 = @parsers[1]
-      if (r1.is_a?(ActionParser))
+      if r1.is_a?(ActionParser)
         act1 = r1.action
         r1 = r1.parsers[0]
       end
-      if (r2.is_a?(ActionParser))
+      if r2.is_a?(ActionParser)
         act2 = r2.action
         r2 = r2.parsers[0]
       end
       share,r12,r22, = shared_sequence(r1, r2)
-      if (share)
+      if share
         r = share - (r12 + r22)
-        if (act1)
-          if (act2)
+        if act1
+          if act2
             r = r >> Proc.new{|x|
               y0,y1,*ys = x.pop()
-              if (y0)
+              if y0
                 act1.call(x.push(*y0))
               else
                 act2.call(x.push(*y1))
@@ -478,16 +478,16 @@ module TDParser
           else
             r = r >> Proc.new{|x|
               y0,y1,*ys = x.pop()
-              if (y0)
+              if y0
                 act1.call(x.push(*y0))
               end
             }
           end
         else
-          if (act2)
+          if act2
             r = r >> Proc.new{|x|
               y0,y1,*ys = x.pop()
-              if (y1)
+              if y1
                 act2.call(x.push(*y1))
               end
             }
@@ -495,7 +495,7 @@ module TDParser
         end
         return r
       end
-      if (default)
+      if default
         self.dup()
       else
         super(default)
@@ -515,7 +515,7 @@ module TDParser
       end
     end
 
-    def to_s()
+    def to_s
       "(#{@parsers[0]} + #{@parsers[1]})"
     end
   end
@@ -544,7 +544,7 @@ module TDParser
           xs.push(x)
         end
       end
-      if ( x.nil? )
+      if  x.nil?
         nil
       else
         if( range )
@@ -580,7 +580,7 @@ module TDParser
       end
     end
 
-    def to_s()
+    def to_s
       "(#{@parsers[0]})*#{@range ? @range.to_s : @min.to_s}"
     end
 
@@ -604,7 +604,7 @@ module TDParser
       end
     end
 
-    def to_s()
+    def to_s
       "~#{@parsers[0]}"
     end
   end
@@ -614,11 +614,11 @@ module TDParser
       nil
     end
 
-    def to_s()
+    def to_s
       "<fail>"
     end
 
-    def ==()
+    def ==
       (self.class == r.class)
     end
   end
@@ -628,7 +628,7 @@ module TDParser
       Sequence[nil]
     end
 
-    def to_s()
+    def to_s
       "<empty>"
     end
 
@@ -640,14 +640,14 @@ module TDParser
   class AnyParser < Parser
     def call(tokens, _buff)
       t = tokens.shift
-      if (t.nil?)
+      if t.nil?
         nil
       else
         Sequence[t]
       end
     end
 
-    def to_s()
+    def to_s
       "<any>"
     end
 
@@ -659,14 +659,14 @@ module TDParser
   class NoneParser < Parser
     def call(tokens, _buff)
       t = tokens.shift
-      if (t.nil?)
+      if t.nil?
         Sequence[nil]
       else
         nil
       end
     end
 
-    def to_s()
+    def to_s
       "<none>"
     end
 
@@ -710,7 +710,7 @@ module TDParser
       end
     end
 
-    def to_s()
+    def to_s
       "<backref:#{@label}>"
     end
 
@@ -738,13 +738,13 @@ module TDParser
       end
     end
 
-    def to_s()
+    def to_s
       "<stackref:#{@stack.object_id}>"
     end
 
     def ==(r)
       super(r) &&
-      (@stack.equal?(r.stack)) &&
+      @stack.equal?(r.stack) &&
       (@equality == r.equality)
     end
   end
@@ -764,7 +764,7 @@ module TDParser
       end
     end
 
-    def to_s()
+    def to_s
       "<condition:#{@condition}>"
     end
 
@@ -793,7 +793,7 @@ module TDParser
       end
     end
 
-    def to_s()
+    def to_s
       "<state:#{@state}>"
     end
 
@@ -832,17 +832,17 @@ module TDParser
   end
   alias empty empty_rule
 
-  def any_rule()
+  def any_rule
     AnyParser.new()
   end
   alias any any_rule
 
-  def none_rule()
+  def none_rule
     NoneParser.new()
   end
   alias none none_rule
 
-  def fail_rule()
+  def fail_rule
     FailParser.new()
   end
   alias fail fail_rule
