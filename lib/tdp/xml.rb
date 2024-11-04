@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'tdp'
 require 'rexml/parsers/pullparser'
 require 'rexml/document'

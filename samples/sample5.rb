@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # -*- ruby -*-
 # writing grammars in the substitution style.
 

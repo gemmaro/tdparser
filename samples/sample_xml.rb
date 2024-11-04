@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'tdp'
 require 'tdp/utils'
 require 'tdp/xml'
