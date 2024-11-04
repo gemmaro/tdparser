@@ -3,16 +3,41 @@
 # Top-down parser for embedded in a ruby script.
 #
 
-require 'generator'
+require "enumerator"
 
 module TDParser
   class ParserException < RuntimeError
   end
 
-  class TokenGenerator < Generator
-    def initialize(*args, &block)
-      super(*args, &block)
+  class TokenGenerator
+    def initialize(args = nil, &block)
+      enumerator = Enumerator.new do |y|
+        if args
+          args.each { |arg| y << arg }
+        else
+          block.call(y)
+        end
+      end
+      @enumerator = enumerator
+
       @buffer = []
+    end
+
+    def next
+      @enumerator.next
+    end
+
+    def next?
+      begin
+        @enumerator.peek
+        true
+      rescue StopIteration
+        false
+      end
+    end
+
+    def to_a
+      @enumerator.to_a
     end
 
     def shift()
