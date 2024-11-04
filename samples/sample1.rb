@@ -23,7 +23,7 @@ class MyParser
   end
 
   def parse(str)
-    tokens = str.split(/(?:\s+)|([\+\-\*\/])/).select { |x| x != "" }
+    tokens = str.split(%r{ (?:\s+) | [+\-*/] }x).select { |x| x != "" }
     expr.parse(tokens)
   end
 end

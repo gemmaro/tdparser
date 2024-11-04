@@ -65,7 +65,7 @@ class FastParser < MyParser
   end
 
   def parse(str)
-    tokens = str.split(/(?:\s+)|([()+\-*\/])/).select { |x| x != "" }
+    tokens = str.split(%r{(?:\s+)|([()+\-*/])}).select { |x| x != "" }
     expr1.parse(tokens)
   end
 end

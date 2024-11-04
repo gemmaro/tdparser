@@ -512,7 +512,7 @@ class TestTDParser < Test::Unit::TestCase
     tokenizer = StringTokenizer.new({
       /\d+\.\d+/ => :real,
       /\d+(?!\.\d)/ => :int,
-      /\+|-|\*|\// => :op,
+      %r{\+|-|\*|/} => :op,
     })
     tokens = tokenizer.generate("1 + 1.0 - 2").to_a()
     kinds = tokens.collect { |x| x.kind }
