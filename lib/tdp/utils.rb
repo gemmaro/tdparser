@@ -47,7 +47,7 @@ module TDPUtils
           if (sstr)
             @rule.each{|reg,kind|
               if (reg =~ sstr)
-                x.yield(Token.new(kind, sstr))
+                x << Token.new(kind, sstr)
                 yielded = true
                 break
               end
