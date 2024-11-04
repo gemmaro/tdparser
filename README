@@ -1,0 +1,30 @@
+	TDP4R -- Top-Down Parser for Ruby (LL(k) Parser)
+
+	Copyright(C) 2003,2004,2005,2006, Takaaki Tateishi <ttate@ttsky.net>
+
+Description
+------------
+TDP4R is a ruby library that helps us to construct a top-down parser
+using recursive method calls, that is also called a recursive
+descendent parser. The main features are (1) constructing a parser
+using combinators as in Parsec[1], (2) backtracking parse algorithm
+with unlimited lookahead, and (3) writing EBNF grammars using ruby's
+objects.
+The feature of (1) enables us to change some production rules in a
+grammar at runtime and componentize a set of production rules.
+From the feature of (2), we need not consider how to prevent
+conflicts among production rules. In addition, TDP4R can be viewed as
+an internal DSL for writing LL(k) grammars because of (3).
+
+TODO
+-----
+*
+
+License
+--------
+See COPYING
+
+[1] Daan Leijen: Parsec (Monadic Parser Combinator Library for Haskell),
+    http://www.cs.uu.nl/~daan/parsec.html
+[2] Bryan Ford: "Packrat Parsing: Simple, Powerful, Lazy, Linear
+    Time", ICFP, 2002.

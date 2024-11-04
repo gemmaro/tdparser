@@ -1,0 +1,37 @@
+* How do I write a rule that represents left/right-associative
+  infix operators.
+
+One of the good example is an arithmetic expression for "*", "/",
+"+" and "-". If you use racc (yacc-style parser for ruby), you
+would write the following rule:
+
+  prechigh
+    left '*','/'
+    left '+','-'
+  preclow
+  ...
+  expr : expr '*' expr { result = val[0] * val[2]}
+       | expr '/' expr { result = val[0] / val[2]}
+       | expr '+' expr { result = val[0] + val[2]}
+       | expr '-' expr { result = val[0] - val[2]}
+       | NUMBER        { result = val[0].to_i() }
+
+In TDP4R, you can write the above rule as follows:
+
+  TDParser.define{|g|
+    g.expr = chainl(NUMBER >> Proc.new{|x| x[0].to_i},
+                    token("*")|token("/"),
+                    token("+")|token("-")){|x|
+      case x[1]
+      when "*"
+        x[0] * x[2]
+      when "/"
+        x[0] / x[2]
+      when "+"
+        x[0] + x[2]
+      when "-"
+        x[0] - x[2]
+      end
+    }
+    ...
+  }
