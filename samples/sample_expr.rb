@@ -6,14 +6,14 @@
 require 'tdp'
 require 'tdp/utils'
 
-parser = TDParser.define{|g|
+parser = TDParser.define { |g|
   g.plus = "+"
   g.minus = "-"
   g.mult = "*"
   g.div = "/"
 
   g.expr1 =
-    chainl(prim, mult|div, plus|minus){|x|
+    chainl(prim, mult | div, plus | minus) { |x|
       case x[1]
       when "+"
         x[0] + x[2]
@@ -27,8 +27,8 @@ parser = TDParser.define{|g|
     }
 
   g.prim =
-    (token(:int) >> proc{|x| x[0].value.to_i }) |
-    ((token("(") - expr1 - token(")")) >> proc{|x| x[1] })
+    (token(:int) >> proc { |x| x[0].value.to_i }) |
+    ((token("(") - expr1 - token(")")) >> proc { |x| x[1] })
 
   def parse(str)
     tokenizer = TDPUtils::StringTokenizer[
