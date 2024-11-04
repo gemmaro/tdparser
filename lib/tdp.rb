@@ -394,10 +394,6 @@ module TDParser
   end
 
   class ConcatParser < CompositeParser
-    def initialize(r1, r2)
-      super(r1, r2)
-    end
-
     def call(tokens, buff)
       if( (x = @parsers[0].call(tokens, buff)).nil? )
         nil
@@ -420,10 +416,6 @@ module TDParser
   end
 
   class ChoiceParser < CompositeParser
-    def initialize(r1, r2)
-      super(r1, r2)
-    end
-
     def call(tokens, buff)
       b = prepare(buff)
       if( (x = @parsers[0].call(tokens, b)).nil? )
@@ -510,10 +502,6 @@ module TDParser
   end
 
   class ParallelParser < CompositeParser
-    def initialize(r1, r2)
-      super(r1, r2)
-    end
-
     def call(tokens, buff)
       b = prepare(buff)
       if( (x = @parsers[0].call(tokens, b)).nil? )
@@ -602,10 +590,6 @@ module TDParser
   end
 
   class NegativeParser < CompositeParser
-    def initialize(parser)
-      super(parser)
-    end
-
     def call(tokens, buff)
       b = prepare(buff)
       r = @parsers[0].call(tokens,b)
