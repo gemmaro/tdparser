@@ -37,6 +37,11 @@ translator = TDParser.define { |g|
   end
 }
 
+if ENV["TEST"]
+  XMLTranslator = translator
+  return
+end
+
 seq = translator.translate(<<EOS)
 <?xml version="1.0" ?>
 <!DOCTYPE body [

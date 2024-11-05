@@ -39,6 +39,11 @@ parser = TDParser.define { |g|
   end
 }
 
+if ENV["TEST"]
+  SampleExprParser = parser
+  return
+end
+
 puts("1 = " + parser.parse("1").to_s)
 puts("1+10 = " + parser.parse("1+10").to_s)
 puts("2-1*20+18 = " + parser.parse("2 - 1 * 20 + 18").to_s)
