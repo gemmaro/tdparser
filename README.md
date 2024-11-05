@@ -14,3 +14,8 @@ Login name is ttate (also on RubyGems.org).
 He is a [Ruby contributor](https://ruby-doc.org/core-2.5.1/doc/contributors_rdoc.html).
 
 There are [some articles](https://web.archive.org/web/20100916024045/http://log.ttsky.net:80/tag/tdp4r) about this library.
+
+https://magazine.rubyist.net/articles/0008/0008-RLR.html
+
+https://openhub.net/p/tdp4r
+BSD 3-clause
