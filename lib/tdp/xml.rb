@@ -4,7 +4,7 @@ require 'tdp'
 require 'rexml/parsers/pullparser'
 require 'rexml/document'
 
-module TDPXML
+module TDParser
   module XMLParser
     class XMLTokenGenerator < TDParser::TokenGenerator
       def initialize(src)
