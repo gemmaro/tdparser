@@ -6,7 +6,7 @@
 require 'tdparser'
 require 'tdparser/utils'
 
-class MyParser
+class Sample3Parser
   include TDParser
 
   def expr1
@@ -51,7 +51,9 @@ class MyParser
   end
 end
 
-parser = MyParser.new
+ENV["TEST"] and return
+
+parser = Sample3Parser.new
 puts("1+10 = " + parser.parse("1+10").to_s)
 puts("2-1*20+18 = " + parser.parse("2 - 1 * 20 + 18").to_s)
 puts("2-(1-20) = " + parser.parse("2 - (1 - 20)").to_s)
