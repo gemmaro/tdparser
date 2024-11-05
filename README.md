@@ -10,3 +10,7 @@ Login name is ttate (also on RubyGems.org).
 > Original Author:
 >   Takaaki Tateishi <ttate@jaist.ac.jp>
 > ```
+
+He is a [Ruby contributor](https://ruby-doc.org/core-2.5.1/doc/contributors_rdoc.html).
+
+There are [some articles](https://web.archive.org/web/20100916024045/http://log.ttsky.net:80/tag/tdp4r) about this library.
