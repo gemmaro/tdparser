@@ -6,7 +6,9 @@ require 'rake/testtask'
 require 'rdoc/task'
 
 Rake::TestTask.new do |t|
-  t.test_files = FileList["test/test_*.rb"]
+  t.libs << "samples" << "test"
+  t.test_files = FileList["test/*_test.rb"]
+  t.verbose = true
 end
 
 RDoc::Task.new do |rdoc|
