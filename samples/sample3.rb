@@ -6,7 +6,6 @@ require 'tdp/utils'
 
 class MyParser
   include TDParser
-  include TDPUtils
 
   def expr1
     n = nil;

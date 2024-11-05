@@ -17,7 +17,6 @@ end
 
 class Calculator
   include TDParser
-  include TDPUtils
 
   def expr1
     rule(:expr2) - ((token("+")|token("-")) - rule(:expr2))*0 >> proc{|x|
@@ -83,7 +82,7 @@ Calculator2 = TDParser.define{|g|
     g.token("(") - g.expr1 - g.token(")") >> proc{|x| x[1] }
 
   def parse(str)
-    tokenizer = TDPUtils::StringTokenizer.new({
+    tokenizer = TDParser::StringTokenizer.new({
       /\d+/ => :int,
     })
     expr1.parse(tokenizer.generate(str))
@@ -131,7 +130,7 @@ LeftResursiveCalculator = TDParser.define{|g|
     g.token("(") - g.expr1 - g.token(")") >> proc{|x| x[1] }
 
   def parse(str)
-    tokenizer = TDPUtils::StringTokenizer.new({
+    tokenizer = TDParser::StringTokenizer.new({
       /\d+/ => :int,
     })
     expr1.parse(tokenizer.generate(str))
@@ -141,7 +140,6 @@ LeftResursiveCalculator = TDParser.define{|g|
 
 class TestTDParser < Test::Unit::TestCase
   include TDParser
-  include TDPUtils
 
   def setup()
     @calc = Calculator.new()

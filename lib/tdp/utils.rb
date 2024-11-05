@@ -1,6 +1,6 @@
 require 'tdp'
 
-module TDPUtils
+module TDParser
   class Token
     attr_accessor :kind, :value
     def initialize(kind, value)

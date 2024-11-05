@@ -6,7 +6,6 @@ require 'tdp/utils'
 
 class MyParser
   include TDParser
-  include TDPUtils
 
   def expr1
     rule(:expr2) - ((token("+")|token("-")) - rule(:expr2))*0 >> proc{|x|
