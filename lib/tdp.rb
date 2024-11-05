@@ -894,8 +894,6 @@ module TDParser
         begin
           alias method_missing g_method_missing
           block.call(self)
-        ensure
-          undef method_missing
         end
       }
     end
@@ -934,10 +932,6 @@ module TDParser
       else
         g.instance_eval(&block)
       end
-    ensure
-      g.instance_eval {
-        undef method_missing
-      }
     end
     g
   end
