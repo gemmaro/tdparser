@@ -898,15 +898,18 @@ module TDParser
       arg0 = args[0]
       sym = sym.to_s
       if (sym[-1, 1] == "=")
+        name = sym[0..-2]
         case arg0
         when Parser
           self.class.instance_eval {
-            define_method(sym[0..-2]) { arg0 }
+            method_defined?(name) or
+              define_method(name) { arg0 }
           }
         else
           t = token(arg0)
           self.class.instance_eval {
-            define_method(sym[0..-2]) { t }
+            method_defined?(name) or
+            define_method(name) { t }
           }
         end
       elsif (args.size == 0)
