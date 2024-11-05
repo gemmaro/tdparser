@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'tdp'
+require 'tdparser'
 
 module TDParser
   class Token

@@ -6,8 +6,7 @@
 #
 
 module TDParser
-  class ParserException < RuntimeError
-  end
+  ParserException = Class.new(RuntimeError)
 
   class TokenGenerator
     def initialize(args = nil, &block)

@@ -3,7 +3,7 @@
 # -*- ruby -*-
 # adder-substractor
 
-require 'tdp'
+require 'tdparser'
 
 class MyParser
   include TDParser

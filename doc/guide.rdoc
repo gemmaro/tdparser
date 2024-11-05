@@ -148,5 +148,5 @@ section, can also be defined as follows.
 == <tt>StringTokenizer</tt>
 
 There is a simple tokenizer called TDParser::StringTokenizer in the
-library <tt>tdp/utils</tt>.  (See <tt>MyParser#parse</tt> in
+library <tt>tdparser/utils</tt>.  (See <tt>MyParser#parse</tt> in
 <tt>sample2.rb</tt>)
