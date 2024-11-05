@@ -1,14 +1,16 @@
-= TDP4R Programmers Guide
+= TDParser Programmers Guide
+
+Note: TDParser is a successor of TDP4R.
 
 == Introduction
 
-TDP4R is a Ruby component that helps us to construct a top-down parser
-using method calls.  This document describes how to use TDP4R in two
-styles.  Both of styles are similar to one of JavaCC on the surface.
-However, one is a style in which we define rules of a grammar as
-methods (like shown in +sample4.rb+).  The other is a style in which
-each rule is defined as if it is a property of a grammar (see also
-+sample5.rb+).
+TDParser is a Ruby component that helps us to construct a top-down
+parser using method calls.  This document describes how to use TDParser
+in two styles.  Both of styles are similar to one of JavaCC on the
+surface.  However, one is a style in which we define rules of a
+grammar as methods (like shown in +sample4.rb+).  The other is a style
+in which each rule is defined as if it is a property of a grammar (see
+also +sample5.rb+).
 
 == Defining Rules in Module
 
