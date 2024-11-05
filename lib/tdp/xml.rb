@@ -11,7 +11,7 @@ module TDPXML
         @xparser = REXML::Parsers::BaseParser.new(src)
         super() { |g|
           while @xparser.has_next?
-            e = @xparser.pull()
+            e = @xparser.pull
             g.yield(e)
           end
         }
@@ -66,14 +66,14 @@ module TDPXML
 
     def element(elem=String, &inner)
       if inner
-        crule = inner.call() | empty()
+        crule = inner.call | empty
       else
-        crule = empty()
+        crule = empty
       end
       (start_element(elem) - crule - end_element(elem)) >> Proc.new { |x|
         name = x[0][1]
         attrs = x[0][2]
-        node = REXML::Element.new()
+        node = REXML::Element.new
         node.name = name
         node.attributes.merge!(attrs)
         [node, x[1]]
@@ -120,11 +120,11 @@ module TDPXML
 
     def doctype(name=String, &inner)
       if inner
-        crule = inner.call() | empty()
+        crule = inner.call | empty
       else
-        crule = empty()
+        crule = empty
       end
-      (start_doctype(name) - crule - end_doctype()) >> Proc.new { |x|
+      (start_doctype(name) - crule - end_doctype) >> Proc.new { |x|
         node = REXML::DocType.new(x[0][1..-1])
         [node, x[1]]
       }
@@ -161,9 +161,9 @@ module TDPXML
     end
 
     def any_node(&b)
-      (element(&b) | doctype(&b) | text() | pi() | cdata() |
-       comment() | xmldecl() | externalentity() | elementdecl() |
-       entitydecl() | attlistdecl() | notationdecl()) >> Proc.new { |x| x[2] }
+      (element(&b) | doctype(&b) | text | pi | cdata |
+       comment | xmldecl | externalentity | elementdecl |
+       entitydecl | attlistdecl | notationdecl) >> Proc.new { |x| x[2] }
     end
 
     def dom_constructor(&act)

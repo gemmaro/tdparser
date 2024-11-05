@@ -17,17 +17,17 @@ parser = TDParser.define { |g|
   g.rule1 =
     ((token("1") - token("2") - rule1 - token("a")) >> f) |
     ((token("1") - token("2") - rule1 - token("b")) >> f) |
-    empty()
+    empty
 
 
   g.rule2 =
     (((token("1") - token("2") - rule2 - token("a")) >> f) |
      ((token("1") - token("2") - rule2 - token("b")) >> f) |
-     empty()).optimize()
+     empty).optimize
 
   g.rule3 =
     (((token("1") - token("2") - rule3 - (token("a") | token("b"))) >> f) |
-     empty())
+     empty)
 }
 
 puts(parser.rule1.to_s)

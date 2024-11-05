@@ -50,7 +50,6 @@ module TDPUtils
             @rule.each { |reg, kind|
               if (reg =~ sstr)
                 x << Token.new(kind, sstr)
-                yielded = true
                 break
               end
             }
@@ -83,7 +82,7 @@ module TDPUtils
       if @terminated
         return nil
       end
-      while empty?()
+      while empty?
       end
       super()
     end
