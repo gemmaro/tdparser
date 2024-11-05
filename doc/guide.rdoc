@@ -1,0 +1,152 @@
+= TDP4R Programmers Guide
+
+== Introduction
+
+TDP4R is a Ruby component that helps us to construct a top-down parser
+using method calls.  This document describes how to use TDP4R in two
+styles.  Both of styles are similar to one of JavaCC on the surface.
+However, one is a style in which we define rules of a grammar as
+methods (like shown in +sample4.rb+).  The other is a style in which
+each rule is defined as if it is a property of a grammar (see also
++sample5.rb+).
+
+== Defining Rules in Module
+
+The following class is a parser class, and it accepts expressions that
+consists of digits and <tt>+</tt>.
+
+  class MyParser
+    include TDParser
+
+    def expr
+      token(/\d+/) - token("+") - rule(:expr) >> proc{|x| x[0].to_i + x[2] } |
+      token(/\d+/) >> proc{|x| x[0].to_i }
+    end
+  end
+
+In this class, the method +expr+ represents the following production
+rule.
+
+  expr := int '+' expr
+        | int
+
+In addition, at the first line of the method +expr+, values accepted
+by <tt>token(/\d+/)</tt>, <tt>token("+")</tt> and <tt>rule(:expr)</tt>
+are assigned to <tt>x[0]</tt>, <tt>x[1]</tt> and <tt>x[2]</tt>
+respectively.  After that, in order to parse <tt>1 + 2</tt>, we first
+split it into an array of tokens like <tt>["1", "+", "2"]</tt>, and
+then call the +parse+ method of a parser object, which is created by
+<tt>MyParser.new()</tt>, as follows.
+
+   parser = MyParser.new()
+   parser.expr.parse(["1", "+", "2"])
+
+Note that we can pass one of the following objects to the parse method.
+
+- an Enumerable object.  E.g.: <tt>expr.parse(["1", "+", "2"])</tt>
+
+- an object which has methods 'shift' and 'unshift'.
+  E.g.:
+
+    expr.parse(TDParser::TokenGenerator{|x|
+                 x.yield("1"); x.yield("+"); x.yield("2")
+               })
+
+- a block.  E.g.: <tt>expr.parse{|x| x.yield("1"); x.yield("+");
+  x.yield("2") }</tt>
+
+In that syntax, <tt>+</tt> is right-associative.  However, we
+<i>can't</i> write as follows.
+
+  def expr
+    rule(:expr) - token("+") - token(/\d+/) >> proc{|x| x[0].to_i + x[2].to_i }
+    token(/\d+/) >> proc{|x| x[0].to_i }
+  end
+
+This problem is called left-recursion problem.  So we have to use one
+of the following rules instead.
+
+  def expr
+    token(/\d+/) - (token("+") - token(/\d+/))*0 >> proc{|x|
+      x[1].inject(x[0]){|acc,y|
+        case y[0]
+        when "+"
+          acc + y[1]
+        end
+      }
+    }
+  end
+
+  def expr  # javacc style
+    n = nil
+    (token(/\d+/) >> proc{|x| n = x }) -
+    (token("+") - rule(/\d+/) >> proc{|y|
+      case y[0]
+      when "+"
+        n += y[1].to_i
+      end
+    })*0 >> proc{|x| n }
+  end
+
+In the rules, <tt>(...)*N</tt> represents <i>N</i> or more rules
+<tt>(...)</tt>.  <tt>x[1]</tt> has multiple sequences of tokens
+accepted by <tt>(...)*0</tt>.  For example, if <tt>["1",
+"+","1","+","2"]</tt> is parsed by the rule: <tt>token(/\d+/) -
+(token("+") - token(/\d+/))*0</tt>, we obtain <tt>[["+", "1"], ["+",
+"2"]]</tt> by <tt>x[1]</tt>.
+
+== Defining Rules using <tt>TDParser.define()</tt>
+
+The rule defined in the first sample script, shown in the previous
+section, can also be defined as follows.
+
+  parser = TDParser.define{|g|
+    g.expr =
+      g.token(/\d+/) - g.token("+") - g.expr >> proc{|x| x[0].to_i + x[2] } |
+      g.token(/\d+/) >> proc{|x| x[0].to_i }
+  }
+
+(See also <tt>sample5.rb</tt> and <tt>sample6.rb</tt>)
+
+== Parser Combinators
+
+* Constructors
+  * <tt>token(obj)</tt>
+  * <tt>rule(method)</tt>
+  * <tt>any()</tt>:: any token
+  * <tt>none()</tt>:: no more token
+  * <tt>empty()</tt>:: empty
+  * <tt>fail()</tt>:: failure
+  * <tt>backref(label)</tt>:: back reference
+  * <tt>stackref(stack)</tt>:: stack reference
+* Operators
+  * <tt>rule - rule</tt>:: sequence
+  * <tt>rule | rule</tt>:: choice
+  * <tt>rule * n</tt>:: iteration
+  * <tt>rule * n..m</tt>:: iteration
+  * <tt>rule / label</tt>:: label
+  * <tt>rule % stack</tt>:: stack
+  * <tt>~ rule</tt>:: negative lookahead
+* Utility Functions
+  * <tt>leftrec(base, rule1, ..., ruleN, &action)</tt>:: This constructs the following rule:
+
+      base - ruleN* >> action' |
+      ... |
+      base - rule1* >> action' |
+      fail()
+
+  * <tt>rightrec(rule1, ..., ruleN, base, &action)</tt>:: This constructs the following rule:
+  
+      ruleN* - base >> action' |
+      ... |
+      rule1* - base >> action' |
+      fail()
+
+  * <tt>chainl(base, infix1, ..., infixN, &action)</tt>
+  * <tt>chainr(base, infix1, ..., infixN, &action)</tt>
+
+== <tt>StringTokenizer</tt>
+
+There is a simple tokenizer called TDPUtils::StringTokenizer in the
+library <tt>tdp/utils</tt>.  (See <tt>MyParser#parse</tt> in
+<tt>sample2.rb</tt>)
