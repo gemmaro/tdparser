@@ -26,11 +26,11 @@ module TDParser
   end
 
   class BasicStringTokenizer
-    def self.[](rule, ignore=nil)
+    def self.[](rule, ignore = nil)
       self.new(rule, ignore)
     end
 
-    def initialize(rule, ignore=nil)
+    def initialize(rule, ignore = nil)
       require("strscan")
       @rule = rule
       @scan_pattern = Regexp.new(@rule.keys.join("|"))
@@ -63,7 +63,7 @@ module TDParser
   end
 
   class StringTokenizer < BasicStringTokenizer
-    def initialize(rule, ignore=nil)
+    def initialize(rule, ignore = nil)
       super(rule, ignore || /\s+/)
     end
   end
