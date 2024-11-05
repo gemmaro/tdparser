@@ -31,7 +31,7 @@ parser = TDParser.define { |g|
     ((token("(") - expr1 - token(")")) >> proc { |x| x[1] })
 
   def parse(str)
-    tokenizer = TDPUtils::StringTokenizer[
+    tokenizer = TDParser::StringTokenizer[
       /\d+(?!\.\d)/ => :int,
       /\d+\.\d+/ => :real,
     ]
