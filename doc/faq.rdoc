@@ -1,9 +1,8 @@
-* How do I write a rule that represents left/right-associative
-  infix operators.
+= How do I write a rule that represents left/right-associative infix operators
 
-One of the good example is an arithmetic expression for "*", "/",
-"+" and "-". If you use racc (yacc-style parser for ruby), you
-would write the following rule:
+One of the good example is an arithmetic expression for <tt>*</tt>,
+<tt>/</tt>, <tt>+</tt> and <tt>-</tt>.  If you use Racc (Yacc-style
+parser for Ruby), you would write the following rule:
 
   prechigh
     left '*','/'
@@ -33,5 +32,5 @@ In TDP4R, you can write the above rule as follows:
         x[0] - x[2]
       end
     }
-    ...
+    # ...
   }
