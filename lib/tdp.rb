@@ -125,10 +125,6 @@ module TDParser
       Proc.new { |*x| self.call(*x) }
     end
 
-    def to_s
-      "??"
-    end
-
     def call(*args)
     end
 
