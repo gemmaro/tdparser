@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'tdp'
-require 'tdp/utils'
-require 'tdp/xml'
+require 'tdparser'
+require 'tdparser/utils'
+require 'tdparser/xml'
 
 translator = TDParser.define { |g|
   extend TDParser::XMLParser

@@ -3,8 +3,8 @@
 # -*- ruby -*-
 # writing grammars in the substitution style.
 
-require 'tdp'
-require 'tdp/utils'
+require 'tdparser'
+require 'tdparser/utils'
 
 parser = TDParser.define { |g|
   g.plus = "+"

@@ -3,8 +3,8 @@
 # -*- ruby -*-
 # caching constructed grammars
 
-require 'tdp'
-require 'tdp/utils'
+require 'tdparser'
+require 'tdparser/utils'
 
 class MyParser
   include TDParser

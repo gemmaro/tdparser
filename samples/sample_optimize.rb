@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'tdp'
+require 'tdparser'
 require 'benchmark'
 
 # disable auto optimization
