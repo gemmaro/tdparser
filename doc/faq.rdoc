@@ -15,7 +15,7 @@ parser for Ruby), you would write the following rule:
        | expr '-' expr { result = val[0] - val[2]}
        | NUMBER        { result = val[0].to_i() }
 
-In TDP4R, you can write the above rule as follows:
+In TDParser, you can write the above rule as follows:
 
   TDParser.define{|g|
     g.expr = chainl(NUMBER >> Proc.new{|x| x[0].to_i},
