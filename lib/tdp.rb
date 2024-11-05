@@ -11,14 +11,13 @@ module TDParser
 
   class TokenGenerator
     def initialize(args = nil, &block)
-      enumerator = Enumerator.new do |y|
+      @enumerator = Enumerator.new do |y|
         if args
           args.each { |arg| y << arg }
         else
           block.call(y)
         end
       end
-      @enumerator = enumerator
 
       @buffer = []
     end
