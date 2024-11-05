@@ -13,7 +13,7 @@ parser = TDParser.define { |g|
   g.elem = (g.str | g.list) >> proc { |x| x[0] }
 
   def parse(str)
-    buff = str.split(/\s+|([()])/).select { |s| s.size() > 0 }
+    buff = str.split(/\s+|([()])/).select { |s| s.size > 0 }
     list.parse(buff)
   end
 }

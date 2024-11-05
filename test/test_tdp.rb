@@ -146,149 +146,149 @@ class TestTDParser < Test::Unit::TestCase
   include TDPUtils
 
   def setup
-    @calc = Calculator.new()
+    @calc = Calculator.new
   end
 
   def test_sequence1
     abc = "abc"
-    rule = (token("a") - token("b") - token("c")) >> proc { |arg| arg.join() }
+    rule = (token("a") - token("b") - token("c")) >> proc { |arg| arg.join }
     assert_equal(abc, rule.parse(Tokens.new(abc)))
   end
 
   def test_sequence2
     abc = "aBc"
-    rule = (token("a") - token("b") - token("c")) >> proc { |arg| arg.join() }
+    rule = (token("a") - token("b") - token("c")) >> proc { |arg| arg.join }
     assert_equal(nil, rule.parse(Tokens.new(abc)))
   end
 
   def test_sequence3
     abc = "abC"
-    rule = (token("a") - token("b") - token("c")) >> proc { |arg| arg.join() }
+    rule = (token("a") - token("b") - token("c")) >> proc { |arg| arg.join }
     assert_equal(nil, rule.parse(Tokens.new(abc)))
   end
 
   def test_sequence4
     abc = "ab"
-    rule = (token("a") - token("b") - token("c")) >> proc { |arg| arg.join() }
+    rule = (token("a") - token("b") - token("c")) >> proc { |arg| arg.join }
     assert_equal(nil, rule.parse(Tokens.new(abc)))
   end
 
   def test_sequence5
     abc = "abc"
-    rule = (any() - any() - any()) >> proc { |arg| arg.join() }
+    rule = (any - any - any) >> proc { |arg| arg.join }
     assert_equal(abc, rule.parse(Tokens.new(abc)))
   end
 
   def test_sequence6
     abc = "abc"
-    rule = (any() - any() - any() - empty()) >> proc { |arg| arg }
+    rule = (any - any - any - empty) >> proc { |arg| arg }
     assert_equal(["a", "b", "c", nil], rule.parse(Tokens.new(abc)))
   end
 
   def test_sequence7
     abc = "abc"
-    rule = (any() - any() - (empty() | any())) >> proc { |arg| arg }
+    rule = (any - any - (empty | any)) >> proc { |arg| arg }
     assert_equal(["a", "b", nil], rule.parse(Tokens.new(abc)))
   end
 
   def test_sequence8
     abc = "abc"
-    rule = (any() - any() - (any() | empty())) >> proc { |arg| arg }
+    rule = (any - any - (any | empty)) >> proc { |arg| arg }
     assert_equal(["a", "b", "c"], rule.parse(Tokens.new(abc)))
   end
 
   def test_sequence9
     abc = "abc"
-    rule = (any() - any() - any() - (any() | empty())) >> proc { |arg| arg }
+    rule = (any - any - any - (any | empty)) >> proc { |arg| arg }
     assert_equal(["a", "b", "c", nil], rule.parse(Tokens.new(abc)))
   end
 
   def test_sequence10
     abc = "ab"
-    rule = (any() - any() - none()) >> proc { |arg| arg }
+    rule = (any - any - none) >> proc { |arg| arg }
     assert_equal(["a", "b", nil], rule.parse(Tokens.new(abc)))
   end
 
   def test_sequence11
     abc = "abc"
-    rule = (any() - any() - none()) >> proc { |arg| arg }
+    rule = (any - any - none) >> proc { |arg| arg }
     assert_equal(nil, rule.parse(Tokens.new(abc)))
   end
 
   def test_sequence12
     abc = "abc"
-    rule = (any() - any() - ~token("c")) >> proc { |arg| arg }
+    rule = (any - any - ~token("c")) >> proc { |arg| arg }
     assert_equal(nil, rule.parse(Tokens.new(abc)))
   end
 
   def test_sequence13
     abc = "aba"
-    rule = (any() - any() - ~token("c") - any()) >> proc { |arg| arg }
+    rule = (any - any - ~token("c") - any) >> proc { |arg| arg }
     assert_equal(["a", "b", ["a"], "a"], rule.parse(Tokens.new(abc)))
   end
 
   def test_sequence14
     abc = "aba"
     rule1 = token("a") - token("b")
-    rule2 = (~rule(rule1) - any() - any() - any()) >> proc { |arg| arg }
+    rule2 = (~rule(rule1) - any - any - any) >> proc { |arg| arg }
     assert_equal(nil, rule2.parse(Tokens.new(abc)))
   end
 
   def test_sequence15
     abc = "aca"
     rule1 = token("a") - token("b")
-    rule2 = (~rule(rule1) - any() - any() - any()) >> proc { |arg| arg }
+    rule2 = (~rule(rule1) - any - any - any) >> proc { |arg| arg }
     assert_equal([["a", "c"], "a", "c", "a"], rule2.parse(Tokens.new(abc)))
   end
 
   def test_generator1
     generator = TDParser::TokenGenerator.new { |x| ["a", "b", "c"].each { |e| x.yield(e) } }
-    rule = (any() - any() - any() - (any() | empty())) >> proc { |arg| arg }
+    rule = (any - any - any - (any | empty)) >> proc { |arg| arg }
     assert_equal(["a", "b", "c", nil], rule.parse(generator))
   end
 
   def test_generator2
-    rule = (any() - any() - any() - (any() | empty())) >> proc { |arg| arg }
+    rule = (any - any - any - (any | empty)) >> proc { |arg| arg }
     result = rule.parse { |x| ["a", "b", "c"].each { |e| x.yield(e) } }
     assert_equal(["a", "b", "c", nil], result)
   end
 
   def test_iteration1
     abc = "abcabc"
-    rule = ((token("a") - (token("b") | token("B")) - (token("c") | token("C"))) * 0) >> proc { |arg| arg.join() }
+    rule = ((token("a") - (token("b") | token("B")) - (token("c") | token("C"))) * 0) >> proc { |arg| arg.join }
     assert_equal(abc, rule.parse(Tokens.new(abc)))
   end
 
   def test_iteration2
     abc = "aBcabc"
-    rule = ((token("a") - (token("b") | token("B")) - (token("c") | token("C"))) * 0) >> proc { |arg| arg.join() }
+    rule = ((token("a") - (token("b") | token("B")) - (token("c") | token("C"))) * 0) >> proc { |arg| arg.join }
     assert_equal(abc, rule.parse(Tokens.new(abc)))
   end
 
   def test_iteration3
     abc = ""
-    rule = ((token("a") - (token("b") | token("B")) - (token("c") | token("C"))) * 0) >> proc { |arg| arg.join() }
+    rule = ((token("a") - (token("b") | token("B")) - (token("c") | token("C"))) * 0) >> proc { |arg| arg.join }
     assert_equal(abc, rule.parse(Tokens.new(abc)))
   end
 
   def test_iteration4
     abc = ""
-    rule = ((token("a") - (token("b") | token("B")) - (token("c") | token("C"))) * 1) >> proc { |arg| arg.join() }
+    rule = ((token("a") - (token("b") | token("B")) - (token("c") | token("C"))) * 1) >> proc { |arg| arg.join }
     assert_equal(nil, rule.parse(Tokens.new(abc)))
   end
 
   def test_iteration5
     abc = "aBCAbc"
-    rule = ((token("a") - (token("b") | token("B")) - (token("c") | token("C"))) * 0) >> proc { |arg| arg.join() }
+    rule = ((token("a") - (token("b") | token("B")) - (token("c") | token("C"))) * 0) >> proc { |arg| arg.join }
     assert_equal("aBC", rule.parse(Tokens.new(abc)))
-    assert_equal("A", rule.peek())
+    assert_equal("A", rule.peek)
   end
 
   def test_iteration6
     abc = "aBCaBcd"
-    rule = ((token("a") - (token("b") | token("B")) - (token("c") | token("C"))) * 0) >> proc { |arg| arg.join() }
+    rule = ((token("a") - (token("b") | token("B")) - (token("c") | token("C"))) * 0) >> proc { |arg| arg.join }
     assert_equal("aBCaBc", rule.parse(Tokens.new(abc)))
-    assert_equal("d", rule.peek())
+    assert_equal("d", rule.peek)
   end
 
   def test_iteration7
@@ -514,7 +514,7 @@ class TestTDParser < Test::Unit::TestCase
       /\d+(?!\.\d)/ => :int,
       %r{\+|-|\*|/} => :op,
     })
-    tokens = tokenizer.generate("1 + 1.0 - 2").to_a()
+    tokens = tokenizer.generate("1 + 1.0 - 2").to_a
     kinds = tokens.collect { |x| x.kind }
     vals = tokens.collect { |x| x.value }
     assert_equal([:int, :op, :real, :op, :int], kinds)

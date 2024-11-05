@@ -11,12 +11,12 @@ translator = TDParser.define { |g|
     (element("a") {
       element("b") {
         g.xmlseq
-      } >> dom_constructor { |node| node.children() }
+      } >> dom_constructor { |node| node.children }
     } >> dom_constructor { |node| node.name = "AB"; node }) |
     (element(String) {
       g.xmlseq
     } >> dom_constructor { |node|
-           node.name = node.name.upcase()
+           node.name = node.name.upcase
            node
          }) |
     (doctype {
@@ -26,10 +26,10 @@ translator = TDParser.define { |g|
     (elementdecl >> Proc.new { |x| x[0] }) |
     (xmldecl >> Proc.new { |x| x[0] }) |
     (comment >> Proc.new { |x| x[0] }) |
-    (any_node() >> Proc.new { |x| x[0] })
+    (any_node >> Proc.new { |x| x[0] })
 
   g.xmlseq =
-    ((g.xml() * 0) >> Proc.new { |x| x[0].collect { |y| y[0] } }) |
+    ((g.xml * 0) >> Proc.new { |x| x[0].collect { |y| y[0] } }) |
 
   def translate(src)
     gen = TDPXML::XMLParser::XMLTokenGenerator.new(src)
@@ -49,6 +49,6 @@ seq = translator.translate(<<EOS)
   <b>b?</b>
 </list>
 EOS
-doc = REXML::Document.new()
+doc = REXML::Document.new
 seq.each { |x| doc.add(x) }
 puts(doc)

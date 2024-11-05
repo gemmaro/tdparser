@@ -82,7 +82,7 @@ module TDPUtils
       if @terminated
         return nil
       end
-      while empty?()
+      while empty?
       end
       super()
     end
