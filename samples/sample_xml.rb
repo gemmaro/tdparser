@@ -5,7 +5,7 @@ require 'tdp/utils'
 require 'tdp/xml'
 
 translator = TDParser.define { |g|
-  extend TDPXML::XMLParser
+  extend TDParser::XMLParser
 
   g.xml =
     (element("a") {
@@ -32,7 +32,7 @@ translator = TDParser.define { |g|
     ((g.xml * 0) >> Proc.new { |x| x[0].collect { |y| y[0] } }) |
 
   def translate(src)
-    gen = TDPXML::XMLParser::XMLTokenGenerator.new(src)
+    gen = TDParser::XMLParser::XMLTokenGenerator.new(src)
     xmlseq.parse(gen)
   end
 }
