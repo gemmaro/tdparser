@@ -135,7 +135,7 @@ module TDParser
     #  call(*args)
     #end
 
-    def optimize(_default=false)
+    def optimize(_default = false)
       self.dup
     end
 
@@ -192,7 +192,7 @@ module TDParser
       NegativeParser.new(self)
     end
 
-    def parse(tokens=nil, buff=nil, &blk)
+    def parse(tokens = nil, buff = nil, &blk)
       buff ||= TokenBuffer.new
       if  blk.nil?
         if ( tokens.respond_to?(:shift) && tokens.respond_to?(:unshift) )
@@ -294,7 +294,7 @@ module TDParser
       @parsers = parsers
     end
 
-    def optimize(default=false)
+    def optimize(default = false)
       parser = dup
       parser.parsers = @parsers.collect { |x| x.optimize(default) }
       parser
@@ -450,7 +450,7 @@ module TDParser
       [nil, r1, r2]
     end
 
-    def optimize(default=false)
+    def optimize(default = false)
       r1 = @parsers[0]
       r2 = @parsers[1]
       if r1.is_a?(ActionParser)
@@ -810,15 +810,15 @@ module TDParser
     NonTerminalParser.new(self, sym, *opts)
   end
 
-  def token(x, eqsym=:===)
+  def token(x, eqsym = :===)
     TerminalParser.new(x, eqsym)
   end
 
-  def backref(x, eqsym=:===)
+  def backref(x, eqsym = :===)
     BackrefParser.new(x, eqsym)
   end
 
-  def stackref(stack, eqsym=:===)
+  def stackref(stack, eqsym = :===)
     StackrefParser.new(stack, eqsym)
   end
 

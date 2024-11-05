@@ -56,15 +56,15 @@ module TDParser
       end
     end
 
-    def start_element(name=String)
+    def start_element(name = String)
       token(XArray[:start_element, name, Hash])
     end
 
-    def end_element(name=String)
+    def end_element(name = String)
       token(XArray[:end_element, name])
     end
 
-    def element(elem=String, &inner)
+    def element(elem = String, &inner)
       if inner
         crule = inner.call | empty
       else
@@ -80,7 +80,7 @@ module TDParser
       }
     end
 
-    def text(match=String)
+    def text(match = String)
       token(XArray[:text, match]) >> Proc.new { |x|
         REXML::Text.new(x[0][1])
       }
@@ -92,13 +92,13 @@ module TDParser
       }
     end
 
-    def cdata(match=String)
+    def cdata(match = String)
       token(XArray[:cdata, match]) >> Proc.new { |x|
         REXML::CData.new(x[0][1])
       }
     end
 
-    def comment(match=String)
+    def comment(match = String)
       token(XArray[:comment, match]) >> Proc.new { |x|
         REXML::Comment.new(x[0][1])
       }
@@ -110,7 +110,7 @@ module TDParser
       }
     end
 
-    def start_doctype(name=String)
+    def start_doctype(name = String)
       token(XArray[:start_doctype, name])
     end
 
@@ -118,7 +118,7 @@ module TDParser
       token(XArray[:end_doctype])
     end
 
-    def doctype(name=String, &inner)
+    def doctype(name = String, &inner)
       if inner
         crule = inner.call | empty
       else
@@ -130,31 +130,31 @@ module TDParser
       }
     end
 
-    def externalentity(entity=String)
+    def externalentity(entity = String)
       token(XArray[:externalentity, entity]) >> Proc.new { |x|
         REXML::ExternalEntity.new(x[0][1])
       }
     end
 
-    def elementdecl(elem=String)
+    def elementdecl(elem = String)
       token(XArray[:elementdecl, elem]) >> Proc.new { |x|
         REXML::ElementDecl.new(x[0][1])
       }
     end
 
-    def entitydecl(_entity=String)
+    def entitydecl(_entity = String)
       token(XArray[:entitydecl, elem]) >> Proc.new { |x|
         REXML::Entity.new(x[0])
       }
     end
 
-    def attlistdecl(_decl=String)
+    def attlistdecl(_decl = String)
       token(XArray[:attlistdecl]) >> Proc.new { |x|
         REXML::AttlistDecl.new(x[0][1..-1])
       }
     end
 
-    def notationdecl(_decl=String)
+    def notationdecl(_decl = String)
       token(XArray[:notationdecl]) >> Proc.new { |x|
         REXML::NotationDecl.new(*x[0][1..-1])
       }
