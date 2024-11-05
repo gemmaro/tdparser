@@ -468,7 +468,7 @@ module TDParser
         if act1
           if act2
             r = r >> Proc.new { |x|
-              y0, y1, *ys = x.pop()
+              y0, y1, = x.pop()
               if y0
                 act1.call(x.push(*y0))
               else
@@ -477,7 +477,7 @@ module TDParser
             }
           else
             r = r >> Proc.new { |x|
-              y0, y1, *ys = x.pop()
+              y0, = x.pop()
               if y0
                 act1.call(x.push(*y0))
               end
@@ -486,7 +486,7 @@ module TDParser
         else
           if act2
             r = r >> Proc.new { |x|
-              y0, y1, *ys = x.pop()
+              _, y1, = x.pop()
               if y1
                 act2.call(x.push(*y1))
               end
