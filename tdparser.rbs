@@ -112,13 +112,12 @@ module TDParser
   end
 
   class TokenBuffer < Array[untyped]
-    attr_accessor map: Hash[:__state__, untyped]
+    attr_accessor map: Hash[untyped, untyped]
+    attr_accessor state: untyped
     def initialize: (*untyped args) -> void
     def []: (untyped idx) -> nil
     def []=: (untyped idx, untyped val) -> untyped
-    def state: -> untyped
-    def state=: (untyped s) -> untyped
-    def clear: -> Hash[:__state__, untyped]
+    def clear: -> Hash[untyped, untyped]
   end
 
   class Parser
