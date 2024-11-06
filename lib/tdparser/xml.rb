@@ -27,11 +27,7 @@ module TDParser
           return false
         end
         each_with_index { |v, idx|
-          case ary[idx]
-          when v
-          else
-            return false
-          end
+          v === ary[idx] or return false
         }
         true
       end
@@ -46,11 +42,7 @@ module TDParser
           return false
         end
         each { |k, v|
-          case h[k]
-          when v
-          else
-            return false
-          end
+          v === h[k] or return false
         }
         true
       end
