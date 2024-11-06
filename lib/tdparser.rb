@@ -122,10 +122,6 @@ module TDParser
       self.dup
     end
 
-    def ==(_r)
-      false
-    end
-
     def same?(r)
       self == r
     end
