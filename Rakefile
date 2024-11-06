@@ -5,6 +5,8 @@ $LOAD_PATH << File.join(__dir__, "../lib")
 require 'rake/testtask'
 require 'rdoc/task'
 
+task default: %i[test rdoc gensig]
+
 Rake::TestTask.new do |t|
   t.libs << "samples" << "test"
   t.test_files = FileList["test/*_test.rb"]
