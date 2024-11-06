@@ -149,7 +149,6 @@ module TDParser
     def initialize: (Grammar | TDParser context, untyped sym, *untyped options) -> void
     def call: (untyped tokens, untyped buff) -> nil
     def ==: (untyped r) -> bool
-    def to_s: -> String
   end
 
   class TerminalParser < Parser
@@ -158,7 +157,6 @@ module TDParser
     def initialize: (untyped obj, :=== eqsym) -> void
     def call: (untyped tokens, untyped buff) -> Array[untyped]?
     def ==: (untyped r) -> bool
-    def to_s: -> String
   end
 
   class CompositeParser < Parser
@@ -167,7 +165,6 @@ module TDParser
     def optimize: (?false default) -> (ActionParser | ChoiceParser | ConcatParser | ParallelParser)
     def ==: (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r) -> bool
     def same?: ((ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)? r) -> bool
-    def to_s: -> String
   end
 
   class ActionParser < CompositeParser
@@ -175,7 +172,6 @@ module TDParser
     def initialize: (ConcatParser | Parser parser, ^(Array[untyped]) -> nil act) -> void
     def call: (untyped tokens, TokenBuffer? buff) -> Array[nil]?
     def ==: (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r) -> bool
-    def to_s: -> String
   end
 
   class LabelParser < CompositeParser
@@ -183,7 +179,6 @@ module TDParser
     def initialize: (Parser parser, untyped label) -> void
     def call: (untyped tokens, untyped buff) -> Array[Array[nil]?]?
     def ==: (untyped r) -> false
-    def to_s: -> String
   end
 
   class StackParser < CompositeParser
@@ -192,25 +187,21 @@ module TDParser
     def call: (untyped tokens, untyped buff) -> Array[Array[nil]?]?
     def ==: (untyped r) -> false
     def same?: (untyped _r) -> false
-    def to_s: -> String
   end
 
   class ConcatParser < CompositeParser
     def call: (untyped tokens, TokenBuffer? buff) -> Array[Array[nil]?]?
     def -: (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r) -> ConcatParser
-    def to_s: -> String
   end
 
   class ChoiceParser < CompositeParser
     def call: (untyped tokens, TokenBuffer? buff) -> Array[Array[nil]?]?
-    def to_s: -> String
     def shared_sequence: (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r1, ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r2) -> ([(ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)?, ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser, ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser])
     def optimize: (?bool default) -> (ActionParser | ChoiceParser | ConcatParser | ParallelParser)
   end
 
   class ParallelParser < CompositeParser
     def call: (untyped tokens, TokenBuffer? buff) -> Array[Array[Array[untyped]?]]
-    def to_s: -> String
   end
 
   class IterationParser < CompositeParser
@@ -218,35 +209,29 @@ module TDParser
     attr_reader range: nil
     def initialize: (Parser parser, untyped n, nil range) -> void
     def call: (untyped ts, untyped buff) -> Array[Array[Array[untyped]?]]?
-    def to_s: -> String
     def ==: (untyped r) -> bool
   end
 
   class NegativeParser < CompositeParser
     def call: (untyped tokens, untyped buff) -> Array[Array[untyped]]?
-    def to_s: -> String
   end
 
   class FailParser < Parser
-    def to_s: -> String
     def ==: -> bool
   end
 
   class EmptyParser < Parser
     def call: (untyped _tokens, untyped _buff) -> Array[nil]
-    def to_s: -> String
     def ==: (untyped _r) -> true
   end
 
   class AnyParser < Parser
     def call: (untyped tokens, untyped _buff) -> Array[untyped]?
-    def to_s: -> String
     def ==: (untyped _r) -> true
   end
 
   class NoneParser < Parser
     def call: (untyped tokens, untyped _buff) -> Array[nil]?
-    def to_s: -> String
     def ==: (untyped _r) -> true
   end
 
@@ -260,7 +245,6 @@ module TDParser
     attr_reader equality: :===
     def initialize: (untyped label, :=== eqsym) -> void
     def call: (untyped tokens, untyped buff) -> nil
-    def to_s: -> String
     def ==: (untyped r) -> bool
   end
 
@@ -269,7 +253,6 @@ module TDParser
     attr_reader equality: :===
     def initialize: (untyped stack, :=== eqsym) -> void
     def call: (untyped tokens, untyped buff) -> nil
-    def to_s: -> String
     def ==: (untyped r) -> bool
   end
 
@@ -277,7 +260,6 @@ module TDParser
     attr_reader condition: nil
     def initialize: -> void
     def call: (untyped _tokens, untyped buff) -> Array[untyped]?
-    def to_s: -> String
     def ==: (untyped r) -> bool
     def same?: (untyped _r) -> false
   end
@@ -286,7 +268,6 @@ module TDParser
     attr_reader state: untyped
     def initialize: (untyped s) -> void
     def call: (untyped _tokens, untyped buff) -> Array[untyped]?
-    def to_s: -> String
     def ==: (untyped r) -> false
     def same?: (untyped _r) -> false
   end

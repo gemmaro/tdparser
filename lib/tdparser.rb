@@ -214,10 +214,6 @@ module TDParser
       (@symbol == r.symbol) &&
       (@options == r.options)
     end
-
-    def to_s
-      "#{@symbol}"
-    end
   end
 
   class TerminalParser < Parser # :nodoc:
@@ -244,10 +240,6 @@ module TDParser
       (@symbol == r.symbol) &&
       (@equality == r.equality)
     end
-
-    def to_s
-      "#{@symbol}"
-    end
   end
 
   class CompositeParser < Parser # :nodoc:
@@ -273,10 +265,6 @@ module TDParser
       super(r) &&
       @parsers.zip(r.parsers).all? { |x, y| x.same?(y) }
     end
-
-    def to_s
-      "<composite: #{@parsers.collect { |x| x.to_s }}>"
-    end
   end
 
   class ActionParser < CompositeParser # :nodoc:
@@ -301,10 +289,6 @@ module TDParser
       super(r) &&
       (@action == r.action)
     end
-
-    def to_s
-      "(#{@parsers[0]} <action>)"
-    end
   end
 
   class LabelParser < CompositeParser # :nodoc:
@@ -324,10 +308,6 @@ module TDParser
     def ==(r)
       super(r) &&
       (@label == r.label)
-    end
-
-    def to_s
-      "(#{@parsers[0]}/#{@label})"
     end
   end
 
@@ -352,10 +332,6 @@ module TDParser
     def same?(_r)
       false
     end
-
-    def to_s
-      "<stack:#{@stack.object_id}>"
-    end
   end
 
   class ConcatParser < CompositeParser # :nodoc:
@@ -374,10 +350,6 @@ module TDParser
     def -(r)
       @parsers[0] - (@parsers[1] - r)
     end
-
-    def to_s
-      "(#{@parsers[0]} #{@parsers[1]})"
-    end
   end
 
   class ChoiceParser < CompositeParser # :nodoc:
@@ -390,10 +362,6 @@ module TDParser
         buff.insert(0, *b)
         x
       end
-    end
-
-    def to_s
-      "(#{@parsers[0]} | #{@parsers[1]})"
     end
 
     def shared_sequence(r1, r2)
@@ -477,10 +445,6 @@ module TDParser
         Array[Array[x, nil]]
       end
     end
-
-    def to_s
-      "(#{@parsers[0]} + #{@parsers[1]})"
-    end
   end
 
   class IterationParser < CompositeParser # :nodoc:
@@ -543,10 +507,6 @@ module TDParser
       end
     end
 
-    def to_s
-      "(#{@parsers[0]})*#{@range ? @range.to_s : @min.to_s}"
-    end
-
     def ==(r)
       super(r) &&
       (@min == r.min) &&
@@ -566,17 +526,9 @@ module TDParser
         nil
       end
     end
-
-    def to_s
-      "~#{@parsers[0]}"
-    end
   end
 
   class FailParser < Parser # :nodoc:
-    def to_s
-      "<fail>"
-    end
-
     def ==
       (self.class == r.class)
     end
@@ -585,10 +537,6 @@ module TDParser
   class EmptyParser < Parser # :nodoc:
     def call(_tokens, _buff)
       Array[nil]
-    end
-
-    def to_s
-      "<empty>"
     end
 
     def ==(_r)
@@ -606,10 +554,6 @@ module TDParser
       end
     end
 
-    def to_s
-      "<any>"
-    end
-
     def ==(_r)
       true
     end
@@ -623,10 +567,6 @@ module TDParser
       else
         nil
       end
-    end
-
-    def to_s
-      "<none>"
     end
 
     def ==(_r)
@@ -670,10 +610,6 @@ module TDParser
       end
     end
 
-    def to_s
-      "<backref:#{@label}>"
-    end
-
     def ==(r)
       super(r) &&
       (@label == r.label) &&
@@ -699,10 +635,6 @@ module TDParser
       end
     end
 
-    def to_s
-      "<stackref:#{@stack.object_id}>"
-    end
-
     def ==(r)
       super(r) &&
       @stack.equal?(r.stack) &&
@@ -724,10 +656,6 @@ module TDParser
       else
         nil
       end
-    end
-
-    def to_s
-      "<condition:#{@condition}>"
     end
 
     def ==(r)
@@ -754,10 +682,6 @@ module TDParser
       else
         nil
       end
-    end
-
-    def to_s
-      "<state:#{@state}>"
     end
 
     def ==(r)
