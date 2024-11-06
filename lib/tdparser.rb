@@ -260,11 +260,6 @@ module TDParser
       (self.class == r.class) &&
       (@parsers == r.parsers)
     end
-
-    def same?(r)
-      super(r) &&
-      @parsers.zip(r.parsers).all? { |x, y| x.same?(y) }
-    end
   end
 
   class ActionParser < CompositeParser # :nodoc:
@@ -327,10 +322,6 @@ module TDParser
     def ==(r)
       super(r) &&
       (@stack == r.stack)
-    end
-
-    def same?(_r)
-      false
     end
   end
 
@@ -586,10 +577,6 @@ module TDParser
         end
       }
     end
-
-    def same?(_r)
-      false
-    end
   end
 
   class BackrefParser < ReferenceParser # :nodoc:
@@ -662,10 +649,6 @@ module TDParser
       super(r) &&
       (@condition == r.condition)
     end
-
-    def same?(_r)
-      false
-    end
   end
 
   class StateParser < Parser # :nodoc:
@@ -687,10 +670,6 @@ module TDParser
     def ==(r)
       super(r) &&
       (@state == r.state)
-    end
-
-    def same?(_r)
-      false
     end
   end
 

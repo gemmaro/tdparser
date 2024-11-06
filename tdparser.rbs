@@ -164,7 +164,6 @@ module TDParser
     def initialize: (*ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser parsers) -> void
     def optimize: (?false default) -> (ActionParser | ChoiceParser | ConcatParser | ParallelParser)
     def ==: (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r) -> bool
-    def same?: ((ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)? r) -> bool
   end
 
   class ActionParser < CompositeParser
@@ -186,7 +185,6 @@ module TDParser
     def initialize: (Parser parser, untyped stack) -> void
     def call: (untyped tokens, untyped buff) -> Array[Array[nil]?]?
     def ==: (untyped r) -> false
-    def same?: (untyped _r) -> false
   end
 
   class ConcatParser < CompositeParser
@@ -237,7 +235,6 @@ module TDParser
 
   class ReferenceParser < Parser
     def __backref__: (untyped xs, :=== eqsym) -> untyped
-    def same?: (untyped _r) -> false
   end
 
   class BackrefParser < ReferenceParser
@@ -261,7 +258,6 @@ module TDParser
     def initialize: -> void
     def call: (untyped _tokens, untyped buff) -> Array[untyped]?
     def ==: (untyped r) -> bool
-    def same?: (untyped _r) -> false
   end
 
   class StateParser < Parser
@@ -269,7 +265,6 @@ module TDParser
     def initialize: (untyped s) -> void
     def call: (untyped _tokens, untyped buff) -> Array[untyped]?
     def ==: (untyped r) -> false
-    def same?: (untyped _r) -> false
   end
 
   class Grammar
