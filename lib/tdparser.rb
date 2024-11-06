@@ -815,9 +815,13 @@ module TDParser
     BackrefParser.new(x, eqsym)
   end
 
+  alias back_ref backref
+
   def stackref(stack, eqsym = :===)
     StackrefParser.new(stack, eqsym)
   end
+
+  alias stack_ref stackref
 
   def state(s)
     StateParser.new(s)
@@ -858,6 +862,8 @@ module TDParser
     rules.collect { |r| (base - (r * 0)) >> f }.inject(fail) { |acc, r| r | acc }
   end
 
+  alias left_rec leftrec
+
   def rightrec(*rules, &act)
     f = Proc.new { |x|
       x[0].reverse.inject(x[1]) { |acc, y|
@@ -870,17 +876,23 @@ module TDParser
     rules.collect { |r| ((r * 0) - base) >> f }.inject(fail) { |acc, r| r | acc }
   end
 
+  alias right_rec rightrec
+
   def chainl(base, *infixes, &act)
     infixes.inject(base) { |acc, r|
       leftrec(acc, r - acc, &act)
     }
   end
 
+  alias chain_left chainl
+
   def chainr(base, *infixes, &act)
     infixes.inject(base) { |acc, r|
       rightrec(acc - r, acc, &act)
     }
   end
+
+  alias chain_right chainr
 
   class Grammar
     include TDParser
@@ -894,7 +906,7 @@ module TDParser
       }
     end
 
-    def g_method_missing(sym, *args)
+    def g_method_missing(sym, *args) # :nodoc:
       arg0 = args[0]
       sym = sym.to_s
       if (sym[-1, 1] == "=")
@@ -919,7 +931,7 @@ module TDParser
       end
     end
 
-    alias method_missing g_method_missing
+    alias method_missing g_method_missing # :nodoc:
   end
 
   def TDParser.define(*_args, &block)

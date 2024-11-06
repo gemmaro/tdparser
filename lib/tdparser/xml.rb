@@ -102,6 +102,8 @@ module TDParser
       }
     end
 
+    alias xml_decl xmldecl
+
     def start_doctype(name = String)
       token(XArray[:start_doctype, name])
     end
@@ -128,11 +130,15 @@ module TDParser
       }
     end
 
+    alias external_entity externalentity
+
     def elementdecl(elem = String)
       token(XArray[:elementdecl, elem]) >> Proc.new { |x|
         REXML::ElementDecl.new(x[0][1])
       }
     end
+
+    alias element_decl elementdecl
 
     def entitydecl(_entity = String)
       token(XArray[:entitydecl, elem]) >> Proc.new { |x|
@@ -140,17 +146,23 @@ module TDParser
       }
     end
 
+    alias entity_decl entitydecl
+
     def attlistdecl(_decl = String)
       token(XArray[:attlistdecl]) >> Proc.new { |x|
         REXML::AttlistDecl.new(x[0][1..-1])
       }
     end
 
+    alias attribute_list_declaration attlistdecl
+
     def notationdecl(_decl = String)
       token(XArray[:notationdecl]) >> Proc.new { |x|
         REXML::NotationDecl.new(*x[0][1..-1])
       }
     end
+
+    alias notation_decl notationdecl
 
     def any_node(&b)
       (element(&b) | doctype(&b) | text | pi | cdata |
