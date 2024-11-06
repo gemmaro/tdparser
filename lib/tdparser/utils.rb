@@ -58,24 +58,4 @@ module TDParser
       super(rule, ignore || /\s+/)
     end
   end
-
-  class WaitingTokenGenerator < TDParser::TokenGenerator # :nodoc:
-    def initialize(*args)
-      super(*args)
-      @terminated = false
-    end
-
-    def terminate
-      @terminated = true
-    end
-
-    def shift
-      if @terminated
-        return nil
-      end
-      while empty?
-      end
-      super()
-    end
-  end
 end

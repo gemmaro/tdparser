@@ -62,14 +62,6 @@ module TDParser
     def initialize: (untyped rule, ?nil ignore) -> void
   end
 
-  class WaitingTokenGenerator
-    @terminated: bool
-
-    def initialize: (*untyped args) -> void
-    def terminate: -> true
-    def shift: -> nil
-  end
-
   class XMLTokenGenerator
     @xparser: untyped
 
