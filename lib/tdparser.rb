@@ -94,7 +94,9 @@ module TDParser
     end
   end
 
-  module BufferUtils
+  class Parser
+    include TDParser
+
     def prepare(buff)
       b = TokenBuffer.new
       b.map = buff.map
@@ -104,12 +106,6 @@ module TDParser
     def recover(buff, ts)
       buff.each { |b| ts.unshift(b) }
     end
-  end
-  include BufferUtils
-
-  class Parser
-    include BufferUtils
-    include TDParser
 
     def to_proc
       proc { |*x| self.call(*x) }

@@ -2,7 +2,7 @@
 
 # Classes
 module TDParser
-  include BufferUtils
+  VERSION: String
 
   def rule: (untyped sym, *untyped opts) -> NonTerminalParser
   def token: (untyped x, ?:=== eqsym) -> TerminalParser
@@ -96,7 +96,7 @@ module TDParser
     def notationdecl: (?singleton(String) _decl) -> untyped
     alias notation_decl notationdecl
     def any_node: -> untyped
-    def dom_constructor: -> Proc
+    def dom_constructor: -> untyped
   end
 
   class TokenGenerator
@@ -121,18 +121,14 @@ module TDParser
     def clear: -> Hash[:__state__, untyped]
   end
 
-  module BufferUtils
-    def prepare: (TokenBuffer? buff) -> TokenBuffer
-    def recover: (TokenBuffer? buff, untyped ts) -> TokenBuffer
-  end
-
   class Parser
     include TDParser
-    include BufferUtils
-    @tokens: nil
+    @tokens: false
 
-    def to_proc: -> Proc
-    def call: (*TokenBuffer? args) -> nil
+    def prepare: (TokenBuffer? buff) -> TokenBuffer
+    def recover: (TokenBuffer? buff, untyped ts) -> TokenBuffer
+    def to_proc: -> ^(*untyped) -> nil
+    def call: (*(TokenBuffer | false)? args) -> nil
     def optimize: (?false _default) -> Parser
     def ==: ((ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)? _r) -> false
     def same?: ((ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)? r) -> bool
@@ -140,7 +136,7 @@ module TDParser
     def +: (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r) -> ParallelParser
     def |: (untyped r) -> (ActionParser | ChoiceParser | ConcatParser | ParallelParser)
     def *: (untyped range) -> IterationParser
-    def >>: (Proc? act) -> ActionParser
+    def >>: (^(Array[untyped]) -> nil? act) -> ActionParser
     def /: (untyped label) -> LabelParser
     def %: (untyped stack) -> StackParser
     def >: (untyped symbol) -> Parser
@@ -179,9 +175,9 @@ module TDParser
   end
 
   class ActionParser < CompositeParser
-    attr_reader action: Proc?
-    def initialize: (ConcatParser | Parser parser, Proc? act) -> void
-    def call: (untyped tokens, TokenBuffer? buff) -> Array[untyped]?
+    attr_reader action: ^(Array[untyped]) -> nil?
+    def initialize: (ConcatParser | Parser parser, ^(Array[untyped]) -> nil? act) -> void
+    def call: (untyped tokens, TokenBuffer? buff) -> Array[nil]?
     def ==: ((ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)? r) -> bool
     def to_s: -> String
   end
@@ -189,7 +185,7 @@ module TDParser
   class LabelParser < CompositeParser
     attr_reader label: untyped
     def initialize: (Parser parser, untyped label) -> void
-    def call: (untyped tokens, untyped buff) -> Array[Array[nil]]?
+    def call: (untyped tokens, untyped buff) -> Array[Array[nil]?]?
     def ==: (untyped r) -> false
     def to_s: -> String
   end
@@ -197,20 +193,20 @@ module TDParser
   class StackParser < CompositeParser
     attr_reader stack: untyped
     def initialize: (Parser parser, untyped stack) -> void
-    def call: (untyped tokens, untyped buff) -> Array[Array[nil]]?
+    def call: (untyped tokens, untyped buff) -> Array[Array[nil]?]?
     def ==: (untyped r) -> false
     def same?: (untyped _r) -> false
     def to_s: -> String
   end
 
   class ConcatParser < CompositeParser
-    def call: (untyped tokens, TokenBuffer? buff) -> Array[Array[nil]]?
+    def call: (untyped tokens, TokenBuffer? buff) -> Array[Array[nil]?]?
     def -: (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r) -> ConcatParser
     def to_s: -> String
   end
 
   class ChoiceParser < CompositeParser
-    def call: (untyped tokens, TokenBuffer? buff) -> Array[Array[nil]]?
+    def call: (untyped tokens, TokenBuffer? buff) -> Array[Array[nil]?]?
     def to_s: -> String
     def shared_sequence: (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r1, ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r2) -> ([(ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)?, ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser, ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser])
     def optimize: (?bool default) -> (ActionParser | ChoiceParser | ConcatParser | ParallelParser)
