@@ -10,5 +10,6 @@ class Sample4Test < Test::Unit::TestCase
     assert_equal 0, parser.parse('2 - 1 * 20 + 18')
     assert_equal 21, parser.parse('2 - (1 - 20)')
     assert_equal 0, parser.parse('1 + 2 - 3')
+    assert_equal 5, parser.parse("30 / 6")
   end
 end
