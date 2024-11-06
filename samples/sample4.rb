@@ -24,7 +24,6 @@ class Sample4Parser
 
   def expr2
     (rule(:prim) - (((token("*") | token("/")) - rule(:prim)) * 0)) >> proc { |x|
-      n = x[0]
       x[1].inject(x[0]) { |n, y|
         case y[0]
         when "*"
