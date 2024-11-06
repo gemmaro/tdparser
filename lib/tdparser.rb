@@ -260,7 +260,7 @@ module TDParser
     def call(tokens, buff)
       t = tokens.shift
       buff.unshift(t)
-      if (@symbol.__send__(@equality, t) || t.__send__(@equality, @symbol))
+      if @symbol.__send__(@equality, t) || t.__send__(@equality, @symbol)
         Array[t]
       else
         nil
@@ -425,7 +425,7 @@ module TDParser
     end
 
     def shared_sequence(r1, r2)
-      if (r1.is_a?(ConcatParser) && r2.is_a?(ConcatParser))
+      if r1.is_a?(ConcatParser) && r2.is_a?(ConcatParser)
         r11 = r1.parsers[0]
         r12 = r1.parsers[1]
         r21 = r2.parsers[0]
@@ -524,7 +524,7 @@ module TDParser
       n = @min
       x  = true
       xs = []
-      while (n > 0)
+      while n > 0
         n -= 1
         b = prepare(buff)
         if  (x = r.call(ts, b)).nil?
@@ -695,7 +695,7 @@ module TDParser
 
     def call(tokens, buff)
       ys = buff.map[@label]
-      if (ys.nil? || ys.empty?)
+      if ys.nil? || ys.empty?
         nil
       else
         __backref__(ys.dup, @equality).call(tokens, buff)
@@ -724,7 +724,7 @@ module TDParser
 
     def call(tokens, buff)
       ys = @stack.pop
-      if (ys.nil? || ys.empty?)
+      if ys.nil? || ys.empty?
         nil
       else
         __backref__(ys.dup, @equality).call(tokens, buff)
@@ -781,7 +781,7 @@ module TDParser
     end
 
     def call(_tokens, buff)
-      if (buff.map[:state] == @state)
+      if buff.map[:state] == @state
         Array[@state]
       else
         nil
@@ -908,7 +908,7 @@ module TDParser
     def g_method_missing(sym, *args) # :nodoc:
       arg0 = args[0]
       sym = sym.to_s
-      if (sym[-1, 1] == "=")
+      if sym[-1, 1] == "="
         name = sym[0..-2]
         case arg0
         when Parser
@@ -923,7 +923,7 @@ module TDParser
             define_method(name) { t }
           }
         end
-      elsif (args.size == 0)
+      elsif args.size == 0
         rule(sym)
       else
         raise(NoMethodError, "undefined method `#{sym}' for #{self.inspect}")
