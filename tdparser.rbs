@@ -1,0 +1,306 @@
+# TypeProf 0.21.3
+
+# Classes
+module TDParser
+  include BufferUtils
+
+  def rule: (untyped sym, *untyped opts) -> NonTerminalParser
+  def token: (untyped x, ?:=== eqsym) -> TerminalParser
+  def backref: (untyped x, ?:=== eqsym) -> BackrefParser
+  def stackref: (untyped stack, ?:=== eqsym) -> StackrefParser
+  def state: (untyped s) -> StateParser
+  def empty_rule: -> EmptyParser
+  alias empty empty_rule
+  def any_rule: -> AnyParser
+  alias any any_rule
+  def none_rule: -> NoneParser
+  alias none none_rule
+  def fail_rule: -> FailParser
+  alias fail fail_rule
+  def condition_rule: -> ConditionParser
+  alias condition condition_rule
+  def leftrec: (*untyped rules) -> FailParser
+  def rightrec: (*untyped rules) -> FailParser
+  def chainl: (untyped base, *untyped infixes) -> untyped
+  def chainr: (untyped base, *untyped infixes) -> untyped
+  def self.define: (*untyped _args) -> untyped
+
+  class Token
+    attr_accessor kind: untyped
+    attr_accessor value: String
+    def initialize: (untyped kind, String value) -> void
+    def ==: (untyped other) -> bool
+    def ===: (untyped other) -> true
+    def =~: (untyped other) -> untyped
+  end
+
+  class BasicStringTokenizer
+    @rule: untyped
+    @scan_pattern: Regexp
+    @ignore_pattern: Regexp?
+
+    def self.[]: (untyped rule, ?nil ignore) -> BasicStringTokenizer
+    def initialize: (untyped rule, ?Regexp? ignore) -> void
+    def generate: (untyped str) -> untyped
+  end
+
+  class StringTokenizer < BasicStringTokenizer
+    def initialize: (untyped rule, ?nil ignore) -> void
+  end
+
+  class WaitingTokenGenerator
+    @terminated: bool
+
+    def initialize: (*untyped args) -> void
+    def terminate: -> true
+    def shift: -> nil
+  end
+
+  module XMLParser
+    def start_element: (?singleton(String) name) -> untyped
+    def end_element: (?singleton(String) name) -> untyped
+    def element: (?singleton(String) elem) -> untyped
+    def text: (?singleton(String) match) -> untyped
+    def pi: -> untyped
+    def cdata: (?singleton(String) match) -> untyped
+    def comment: (?singleton(String) match) -> untyped
+    def xmldecl: -> untyped
+    def start_doctype: (?singleton(String) name) -> untyped
+    def end_doctype: -> untyped
+    def doctype: (?singleton(String) name) -> untyped
+    def externalentity: (?singleton(String) entity) -> untyped
+    def elementdecl: (?singleton(String) elem) -> untyped
+    def entitydecl: (?singleton(String) _entity) -> untyped
+    def attlistdecl: (?singleton(String) _decl) -> untyped
+    def notationdecl: (?singleton(String) _decl) -> untyped
+    def any_node: -> untyped
+    def dom_constructor: -> Proc
+
+    class XMLTokenGenerator
+      @xparser: untyped
+
+      def initialize: (untyped src) -> void
+    end
+
+    class XArray < Array[untyped]
+      def ===: (untyped ary) -> bool
+    end
+
+    class XHash < Hash[untyped, untyped]
+      def ===: (untyped h) -> bool
+    end
+  end
+
+  class TokenGenerator
+    @enumerator: Enumerator[bot, bot]
+    @buffer: Array[untyped]
+
+    def initialize: (?nil args) -> void
+    def next: -> bot
+    def next?: -> false
+    def to_a: -> Array[untyped]
+    def shift: -> nil
+    def unshift: (*untyped token) -> Array[untyped]
+  end
+
+  class TokenBuffer < Array[untyped]
+    attr_accessor map: Hash[:__state__, untyped]
+    def initialize: (*untyped args) -> void
+    def []: (untyped idx) -> nil
+    def []=: (untyped idx, untyped val) -> untyped
+    def state: -> untyped
+    def state=: (untyped s) -> untyped
+    def clear: -> Hash[:__state__, untyped]
+  end
+
+  class Sequence < Array[untyped]
+    def +: (untyped seq) -> Sequence
+  end
+
+  module BufferUtils
+    def prepare: (TokenBuffer? buff) -> TokenBuffer
+    def recover: (TokenBuffer? buff, untyped ts) -> TokenBuffer
+  end
+
+  class Parser
+    include TDParser
+    include BufferUtils
+    @tokens: nil
+
+    def to_proc: -> Proc
+    def call: (*TokenBuffer? args) -> nil
+    def optimize: (?false _default) -> Parser
+    def ==: ((ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)? _r) -> false
+    def same?: ((ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)? r) -> bool
+    def -: (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r) -> ConcatParser
+    def +: (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r) -> ParallelParser
+    def |: (untyped r) -> (ActionParser | ChoiceParser | ConcatParser | ParallelParser)
+    def *: (untyped range) -> IterationParser
+    def >>: (Proc? act) -> ActionParser
+    def /: (untyped label) -> LabelParser
+    def %: (untyped stack) -> StackParser
+    def >: (untyped symbol) -> Parser
+    def ~: -> NegativeParser
+    def parse: (?nil tokens, ?nil buff) -> nil
+    def peek: -> untyped
+    def do: -> ActionParser
+  end
+
+  class NonTerminalParser < Parser
+    attr_reader context: Grammar | TDParser
+    attr_reader symbol: untyped
+    attr_reader options: Array[untyped]
+    def initialize: (Grammar | TDParser context, untyped sym, *untyped options) -> void
+    def call: (untyped tokens, untyped buff) -> nil
+    def ==: (untyped r) -> bool
+    def to_s: -> String
+  end
+
+  class TerminalParser < Parser
+    attr_reader symbol: untyped
+    attr_reader equality: :===
+    def initialize: (untyped obj, :=== eqsym) -> void
+    def call: (untyped tokens, untyped buff) -> Array[untyped]?
+    def ==: (untyped r) -> bool
+    def to_s: -> String
+  end
+
+  class CompositeParser < Parser
+    attr_accessor parsers: Array[ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser]
+    def initialize: (*ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser parsers) -> void
+    def optimize: (?false default) -> (ActionParser | ChoiceParser | ConcatParser | ParallelParser)
+    def ==: ((ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)? r) -> bool
+    def same?: ((ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)? r) -> bool
+    def to_s: -> String
+  end
+
+  class ActionParser < CompositeParser
+    attr_reader action: Proc?
+    def initialize: (ConcatParser | Parser parser, Proc? act) -> void
+    def call: (untyped tokens, TokenBuffer? buff) -> Array[untyped]?
+    def ==: ((ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)? r) -> bool
+    def to_s: -> String
+  end
+
+  class LabelParser < CompositeParser
+    attr_reader label: untyped
+    def initialize: (Parser parser, untyped label) -> void
+    def call: (untyped tokens, untyped buff) -> Array[Array[nil]]?
+    def ==: (untyped r) -> false
+    def to_s: -> String
+  end
+
+  class StackParser < CompositeParser
+    attr_reader stack: untyped
+    def initialize: (Parser parser, untyped stack) -> void
+    def call: (untyped tokens, untyped buff) -> Array[Array[nil]]?
+    def ==: (untyped r) -> false
+    def same?: (untyped _r) -> false
+    def to_s: -> String
+  end
+
+  class ConcatParser < CompositeParser
+    def call: (untyped tokens, TokenBuffer? buff) -> Array[Array[nil]]?
+    def -: (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r) -> ConcatParser
+    def to_s: -> String
+  end
+
+  class ChoiceParser < CompositeParser
+    def call: (untyped tokens, TokenBuffer? buff) -> Array[Array[nil]]?
+    def to_s: -> String
+    def shared_sequence: (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r1, ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r2) -> ([(ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)?, ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser, ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser])
+    def optimize: (?bool default) -> (ActionParser | ChoiceParser | ConcatParser | ParallelParser)
+  end
+
+  class ParallelParser < CompositeParser
+    def call: (untyped tokens, TokenBuffer? buff) -> Array[Array[Array[untyped]?]]
+    def to_s: -> String
+  end
+
+  class IterationParser < CompositeParser
+    attr_reader min: untyped
+    attr_reader range: nil
+    def initialize: (Parser parser, untyped n, nil range) -> void
+    def call: (untyped ts, untyped buff) -> Array[Array[Array[untyped]?]]?
+    def to_s: -> String
+    def ==: (untyped r) -> bool
+  end
+
+  class NegativeParser < CompositeParser
+    def call: (untyped tokens, untyped buff) -> Array[Array[untyped]]?
+    def to_s: -> String
+  end
+
+  class FailParser < Parser
+    def call: (untyped _tokens, untyped _buff) -> nil
+    def to_s: -> String
+    def ==: -> bool
+  end
+
+  class EmptyParser < Parser
+    def call: (untyped _tokens, untyped _buff) -> Array[nil]
+    def to_s: -> String
+    def ==: (untyped _r) -> true
+  end
+
+  class AnyParser < Parser
+    def call: (untyped tokens, untyped _buff) -> Array[untyped]?
+    def to_s: -> String
+    def ==: (untyped _r) -> true
+  end
+
+  class NoneParser < Parser
+    def call: (untyped tokens, untyped _buff) -> Array[nil]?
+    def to_s: -> String
+    def ==: (untyped _r) -> true
+  end
+
+  class ReferenceParser < Parser
+    def __backref__: (untyped xs, :=== eqsym) -> untyped
+    def same?: (untyped _r) -> false
+  end
+
+  class BackrefParser < ReferenceParser
+    attr_reader label: untyped
+    attr_reader equality: :===
+    def initialize: (untyped label, :=== eqsym) -> void
+    def call: (untyped tokens, untyped buff) -> nil
+    def to_s: -> String
+    def ==: (untyped r) -> false
+  end
+
+  class StackrefParser < ReferenceParser
+    attr_reader stack: untyped
+    attr_reader equality: :===
+    def initialize: (untyped stack, :=== eqsym) -> void
+    def call: (untyped tokens, untyped buff) -> nil
+    def to_s: -> String
+    def ==: (untyped r) -> false
+  end
+
+  class ConditionParser < Parser
+    attr_reader condition: nil
+    def initialize: -> void
+    def call: (untyped _tokens, untyped buff) -> Array[untyped]?
+    def to_s: -> String
+    def ==: (untyped r) -> false
+    def same?: (untyped _r) -> false
+  end
+
+  class StateParser < Parser
+    attr_reader state: untyped
+    def initialize: (untyped s) -> void
+    def call: (untyped _tokens, untyped buff) -> Array[untyped]?
+    def to_s: -> String
+    def ==: (untyped r) -> false
+    def same?: (untyped _r) -> false
+  end
+
+  class Grammar
+    include TDParser
+
+    def define: -> untyped
+    def g_method_missing: (untyped sym, *untyped args) -> (NonTerminalParser | true)
+    alias method_missing g_method_missing
+  end
+end
