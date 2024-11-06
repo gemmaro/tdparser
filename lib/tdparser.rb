@@ -222,7 +222,7 @@ module TDParser
       t = tokens.shift
       buff.unshift(t)
       if @symbol.__send__(@equality, t) || t.__send__(@equality, @symbol)
-        Array[t]
+        [t]
       else
         nil
       end
@@ -258,7 +258,7 @@ module TDParser
       else
         x = TokenBuffer[*x]
         x.map = buff.map
-        Array[@action[x]]
+        [@action[x]]
       end
     end
   end
@@ -397,10 +397,10 @@ module TDParser
       b = prepare(buff)
       if  (x = @parsers[0].call(tokens, b)).nil?
         recover(b, tokens)
-        Array[Array[nil, @parsers[1].call(tokens, buff)]]
+        [[nil, @parsers[1].call(tokens, buff)]]
       else
         buff.insert(0, *b)
-        Array[Array[x, nil]]
+        [[x, nil]]
       end
     end
   end
@@ -461,7 +461,7 @@ module TDParser
             end
           end
         end
-        Array[xs]
+        [xs]
       end
     end
   end
@@ -473,7 +473,7 @@ module TDParser
       rev = b.reverse
       recover(b, tokens)
       if  r.nil?
-        Array[Array[*rev]]
+        [[*rev]]
       else
         nil
       end
@@ -484,7 +484,7 @@ module TDParser
 
   class EmptyParser < Parser # :nodoc:
     def call(_tokens, _buff)
-      Array[nil]
+      [nil]
     end
   end
 
@@ -494,7 +494,7 @@ module TDParser
       if t.nil?
         nil
       else
-        Array[t]
+        [t]
       end
     end
   end
@@ -503,7 +503,7 @@ module TDParser
     def call(tokens, _buff)
       t = tokens.shift
       if t.nil?
-        Array[nil]
+        [nil]
       else
         nil
       end
@@ -574,7 +574,7 @@ module TDParser
 
     def call(_tokens, buff)
       if (res = @condition.call(buff.map))
-        Array[res]
+        [res]
       else
         nil
       end
@@ -591,7 +591,7 @@ module TDParser
 
     def call(_tokens, buff)
       if buff.map[:state] == @state
-        Array[@state]
+        [@state]
       else
         nil
       end
@@ -650,7 +650,7 @@ module TDParser
   def leftrec(*rules, &act)
     f = proc { |x|
       x[1].inject(x[0]) { |acc, y|
-        act.call(Array[acc, *y])
+        act.call([acc, *y])
       }
     }
     base = rules.shift
@@ -664,7 +664,7 @@ module TDParser
       x[0].reverse.inject(x[1]) { |acc, y|
         ys = y.dup
         ys.push(acc)
-        act.call(Array[*ys])
+        act.call(ys)
       }
     }
     base = rules.pop
