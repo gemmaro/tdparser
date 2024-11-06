@@ -37,8 +37,8 @@ module TDParser
     end
 
     def shift
-      if  @buffer.empty?
-        if  self.next?
+      if @buffer.empty?
+        if self.next?
           token = self.next
         else
           token = nil
@@ -177,7 +177,7 @@ module TDParser
 
     def parse(tokens = nil, buff = nil, &blk)
       buff ||= TokenBuffer.new
-      if  blk.nil?
+      if blk.nil?
         if (tokens.respond_to?(:shift) && tokens.respond_to?(:unshift)) || !tokens.respond_to?(:each)
           @tokens = tokens
         else
@@ -196,7 +196,7 @@ module TDParser
 
     def peek
       t = @tokens.shift
-      unless  t.nil?
+      unless t.nil?
         @tokens.unshift(t)
       end
       t
@@ -308,7 +308,7 @@ module TDParser
     end
 
     def call(tokens, buff)
-      if  (x = @parsers[0].call(tokens, buff)).nil?
+      if (x = @parsers[0].call(tokens, buff)).nil?
         nil
       else
         x = TokenBuffer[*x]
@@ -380,10 +380,10 @@ module TDParser
 
   class ConcatParser < CompositeParser # :nodoc:
     def call(tokens, buff)
-      if  (x = @parsers[0].call(tokens, buff)).nil?
+      if (x = @parsers[0].call(tokens, buff)).nil?
         nil
       else
-        if  (y = @parsers[1].call(tokens, buff)).nil?
+        if (y = @parsers[1].call(tokens, buff)).nil?
           nil
         else
           x + y
@@ -527,12 +527,12 @@ module TDParser
           xs.push(x)
         end
       end
-      if  x.nil?
+      if x.nil?
         nil
       else
-        if  range
+        if range
           range.each {
-            while  true
+            while true
               y = x
               b = prepare(buff)
               if  (x = r.call(ts, b)).nil?
@@ -546,7 +546,7 @@ module TDParser
             end
           }
         else
-          while  true
+          while true
             y = x
             b = prepare(buff)
             if  (x = r.call(ts, b)).nil?
@@ -682,7 +682,7 @@ module TDParser
     def initialize(label, eqsym)
       super()
       @label = label
-      @equality  = eqsym
+      @equality = eqsym
     end
 
     def call(tokens, buff)
