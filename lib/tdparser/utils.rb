@@ -48,7 +48,7 @@ module TDParser
           sstr = scanner.scan(@scan_pattern)
           if sstr
             @rule.each { |reg, kind|
-              if (reg =~ sstr)
+              if reg =~ sstr
                 x << Token.new(kind, sstr)
                 break
               end
