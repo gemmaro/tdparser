@@ -36,7 +36,7 @@ puts(parser.rule3.to_s)
 
 N = 10
 Benchmark.bm { |x|
-  buff = ["1", "2"]
+  buff = %w[1 2]
   b = ["b"]
   for i in [5, 10, 15]
     puts("--")
