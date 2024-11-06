@@ -512,8 +512,8 @@ class TestTDParser < Test::Unit::TestCase
       %r{\+|-|\*|/} => :op
     })
     tokens = tokenizer.generate('1 + 1.0 - 2').to_a
-    kinds = tokens.collect { |x| x.kind }
-    vals = tokens.collect { |x| x.value }
+    kinds = tokens.collect(&:kind)
+    vals = tokens.collect(&:value)
     assert_equal([:int, :op, :real, :op, :int], kinds)
     assert_equal(['1', '+', '1.0', '-', '2'], vals)
   end
