@@ -33,21 +33,6 @@ module TDParser
   end
 
   module XMLParser
-    class XHash < Hash
-      def ===(h)
-        if super(h)
-          return true
-        end
-        if !h.is_a?(Hash)
-          return false
-        end
-        each { |k, v|
-          v === h[k] or return false
-        }
-        true
-      end
-    end
-
     def start_element(name = String)
       token(XMLArray[:start_element, name, Hash])
     end
