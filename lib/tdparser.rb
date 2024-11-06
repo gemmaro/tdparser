@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# -*- ruby -*-
 #
 # Top-down parser for embedded in a ruby script.
 #

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# -*- ruby -*-
 # writing grammars using chainl().
 
 require 'tdparser'

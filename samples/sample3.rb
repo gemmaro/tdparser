@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# -*- ruby -*-
 # parsing four arithmetic expressions with tdputils.
 
 require 'tdparser'
