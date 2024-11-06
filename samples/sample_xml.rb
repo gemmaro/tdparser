@@ -11,7 +11,7 @@ translator = TDParser.define { |g|
     (element("a") {
       element("b") {
         g.xmlseq
-      } >> dom_constructor { |node| node.children }
+      } >> dom_constructor(&:children)
     } >> dom_constructor { |node| node.name = "AB"; node }) |
     (element(String) {
       g.xmlseq
