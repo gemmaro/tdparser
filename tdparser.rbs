@@ -121,10 +121,6 @@ module TDParser
     def clear: -> Hash[:__state__, untyped]
   end
 
-  class Sequence < Array[untyped]
-    def +: (untyped seq) -> Sequence
-  end
-
   module BufferUtils
     def prepare: (TokenBuffer? buff) -> TokenBuffer
     def recover: (TokenBuffer? buff, untyped ts) -> TokenBuffer
