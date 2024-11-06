@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
 module TDParser
-  class Grammar
+  class Grammar # :nodoc:
     include TDParser
 
     alias define instance_eval
 
-    def respond_to_missing? # :nodoc:
+    def respond_to_missing?
       true
     end
 
-    def method_missing(sym, *args) # :nodoc:
+    def method_missing(sym, *args)
       args.empty? and return rule(sym)
       sym.end_with?('=') or raise(NoMethodError, "undefined method `#{sym}' for #{inspect}")
       name = sym[0..-2]
