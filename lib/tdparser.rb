@@ -826,8 +826,8 @@ module TDParser
     StateParser.new(s)
   end
 
-  def empty_rule(&b)
-    EmptyParser.new(&b)
+  def empty_rule(&)
+    EmptyParser.new(&)
   end
   alias empty empty_rule
 
@@ -846,8 +846,8 @@ module TDParser
   end
   alias fail fail_rule
 
-  def condition_rule(&b)
-    ConditionParser.new(&b)
+  def condition_rule(&)
+    ConditionParser.new(&)
   end
   alias condition condition_rule
 
@@ -877,17 +877,17 @@ module TDParser
 
   alias right_rec rightrec
 
-  def chainl(base, *infixes, &act)
+  def chainl(base, *infixes, &)
     infixes.inject(base) { |acc, r|
-      leftrec(acc, r - acc, &act)
+      leftrec(acc, r - acc, &)
     }
   end
 
   alias chain_left chainl
 
-  def chainr(base, *infixes, &act)
+  def chainr(base, *infixes, &)
     infixes.inject(base) { |acc, r|
-      rightrec(acc - r, acc, &act)
+      rightrec(acc - r, acc, &)
     }
   end
 
@@ -933,14 +933,14 @@ module TDParser
     alias method_missing g_method_missing # :nodoc:
   end
 
-  def TDParser.define(*_args, &block)
+  def TDParser.define(*_args, &)
     klass = Class.new(Grammar)
     g = klass.new
     begin
       if defined?(g.instance_exec)
-        g.instance_exec(g, &block)
+        g.instance_exec(g, &)
       else
-        g.instance_eval(&block)
+        g.instance_eval(&)
       end
     end
     g
