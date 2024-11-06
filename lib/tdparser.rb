@@ -94,12 +94,6 @@ module TDParser
     end
   end
 
-  class Sequence < Array
-    def +(seq)
-      self.dup.concat(seq)
-    end
-  end
-
   module BufferUtils
     def prepare(buff)
       b = TokenBuffer.new
@@ -267,7 +261,7 @@ module TDParser
       t = tokens.shift
       buff.unshift(t)
       if ( @symbol.__send__(@equality, t) || t.__send__(@equality, @symbol) )
-        Sequence[t]
+        Array[t]
       else
         nil
       end
@@ -326,7 +320,7 @@ module TDParser
       else
         x = TokenBuffer[*x]
         x.map = buff.map
-        Sequence[@action[x]]
+        Array[@action[x]]
       end
     end
 
@@ -504,10 +498,10 @@ module TDParser
       b = prepare(buff)
       if  (x = @parsers[0].call(tokens, b)).nil?
         recover(b, tokens)
-        Sequence[Sequence[nil, @parsers[1].call(tokens, buff)]]
+        Array[Array[nil, @parsers[1].call(tokens, buff)]]
       else
         buff.insert(0, *b)
-        Sequence[Sequence[x, nil]]
+        Array[Array[x, nil]]
       end
     end
 
@@ -572,7 +566,7 @@ module TDParser
             end
           end
         end
-        Sequence[xs]
+        Array[xs]
       end
     end
 
@@ -594,7 +588,7 @@ module TDParser
       rev = b.reverse
       recover(b, tokens)
       if  r.nil?
-        Sequence[Sequence[*rev]]
+        Array[Array[*rev]]
       else
         nil
       end
@@ -621,7 +615,7 @@ module TDParser
 
   class EmptyParser < Parser # :nodoc:
     def call(_tokens, _buff)
-      Sequence[nil]
+      Array[nil]
     end
 
     def to_s
@@ -639,7 +633,7 @@ module TDParser
       if t.nil?
         nil
       else
-        Sequence[t]
+        Array[t]
       end
     end
 
@@ -656,7 +650,7 @@ module TDParser
     def call(tokens, _buff)
       t = tokens.shift
       if t.nil?
-        Sequence[nil]
+        Array[nil]
       else
         nil
       end
@@ -676,7 +670,7 @@ module TDParser
       x = xs.shift
       xs.inject(token(x, eqsym)) { |acc, x|
         case x
-        when Sequence
+        when Array
           acc - __backref__(x, eqsym)
         else
           acc - token(x, eqsym)
@@ -754,7 +748,7 @@ module TDParser
 
     def call(_tokens, buff)
       if (res = @condition.call(buff.map))
-        Sequence[res]
+        Array[res]
       else
         nil
       end
@@ -783,7 +777,7 @@ module TDParser
 
     def call(_tokens, buff)
       if (buff.map[:state] == @state)
-        Sequence[@state]
+        Array[@state]
       else
         nil
       end
@@ -855,7 +849,7 @@ module TDParser
   def leftrec(*rules, &act)
     f = Proc.new { |x|
       x[1].inject(x[0]) { |acc, y|
-        act.call(Sequence[acc, *y])
+        act.call(Array[acc, *y])
       }
     }
     base = rules.shift
@@ -869,7 +863,7 @@ module TDParser
       x[0].reverse.inject(x[1]) { |acc, y|
         ys = y.dup
         ys.push(acc)
-        act.call(Sequence[*ys])
+        act.call(Array[*ys])
       }
     }
     base = rules.pop
