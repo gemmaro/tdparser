@@ -2,3 +2,9 @@ inherit_from: .rubocop_todo.yml
 
 AllCops:
   NewCops: enable
+
+Lint/BinaryOperatorWithIdenticalOperands:
+  Enabled: false
+
+Naming/ConstantName:
+  Enabled: false
