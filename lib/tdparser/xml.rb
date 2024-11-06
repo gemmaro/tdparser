@@ -149,8 +149,8 @@ module TDParser
 
     alias notation_decl notationdecl
 
-    def any_node(&b)
-      (element(&b) | doctype(&b) | text | pi | cdata |
+    def any_node(&)
+      (element(&) | doctype(&) | text | pi | cdata |
        comment | xmldecl | externalentity | elementdecl |
        entitydecl | attlistdecl | notationdecl) >> proc { |x| x[2] }
     end
