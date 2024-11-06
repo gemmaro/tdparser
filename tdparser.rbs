@@ -130,7 +130,7 @@ module TDParser
     def to_proc: -> ^(*untyped) -> untyped
     def optimize: (?false _default) -> Parser
     def -: (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r) -> ConcatParser
-    def +: (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r) -> ParallelParser
+    def +: ((ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)? r) -> ParallelParser
     def |: (untyped r) -> (ActionParser | ChoiceParser | ConcatParser | ParallelParser)
     def *: (untyped range) -> IterationParser
     def >>: (^(Array[untyped]) -> nil act) -> ActionParser
@@ -158,8 +158,8 @@ module TDParser
   end
 
   class CompositeParser < Parser
-    attr_accessor parsers: Array[ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser]
-    def initialize: (*ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser parsers) -> void
+    attr_accessor parsers: Array[(ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)?]
+    def initialize: (*(ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)? parsers) -> void
     def optimize: (?false default) -> (ActionParser | ChoiceParser | ConcatParser | ParallelParser)
   end
 
@@ -188,7 +188,7 @@ module TDParser
 
   class ChoiceParser < CompositeParser
     def call: (untyped tokens, TokenBuffer? buff) -> Array[[nil, nil]?]?
-    def shared_sequence: (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r1, ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r2) -> ([(ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)?, ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser, ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser])
+    def shared_sequence: ((ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)? r1, (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)? r2) -> ([(ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)?, (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)?, (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)?])
     def optimize: (?bool default) -> (ActionParser | ChoiceParser | ConcatParser | ParallelParser)
   end
 
