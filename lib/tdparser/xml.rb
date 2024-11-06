@@ -47,7 +47,7 @@ module TDParser
       else
         crule = empty
       end
-      (start_element(elem) - crule - end_element(elem)) >> Proc.new { |x|
+      (start_element(elem) - crule - end_element(elem)) >> proc { |x|
         name = x[0][1]
         attrs = x[0][2]
         node = REXML::Element.new
@@ -58,31 +58,31 @@ module TDParser
     end
 
     def text(match = String)
-      token(XMLArray[:text, match]) >> Proc.new { |x|
+      token(XMLArray[:text, match]) >> proc { |x|
         REXML::Text.new(x[0][1])
       }
     end
 
     def pi
-      token(XMLArray[:processing_instruction, String, String]) >> Proc.new { |x|
+      token(XMLArray[:processing_instruction, String, String]) >> proc { |x|
         REXML::Instruction.new(x[0][1], x[0][2])
       }
     end
 
     def cdata(match = String)
-      token(XMLArray[:cdata, match]) >> Proc.new { |x|
+      token(XMLArray[:cdata, match]) >> proc { |x|
         REXML::CData.new(x[0][1])
       }
     end
 
     def comment(match = String)
-      token(XMLArray[:comment, match]) >> Proc.new { |x|
+      token(XMLArray[:comment, match]) >> proc { |x|
         REXML::Comment.new(x[0][1])
       }
     end
 
     def xmldecl
-      token(XMLArray[:xmldecl]) >> Proc.new { |x|
+      token(XMLArray[:xmldecl]) >> proc { |x|
         REXML::XMLDecl.new(x[0][1], x[0][2], x[0][3])
       }
     end
@@ -103,14 +103,14 @@ module TDParser
       else
         crule = empty
       end
-      (start_doctype(name) - crule - end_doctype) >> Proc.new { |x|
+      (start_doctype(name) - crule - end_doctype) >> proc { |x|
         node = REXML::DocType.new(x[0][1..-1])
         [node, x[1]]
       }
     end
 
     def externalentity(entity = String)
-      token(XMLArray[:externalentity, entity]) >> Proc.new { |x|
+      token(XMLArray[:externalentity, entity]) >> proc { |x|
         REXML::ExternalEntity.new(x[0][1])
       }
     end
@@ -118,7 +118,7 @@ module TDParser
     alias external_entity externalentity
 
     def elementdecl(elem = String)
-      token(XMLArray[:elementdecl, elem]) >> Proc.new { |x|
+      token(XMLArray[:elementdecl, elem]) >> proc { |x|
         REXML::ElementDecl.new(x[0][1])
       }
     end
@@ -126,7 +126,7 @@ module TDParser
     alias element_decl elementdecl
 
     def entitydecl(_entity = String)
-      token(XMLArray[:entitydecl, elem]) >> Proc.new { |x|
+      token(XMLArray[:entitydecl, elem]) >> proc { |x|
         REXML::Entity.new(x[0])
       }
     end
@@ -134,7 +134,7 @@ module TDParser
     alias entity_decl entitydecl
 
     def attlistdecl(_decl = String)
-      token(XMLArray[:attlistdecl]) >> Proc.new { |x|
+      token(XMLArray[:attlistdecl]) >> proc { |x|
         REXML::AttlistDecl.new(x[0][1..-1])
       }
     end
@@ -142,7 +142,7 @@ module TDParser
     alias attribute_list_declaration attlistdecl
 
     def notationdecl(_decl = String)
-      token(XMLArray[:notationdecl]) >> Proc.new { |x|
+      token(XMLArray[:notationdecl]) >> proc { |x|
         REXML::NotationDecl.new(*x[0][1..-1])
       }
     end
@@ -152,11 +152,11 @@ module TDParser
     def any_node(&b)
       (element(&b) | doctype(&b) | text | pi | cdata |
        comment | xmldecl | externalentity | elementdecl |
-       entitydecl | attlistdecl | notationdecl) >> Proc.new { |x| x[2] }
+       entitydecl | attlistdecl | notationdecl) >> proc { |x| x[2] }
     end
 
     def dom_constructor(&act)
-      Proc.new { |x|
+      proc { |x|
         node = x[0][0]
         child = x[0][1]
         if child.is_a?(Array)
