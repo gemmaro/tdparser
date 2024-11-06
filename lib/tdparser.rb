@@ -189,12 +189,7 @@ module TDParser
       end
       t
     end
-
-    def do(&block)
-        self >> block
-    end
   end
-  # end of Parser
 
   class NonTerminalParser < Parser # :nodoc:
     attr_reader :context, :symbol, :options
