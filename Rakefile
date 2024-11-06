@@ -16,3 +16,7 @@ RDoc::Task.new do |rdoc|
   rdoc.main = guide
   rdoc.rdoc_files.include("lib/**/*.rb", "doc/faq.rdoc", guide)
 end
+
+task :gensig do
+  sh 'typeprof', '-r', 'rexml', '-r', 'strscan', '-o', 'tdparser.rbs', *Dir['lib/**/*.rb']
+end
