@@ -228,7 +228,6 @@ module TDParser
   end
 
   class FailParser < Parser
-    def call: (untyped _tokens, untyped _buff) -> nil
     def to_s: -> String
     def ==: -> bool
   end
