@@ -112,7 +112,7 @@ module TDParser
     include TDParser
 
     def to_proc
-      Proc.new { |*x| self.call(*x) }
+      proc { |*x| self.call(*x) }
     end
 
     def call(*args)
@@ -454,7 +454,7 @@ module TDParser
         r = share - (r12 + r22)
         if act1
           if act2
-            r = r >> Proc.new { |x|
+            r = r >> proc { |x|
               y0, y1, = x.pop
               if y0
                 act1.call(x.push(*y0))
@@ -463,7 +463,7 @@ module TDParser
               end
             }
           else
-            r = r >> Proc.new { |x|
+            r = r >> proc { |x|
               y0, = x.pop
               if y0
                 act1.call(x.push(*y0))
@@ -472,7 +472,7 @@ module TDParser
           end
         else
           if act2
-            r = r >> Proc.new { |x|
+            r = r >> proc { |x|
               _, y1, = x.pop
               if y1
                 act2.call(x.push(*y1))
@@ -848,7 +848,7 @@ module TDParser
   alias condition condition_rule
 
   def leftrec(*rules, &act)
-    f = Proc.new { |x|
+    f = proc { |x|
       x[1].inject(x[0]) { |acc, y|
         act.call(Array[acc, *y])
       }
@@ -860,7 +860,7 @@ module TDParser
   alias left_rec leftrec
 
   def rightrec(*rules, &act)
-    f = Proc.new { |x|
+    f = proc { |x|
       x[0].reverse.inject(x[1]) { |acc, y|
         ys = y.dup
         ys.push(acc)

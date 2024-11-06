@@ -13,7 +13,7 @@ module TDParser
 end
 
 parser = TDParser.define { |g|
-  f = Proc.new { |x| x.flatten }
+  f = proc { |x| x.flatten }
   g.rule1 =
     ((token("1") - token("2") - rule1 - token("a")) >> f) |
     ((token("1") - token("2") - rule1 - token("b")) >> f) |
