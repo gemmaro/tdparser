@@ -10,6 +10,6 @@ class SampleExprTest < Test::Unit::TestCase
     assert_equal 0, SampleExprParser.parse('2 - 1 * 20 + 18')
     assert_equal 21, SampleExprParser.parse('2 - (1 - 20)')
     assert_equal 0, SampleExprParser.parse('1 + 2 - 3')
-    assert_equal 5, SampleExprParser.parse("30 / 6")
+    assert_equal 5, SampleExprParser.parse('30 / 6')
   end
 end
