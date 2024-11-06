@@ -472,7 +472,7 @@ module TDParser
       r = @parsers[0].call(tokens, b)
       rev = b.reverse
       recover(b, tokens)
-      if  r.nil?
+      if r.nil?
         [[*rev]]
       else
         nil
