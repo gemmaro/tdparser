@@ -1,1 +1,1 @@
-(specifications->manifest (list "ruby@3.1" "ruby-rubocop"))
+(specifications->manifest (list "ruby@3.1" "ruby-rubocop" "ruby-simplecov"))
