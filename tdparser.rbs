@@ -40,8 +40,9 @@ module TDParser
   end
 
   class Token
-    attr_accessor kind: untyped
-    attr_accessor value: String
+    @kind: untyped
+    @value: String
+
     def initialize: (untyped kind, String value) -> void
     def ===: (untyped other) -> true
   end

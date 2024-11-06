@@ -4,7 +4,7 @@ require 'tdparser'
 
 module TDParser
   class Token
-    attr_accessor :kind, :value
+    attr :kind, :value
 
     def initialize(kind, value)
       @kind = kind
