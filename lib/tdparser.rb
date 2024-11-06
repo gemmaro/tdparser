@@ -511,12 +511,14 @@ module TDParser
   end
 
   class ReferenceParser < Parser # :nodoc:
-    def __backref__(xs, eqsym)
+    private
+
+    def backref(xs, eqsym)
       head = xs.shift
       xs.inject(token(head, eqsym)) { |acc, x|
         case x
         when Array
-          acc - __backref__(x, eqsym)
+          acc - backref(x, eqsym)
         else
           acc - token(x, eqsym)
         end
@@ -538,7 +540,7 @@ module TDParser
       if ys.nil? || ys.empty?
         nil
       else
-        __backref__(ys.dup, @equality).call(tokens, buff)
+        backref(ys.dup, @equality).call(tokens, buff)
       end
     end
   end
@@ -557,7 +559,7 @@ module TDParser
       if ys.nil? || ys.empty?
         nil
       else
-        __backref__(ys.dup, @equality).call(tokens, buff)
+        backref(ys.dup, @equality).call(tokens, buff)
       end
     end
   end

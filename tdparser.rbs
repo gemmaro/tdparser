@@ -221,7 +221,8 @@ module TDParser
   end
 
   class ReferenceParser < Parser
-    def __backref__: (untyped xs, :=== eqsym) -> untyped
+    private
+    def backref: (untyped xs, :=== eqsym) -> untyped
   end
 
   class BackrefParser < ReferenceParser
