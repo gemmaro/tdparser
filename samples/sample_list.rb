@@ -16,6 +16,11 @@ parser = TDParser.define{|g|
   end
 }
 
+if ENV["TEST"]
+  SampleListParser = parser
+  return
+end
+
 list = "(a (b c d) (e f g))"
 r = parser.parse(list)
 p r
