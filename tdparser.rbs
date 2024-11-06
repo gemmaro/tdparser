@@ -97,10 +97,6 @@ module TDParser
     alias notation_decl notationdecl
     def any_node: -> untyped
     def dom_constructor: -> Proc
-
-    class XHash < Hash[untyped, untyped]
-      def ===: (untyped h) -> bool
-    end
   end
 
   class TokenGenerator
