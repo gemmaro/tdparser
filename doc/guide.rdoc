@@ -37,8 +37,9 @@ by <tt>token(/\d+/)</tt>, <tt>token("+")</tt> and <tt>rule(:expr)</tt>
 are assigned to <tt>x[0]</tt>, <tt>x[1]</tt> and <tt>x[2]</tt>
 respectively.  After that, in order to parse <tt>1 + 2</tt>, we first
 split it into an array of tokens like <tt>["1", "+", "2"]</tt>, and
-then call the +parse+ method of a parser object, which is created by
-<tt>MyParser.new()</tt>, as follows.
+then call the parse[rdoc-ref:TDParser::Parser#parse] method of a
+parser object, which is created by <tt>MyParser.new()</tt>, as
+follows.
 
    parser = MyParser.new()
    parser.expr.parse(["1", "+", "2"])
