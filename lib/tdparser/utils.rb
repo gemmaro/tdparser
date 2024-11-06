@@ -25,7 +25,7 @@ module TDParser
     end
   end
 
-  class BasicStringTokenizer
+  class BasicStringTokenizer # :nodoc:
     def self.[](rule, ignore = nil)
       self.new(rule, ignore)
     end
@@ -40,7 +40,7 @@ module TDParser
     def generate(str)
       scanner = StringScanner.new(str)
       TDParser::TokenGenerator.new { |x|
-        until scanner.eos?
+        while !scanner.eos?
           if @ignore_pattern
             while scanner.scan(@ignore_pattern)
             end
@@ -68,7 +68,7 @@ module TDParser
     end
   end
 
-  class WaitingTokenGenerator < TDParser::TokenGenerator
+  class WaitingTokenGenerator < TDParser::TokenGenerator # :nodoc:
     def initialize(*args)
       super(*args)
       @terminated = false
