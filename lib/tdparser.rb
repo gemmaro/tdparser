@@ -6,8 +6,6 @@
 #
 
 module TDParser
-  ParserException = Class.new(RuntimeError)
-
   class TokenGenerator
     def initialize(args = nil, &block)
       @enumerator = Enumerator.new do |y|
