@@ -5,19 +5,19 @@ require 'rexml/parsers/pullparser'
 require 'rexml/document'
 
 module TDParser
-  module XMLParser
-    class XMLTokenGenerator < TDParser::TokenGenerator
-      def initialize(src)
-        @xparser = REXML::Parsers::BaseParser.new(src)
-        super() { |g|
-          while @xparser.has_next?
-            e = @xparser.pull
-            g.yield(e)
-          end
-        }
-      end
+  class XMLTokenGenerator < TDParser::TokenGenerator
+    def initialize(src)
+      @xparser = REXML::Parsers::BaseParser.new(src)
+      super() { |g|
+        while @xparser.has_next?
+          e = @xparser.pull
+          g.yield(e)
+        end
+      }
     end
+  end
 
+  module XMLParser
     class XArray < Array
       def ===(ary)
         if super(ary)

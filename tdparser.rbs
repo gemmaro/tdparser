@@ -7,7 +7,9 @@ module TDParser
   def rule: (untyped sym, *untyped opts) -> NonTerminalParser
   def token: (untyped x, ?:=== eqsym) -> TerminalParser
   def backref: (untyped x, ?:=== eqsym) -> BackrefParser
+  alias back_ref backref
   def stackref: (untyped stack, ?:=== eqsym) -> StackrefParser
+  alias stack_ref stackref
   def state: (untyped s) -> StateParser
   def empty_rule: -> EmptyParser
   alias empty empty_rule
@@ -20,9 +22,13 @@ module TDParser
   def condition_rule: -> ConditionParser
   alias condition condition_rule
   def leftrec: (*untyped rules) -> FailParser
+  alias left_rec leftrec
   def rightrec: (*untyped rules) -> FailParser
+  alias right_rec rightrec
   def chainl: (untyped base, *untyped infixes) -> untyped
+  alias chain_left chainl
   def chainr: (untyped base, *untyped infixes) -> untyped
+  alias chain_right chainr
   def self.define: (*untyped _args) -> untyped
 
   class Token
@@ -56,6 +62,12 @@ module TDParser
     def shift: -> nil
   end
 
+  class XMLTokenGenerator
+    @xparser: untyped
+
+    def initialize: (untyped src) -> void
+  end
+
   module XMLParser
     def start_element: (?singleton(String) name) -> untyped
     def end_element: (?singleton(String) name) -> untyped
@@ -65,22 +77,22 @@ module TDParser
     def cdata: (?singleton(String) match) -> untyped
     def comment: (?singleton(String) match) -> untyped
     def xmldecl: -> untyped
+    alias xml_decl xmldecl
     def start_doctype: (?singleton(String) name) -> untyped
     def end_doctype: -> untyped
     def doctype: (?singleton(String) name) -> untyped
     def externalentity: (?singleton(String) entity) -> untyped
+    alias external_entity externalentity
     def elementdecl: (?singleton(String) elem) -> untyped
+    alias element_decl elementdecl
     def entitydecl: (?singleton(String) _entity) -> untyped
+    alias entity_decl entitydecl
     def attlistdecl: (?singleton(String) _decl) -> untyped
+    alias attribute_list_declaration attlistdecl
     def notationdecl: (?singleton(String) _decl) -> untyped
+    alias notation_decl notationdecl
     def any_node: -> untyped
     def dom_constructor: -> Proc
-
-    class XMLTokenGenerator
-      @xparser: untyped
-
-      def initialize: (untyped src) -> void
-    end
 
     class XArray < Array[untyped]
       def ===: (untyped ary) -> bool
