@@ -22,7 +22,7 @@ module TDParser
       if super(ary)
         return true
       end
-      if !ary.is_a?(Array)
+      unless ary.is_a?(Array)
         return false
       end
       each_with_index { |v, idx|

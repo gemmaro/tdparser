@@ -204,7 +204,7 @@ module TDParser
 
     def peek
       t = @tokens.shift
-      if  !t.nil?
+      unless  t.nil?
         @tokens.unshift(t)
       end
       t
