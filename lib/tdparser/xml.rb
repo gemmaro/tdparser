@@ -17,22 +17,22 @@ module TDParser
     end
   end
 
-  module XMLParser
-    class XArray < Array
-      def ===(ary)
-        if super(ary)
-          return true
-        end
-        if !ary.is_a?(Array)
-          return false
-        end
-        each_with_index { |v, idx|
-          v === ary[idx] or return false
-        }
-        true
+  class XMLArray < Array
+    def ===(ary)
+      if super(ary)
+        return true
       end
+      if !ary.is_a?(Array)
+        return false
+      end
+      each_with_index { |v, idx|
+        v === ary[idx] or return false
+      }
+      true
     end
+  end
 
+  module XMLParser
     class XHash < Hash
       def ===(h)
         if super(h)
@@ -49,11 +49,11 @@ module TDParser
     end
 
     def start_element(name = String)
-      token(XArray[:start_element, name, Hash])
+      token(XMLArray[:start_element, name, Hash])
     end
 
     def end_element(name = String)
-      token(XArray[:end_element, name])
+      token(XMLArray[:end_element, name])
     end
 
     def element(elem = String, &inner)
@@ -73,31 +73,31 @@ module TDParser
     end
 
     def text(match = String)
-      token(XArray[:text, match]) >> Proc.new { |x|
+      token(XMLArray[:text, match]) >> Proc.new { |x|
         REXML::Text.new(x[0][1])
       }
     end
 
     def pi
-      token(XArray[:processing_instruction, String, String]) >> Proc.new { |x|
+      token(XMLArray[:processing_instruction, String, String]) >> Proc.new { |x|
         REXML::Instruction.new(x[0][1], x[0][2])
       }
     end
 
     def cdata(match = String)
-      token(XArray[:cdata, match]) >> Proc.new { |x|
+      token(XMLArray[:cdata, match]) >> Proc.new { |x|
         REXML::CData.new(x[0][1])
       }
     end
 
     def comment(match = String)
-      token(XArray[:comment, match]) >> Proc.new { |x|
+      token(XMLArray[:comment, match]) >> Proc.new { |x|
         REXML::Comment.new(x[0][1])
       }
     end
 
     def xmldecl
-      token(XArray[:xmldecl]) >> Proc.new { |x|
+      token(XMLArray[:xmldecl]) >> Proc.new { |x|
         REXML::XMLDecl.new(x[0][1], x[0][2], x[0][3])
       }
     end
@@ -105,11 +105,11 @@ module TDParser
     alias xml_decl xmldecl
 
     def start_doctype(name = String)
-      token(XArray[:start_doctype, name])
+      token(XMLArray[:start_doctype, name])
     end
 
     def end_doctype
-      token(XArray[:end_doctype])
+      token(XMLArray[:end_doctype])
     end
 
     def doctype(name = String, &inner)
@@ -125,7 +125,7 @@ module TDParser
     end
 
     def externalentity(entity = String)
-      token(XArray[:externalentity, entity]) >> Proc.new { |x|
+      token(XMLArray[:externalentity, entity]) >> Proc.new { |x|
         REXML::ExternalEntity.new(x[0][1])
       }
     end
@@ -133,7 +133,7 @@ module TDParser
     alias external_entity externalentity
 
     def elementdecl(elem = String)
-      token(XArray[:elementdecl, elem]) >> Proc.new { |x|
+      token(XMLArray[:elementdecl, elem]) >> Proc.new { |x|
         REXML::ElementDecl.new(x[0][1])
       }
     end
@@ -141,7 +141,7 @@ module TDParser
     alias element_decl elementdecl
 
     def entitydecl(_entity = String)
-      token(XArray[:entitydecl, elem]) >> Proc.new { |x|
+      token(XMLArray[:entitydecl, elem]) >> Proc.new { |x|
         REXML::Entity.new(x[0])
       }
     end
@@ -149,7 +149,7 @@ module TDParser
     alias entity_decl entitydecl
 
     def attlistdecl(_decl = String)
-      token(XArray[:attlistdecl]) >> Proc.new { |x|
+      token(XMLArray[:attlistdecl]) >> Proc.new { |x|
         REXML::AttlistDecl.new(x[0][1..-1])
       }
     end
@@ -157,7 +157,7 @@ module TDParser
     alias attribute_list_declaration attlistdecl
 
     def notationdecl(_decl = String)
-      token(XArray[:notationdecl]) >> Proc.new { |x|
+      token(XMLArray[:notationdecl]) >> Proc.new { |x|
         REXML::NotationDecl.new(*x[0][1..-1])
       }
     end

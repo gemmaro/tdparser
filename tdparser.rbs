@@ -68,6 +68,10 @@ module TDParser
     def initialize: (untyped src) -> void
   end
 
+  class XMLArray < Array[untyped]
+    def ===: (untyped ary) -> bool
+  end
+
   module XMLParser
     def start_element: (?singleton(String) name) -> untyped
     def end_element: (?singleton(String) name) -> untyped
@@ -93,10 +97,6 @@ module TDParser
     alias notation_decl notationdecl
     def any_node: -> untyped
     def dom_constructor: -> Proc
-
-    class XArray < Array[untyped]
-      def ===: (untyped ary) -> bool
-    end
 
     class XHash < Hash[untyped, untyped]
       def ===: (untyped h) -> bool
