@@ -28,7 +28,7 @@ class MyParser
   end
 end
 
-ENV["TEST"] and return
+ENV.fetch("TEST", nil) and return
 
 parser = MyParser.new
 puts("1+10 = " + parser.parse("1+10").to_s)

@@ -1,3 +1,3 @@
 require 'test/unit'
 
-ENV["TEST"] = "yes"
+ENV['TEST'] = 'yes'

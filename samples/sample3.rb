@@ -51,7 +51,7 @@ class Sample3Parser
   end
 end
 
-ENV["TEST"] and return
+ENV.fetch("TEST", nil) and return
 
 parser = Sample3Parser.new
 puts("1+10 = " + parser.parse("1+10").to_s)
