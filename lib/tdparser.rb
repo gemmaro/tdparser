@@ -113,7 +113,7 @@ module TDParser
     end
 
     def optimize(_default = false)
-      self.dup
+      self
     end
 
     def -(r)
