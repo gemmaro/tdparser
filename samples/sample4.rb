@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# -*- ruby -*-
 # caching constructed grammars
 
 require 'tdparser'
