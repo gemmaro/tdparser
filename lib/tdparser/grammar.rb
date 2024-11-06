@@ -2,40 +2,18 @@ module TDParser
   class Grammar
     include TDParser
 
-    def define(&block)
-      instance_eval {
-        begin
-          alias method_missing g_method_missing
-          block.call(self)
-        end
+    alias define instance_eval
+
+    def method_missing(sym, *args) # :nodoc:
+      args.empty? and return rule(sym)
+      sym.end_with?('=') or raise(NoMethodError, "undefined method `#{sym}' for #{self.inspect}")
+      parser, = args
+      parser.is_a?(Parser) or parser = token(parser)
+      self.class.instance_eval {
+        name = sym[0..-2]
+        method_defined?(name) and return
+        define_method(name) { parser }
       }
     end
-
-    def g_method_missing(sym, *args) # :nodoc:
-      arg0 = args[0]
-      sym = sym.to_s
-      if sym[-1, 1] == "="
-        name = sym[0..-2]
-        case arg0
-        when Parser
-          self.class.instance_eval {
-            method_defined?(name) or
-              define_method(name) { arg0 }
-          }
-        else
-          t = token(arg0)
-          self.class.instance_eval {
-            method_defined?(name) or
-            define_method(name) { t }
-          }
-        end
-      elsif args.size == 0
-        rule(sym)
-      else
-        raise(NoMethodError, "undefined method `#{sym}' for #{self.inspect}")
-      end
-    end
-
-    alias method_missing g_method_missing # :nodoc:
   end
 end
