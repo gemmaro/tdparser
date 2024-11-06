@@ -187,8 +187,10 @@ module TDParser
 
   class ChoiceParser < CompositeParser
     def call: (untyped tokens, TokenBuffer? buff) -> Array[[nil, nil]?]?
-    def shared_sequence: ((ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)? r1, (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)? r2) -> ([(ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)?, (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)?, (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)?])
     def optimize: (?bool default) -> (ActionParser | ChoiceParser | ConcatParser | ParallelParser)
+
+    private
+    def shared_sequence: ((ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)? r1, (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)? r2) -> ([(ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)?, (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)?, (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)?])
   end
 
   class ParallelParser < CompositeParser
