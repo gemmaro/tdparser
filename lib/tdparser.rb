@@ -111,9 +111,6 @@ module TDParser
       proc { |*x| self.call(*x) }
     end
 
-    def call(*args)
-    end
-
     def optimize(_default = false)
       self.dup
     end
