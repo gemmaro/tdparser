@@ -191,6 +191,7 @@ module TDParser
 
   class NonTerminalParser < Parser # :nodoc:
     attr_reader :context, :symbol, :options
+
     def initialize(context, sym, *options)
       super()
       @context = context
@@ -281,6 +282,7 @@ module TDParser
 
   class StackParser < CompositeParser # :nodoc:
     attr_reader :stack
+
     def initialize(parser, stack)
       @stack = stack
       super(parser)
@@ -408,6 +410,7 @@ module TDParser
 
   class IterationParser < CompositeParser # :nodoc:
     attr_reader :min, :range
+
     def initialize(parser, n, range)
       @min = n
       @range = range
