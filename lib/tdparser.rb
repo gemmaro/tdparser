@@ -186,7 +186,7 @@ module TDParser
     def parse(tokens = nil, buff = nil, &blk)
       buff ||= TokenBuffer.new
       if  blk.nil?
-        if ( tokens.respond_to?(:shift) && tokens.respond_to?(:unshift) ) || !tokens.respond_to?(:each)
+        if (tokens.respond_to?(:shift) && tokens.respond_to?(:unshift)) || !tokens.respond_to?(:each)
           @tokens = tokens
         else
           @tokens = TokenGenerator.new(tokens)
@@ -260,7 +260,7 @@ module TDParser
     def call(tokens, buff)
       t = tokens.shift
       buff.unshift(t)
-      if ( @symbol.__send__(@equality, t) || t.__send__(@equality, @symbol) )
+      if (@symbol.__send__(@equality, t) || t.__send__(@equality, @symbol))
         Array[t]
       else
         nil
@@ -524,7 +524,7 @@ module TDParser
       n = @min
       x  = true
       xs = []
-      while ( n > 0 )
+      while (n > 0)
         n -= 1
         b = prepare(buff)
         if  (x = r.call(ts, b)).nil?
