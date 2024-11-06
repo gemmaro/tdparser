@@ -69,7 +69,7 @@ class FastParser < Sample4Parser
   end
 end
 
-ENV["TEST"] and return
+ENV.fetch("TEST", nil) and return
 
 parser = Sample4Parser.new
 puts("1+10 = " + parser.parse("1+10").to_s)
