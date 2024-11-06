@@ -40,7 +40,7 @@ module TDParser
     def generate(str)
       scanner = StringScanner.new(str)
       TDParser::TokenGenerator.new { |x|
-        while !scanner.eos?
+        until scanner.eos?
           if @ignore_pattern
             while scanner.scan(@ignore_pattern)
             end
