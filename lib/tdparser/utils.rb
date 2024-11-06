@@ -20,10 +20,6 @@ module TDParser
     def ===(other)
       super(other) || (@kind == other)
     end
-
-    def =~(other)
-      @kind == other
-    end
   end
 
   class BasicStringTokenizer # :nodoc:

@@ -46,7 +46,6 @@ module TDParser
     def initialize: (untyped kind, String value) -> void
     def ==: (untyped other) -> bool
     def ===: (untyped other) -> true
-    def =~: (untyped other) -> untyped
   end
 
   class BasicStringTokenizer
