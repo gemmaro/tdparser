@@ -11,12 +11,6 @@ module TDParser
       @value = value
     end
 
-    def ==(other)
-      (other.class == self.class) &&
-      (@kind == other.kind) &&
-      (@value == other.value)
-    end
-
     def ===(other)
       super(other) || (@kind == other)
     end
