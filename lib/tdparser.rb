@@ -664,8 +664,8 @@ module TDParser
 
   class ReferenceParser < Parser # :nodoc:
     def __backref__(xs, eqsym)
-      x = xs.shift
-      xs.inject(token(x, eqsym)) { |acc, x|
+      head = xs.shift
+      xs.inject(token(head, eqsym)) { |acc, x|
         case x
         when Array
           acc - __backref__(x, eqsym)
