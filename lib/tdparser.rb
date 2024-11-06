@@ -207,13 +207,6 @@ module TDParser
       end
       res
     end
-
-    def ==(r)
-      (self.class == r.class) &&
-      (@context == r.context) &&
-      (@symbol == r.symbol) &&
-      (@options == r.options)
-    end
   end
 
   class TerminalParser < Parser # :nodoc:
@@ -234,12 +227,6 @@ module TDParser
         nil
       end
     end
-
-    def ==(r)
-      (self.class == r.class) &&
-      (@symbol == r.symbol) &&
-      (@equality == r.equality)
-    end
   end
 
   class CompositeParser < Parser # :nodoc:
@@ -254,11 +241,6 @@ module TDParser
       parser = dup
       parser.parsers = @parsers.collect { |x| x.optimize(default) }
       parser
-    end
-
-    def ==(r)
-      (self.class == r.class) &&
-      (@parsers == r.parsers)
     end
   end
 
@@ -279,11 +261,6 @@ module TDParser
         Array[@action[x]]
       end
     end
-
-    def ==(r)
-      super(r) &&
-      (@action == r.action)
-    end
   end
 
   class LabelParser < CompositeParser # :nodoc:
@@ -299,11 +276,6 @@ module TDParser
       buff.map[@label] = x
       x
     end
-
-    def ==(r)
-      super(r) &&
-      (@label == r.label)
-    end
   end
 
   class StackParser < CompositeParser # :nodoc:
@@ -317,11 +289,6 @@ module TDParser
       x = @parsers[0].call(tokens, buff)
       @stack.push(x)
       x
-    end
-
-    def ==(r)
-      super(r) &&
-      (@stack == r.stack)
     end
   end
 
@@ -497,12 +464,6 @@ module TDParser
         Array[xs]
       end
     end
-
-    def ==(r)
-      super(r) &&
-      (@min == r.min) &&
-      (@range == r.range)
-    end
   end
 
   class NegativeParser < CompositeParser # :nodoc:
@@ -519,19 +480,11 @@ module TDParser
     end
   end
 
-  class FailParser < Parser # :nodoc:
-    def ==
-      (self.class == r.class)
-    end
-  end
+  FailParser = Class.new(Parser) # :nodoc:
 
   class EmptyParser < Parser # :nodoc:
     def call(_tokens, _buff)
       Array[nil]
-    end
-
-    def ==(_r)
-      true
     end
   end
 
@@ -544,10 +497,6 @@ module TDParser
         Array[t]
       end
     end
-
-    def ==(_r)
-      true
-    end
   end
 
   class NoneParser < Parser # :nodoc:
@@ -558,10 +507,6 @@ module TDParser
       else
         nil
       end
-    end
-
-    def ==(_r)
-      true
     end
   end
 
@@ -596,12 +541,6 @@ module TDParser
         __backref__(ys.dup, @equality).call(tokens, buff)
       end
     end
-
-    def ==(r)
-      super(r) &&
-      (@label == r.label) &&
-      (@equality == r.equality)
-    end
   end
 
   class StackrefParser < ReferenceParser # :nodoc:
@@ -621,12 +560,6 @@ module TDParser
         __backref__(ys.dup, @equality).call(tokens, buff)
       end
     end
-
-    def ==(r)
-      super(r) &&
-      @stack.equal?(r.stack) &&
-      (@equality == r.equality)
-    end
   end
 
   class ConditionParser < Parser # :nodoc:
@@ -644,11 +577,6 @@ module TDParser
         nil
       end
     end
-
-    def ==(r)
-      super(r) &&
-      (@condition == r.condition)
-    end
   end
 
   class StateParser < Parser # :nodoc:
@@ -665,11 +593,6 @@ module TDParser
       else
         nil
       end
-    end
-
-    def ==(r)
-      super(r) &&
-      (@state == r.state)
     end
   end
 
