@@ -155,7 +155,7 @@ module TDParser
     attr_reader symbol: untyped
     attr_reader equality: :===
     def initialize: (untyped obj, :=== eqsym) -> void
-    def call: (untyped tokens, untyped buff) -> Array[untyped]?
+    def call: (untyped tokens, untyped buff) -> [untyped]?
   end
 
   class CompositeParser < Parser
@@ -167,57 +167,57 @@ module TDParser
   class ActionParser < CompositeParser
     attr_reader action: ^(Array[untyped]) -> nil
     def initialize: (ConcatParser | Parser parser, ^(Array[untyped]) -> nil act) -> void
-    def call: (untyped tokens, TokenBuffer? buff) -> Array[nil]?
+    def call: (untyped tokens, TokenBuffer? buff) -> [nil]?
   end
 
   class LabelParser < CompositeParser
     attr_reader label: untyped
     def initialize: (Parser parser, untyped label) -> void
-    def call: (untyped tokens, untyped buff) -> Array[Array[nil]?]?
+    def call: (untyped tokens, untyped buff) -> Array[[nil, nil]?]?
   end
 
   class StackParser < CompositeParser
     attr_reader stack: untyped
     def initialize: (Parser parser, untyped stack) -> void
-    def call: (untyped tokens, untyped buff) -> Array[Array[nil]?]?
+    def call: (untyped tokens, untyped buff) -> Array[[nil, nil]?]?
   end
 
   class ConcatParser < CompositeParser
-    def call: (untyped tokens, TokenBuffer? buff) -> Array[Array[nil]?]?
+    def call: (untyped tokens, TokenBuffer? buff) -> Array[[nil, nil]?]?
     def -: (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r) -> ConcatParser
   end
 
   class ChoiceParser < CompositeParser
-    def call: (untyped tokens, TokenBuffer? buff) -> Array[Array[nil]?]?
+    def call: (untyped tokens, TokenBuffer? buff) -> Array[[nil, nil]?]?
     def shared_sequence: (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r1, ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r2) -> ([(ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser)?, ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser, ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser])
     def optimize: (?bool default) -> (ActionParser | ChoiceParser | ConcatParser | ParallelParser)
   end
 
   class ParallelParser < CompositeParser
-    def call: (untyped tokens, TokenBuffer? buff) -> Array[Array[Array[untyped]?]]
+    def call: (untyped tokens, TokenBuffer? buff) -> [[Array[untyped]?, Array[untyped]?]]
   end
 
   class IterationParser < CompositeParser
     attr_reader min: untyped
     attr_reader range: nil
     def initialize: (Parser parser, untyped n, nil range) -> void
-    def call: (untyped ts, untyped buff) -> Array[Array[Array[untyped]?]]?
+    def call: (untyped ts, untyped buff) -> [Array[Array[untyped]?]]?
   end
 
   class NegativeParser < CompositeParser
-    def call: (untyped tokens, untyped buff) -> Array[Array[untyped]]?
+    def call: (untyped tokens, untyped buff) -> [Array[untyped]]?
   end
 
   class EmptyParser < Parser
-    def call: (untyped _tokens, untyped _buff) -> Array[nil]
+    def call: (untyped _tokens, untyped _buff) -> [nil]
   end
 
   class AnyParser < Parser
-    def call: (untyped tokens, untyped _buff) -> Array[untyped]?
+    def call: (untyped tokens, untyped _buff) -> [untyped]?
   end
 
   class NoneParser < Parser
-    def call: (untyped tokens, untyped _buff) -> Array[nil]?
+    def call: (untyped tokens, untyped _buff) -> [nil]?
   end
 
   class ReferenceParser < Parser
@@ -242,13 +242,13 @@ module TDParser
   class ConditionParser < Parser
     attr_reader condition: nil
     def initialize: -> void
-    def call: (untyped _tokens, untyped buff) -> Array[untyped]?
+    def call: (untyped _tokens, untyped buff) -> [untyped]?
   end
 
   class StateParser < Parser
     attr_reader state: untyped
     def initialize: (untyped s) -> void
-    def call: (untyped _tokens, untyped buff) -> Array[untyped]?
+    def call: (untyped _tokens, untyped buff) -> [untyped]?
   end
 
   class Grammar
