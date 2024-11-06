@@ -43,7 +43,6 @@ module TDParser
     attr_accessor kind: untyped
     attr_accessor value: String
     def initialize: (untyped kind, String value) -> void
-    def ==: (untyped other) -> bool
     def ===: (untyped other) -> true
   end
 
