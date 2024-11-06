@@ -222,7 +222,7 @@ module TDParser
   end
   # end of Parser
 
-  class NonTerminalParser < Parser
+  class NonTerminalParser < Parser # :nodoc:
     attr_reader :context, :symbol, :options
     def initialize(context, sym, *options)
       @context = context
@@ -253,7 +253,7 @@ module TDParser
     end
   end
 
-  class TerminalParser < Parser
+  class TerminalParser < Parser # :nodoc:
     attr_reader :symbol, :equality
 
     def initialize(obj, eqsym)
@@ -282,7 +282,7 @@ module TDParser
     end
   end
 
-  class CompositeParser < Parser
+  class CompositeParser < Parser # :nodoc:
     attr_accessor :parsers
 
     def initialize(*parsers)
@@ -310,7 +310,7 @@ module TDParser
     end
   end
 
-  class ActionParser < CompositeParser
+  class ActionParser < CompositeParser # :nodoc:
     attr_reader :action
 
     def initialize(parser, act)
@@ -338,7 +338,7 @@ module TDParser
     end
   end
 
-  class LabelParser < CompositeParser
+  class LabelParser < CompositeParser # :nodoc:
     attr_reader :label
 
     def initialize(parser, label)
@@ -362,7 +362,7 @@ module TDParser
     end
   end
 
-  class StackParser < CompositeParser
+  class StackParser < CompositeParser # :nodoc:
     attr_reader :stack
     def initialize(parser, stack)
       @stack = stack
@@ -389,7 +389,7 @@ module TDParser
     end
   end
 
-  class ConcatParser < CompositeParser
+  class ConcatParser < CompositeParser # :nodoc:
     def call(tokens, buff)
       if  (x = @parsers[0].call(tokens, buff)).nil?
         nil
@@ -411,7 +411,7 @@ module TDParser
     end
   end
 
-  class ChoiceParser < CompositeParser
+  class ChoiceParser < CompositeParser # :nodoc:
     def call(tokens, buff)
       b = prepare(buff)
       if  (x = @parsers[0].call(tokens, b)).nil?
@@ -497,7 +497,7 @@ module TDParser
     end
   end
 
-  class ParallelParser < CompositeParser
+  class ParallelParser < CompositeParser # :nodoc:
     def call(tokens, buff)
       b = prepare(buff)
       if  (x = @parsers[0].call(tokens, b)).nil?
@@ -514,7 +514,7 @@ module TDParser
     end
   end
 
-  class IterationParser < CompositeParser
+  class IterationParser < CompositeParser # :nodoc:
     attr_reader :min, :range
     def initialize(parser, n, range)
       @min = n
@@ -585,7 +585,7 @@ module TDParser
     end
   end
 
-  class NegativeParser < CompositeParser
+  class NegativeParser < CompositeParser # :nodoc:
     def call(tokens, buff)
       b = prepare(buff)
       r = @parsers[0].call(tokens, b)
@@ -603,7 +603,7 @@ module TDParser
     end
   end
 
-  class FailParser < Parser
+  class FailParser < Parser # :nodoc:
     def call(_tokens, _buff)
       nil
     end
@@ -617,7 +617,7 @@ module TDParser
     end
   end
 
-  class EmptyParser < Parser
+  class EmptyParser < Parser # :nodoc:
     def call(_tokens, _buff)
       Sequence[nil]
     end
@@ -631,7 +631,7 @@ module TDParser
     end
   end
 
-  class AnyParser < Parser
+  class AnyParser < Parser # :nodoc:
     def call(tokens, _buff)
       t = tokens.shift
       if t.nil?
@@ -650,7 +650,7 @@ module TDParser
     end
   end
 
-  class NoneParser < Parser
+  class NoneParser < Parser # :nodoc:
     def call(tokens, _buff)
       t = tokens.shift
       if t.nil?
@@ -669,7 +669,7 @@ module TDParser
     end
   end
 
-  class ReferenceParser < Parser
+  class ReferenceParser < Parser # :nodoc:
     def __backref__(xs, eqsym)
       x = xs.shift
       xs.inject(token(x, eqsym)) { |acc, x|
@@ -687,7 +687,7 @@ module TDParser
     end
   end
 
-  class BackrefParser < ReferenceParser
+  class BackrefParser < ReferenceParser # :nodoc:
     attr_reader :label, :equality
 
     def initialize(label, eqsym)
@@ -715,7 +715,7 @@ module TDParser
     end
   end
 
-  class StackrefParser < ReferenceParser
+  class StackrefParser < ReferenceParser # :nodoc:
     attr_reader :stack, :equality
 
     def initialize(stack, eqsym)
@@ -743,7 +743,7 @@ module TDParser
     end
   end
 
-  class ConditionParser < Parser
+  class ConditionParser < Parser # :nodoc:
     attr_reader :condition
 
     def initialize(&condition)
@@ -772,7 +772,7 @@ module TDParser
     end
   end
 
-  class StateParser < Parser
+  class StateParser < Parser # :nodoc:
     attr_reader :state
 
     def initialize(s)
