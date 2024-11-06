@@ -118,10 +118,6 @@ module TDParser
       self.dup
     end
 
-    def same?(r)
-      self == r
-    end
-
     def -(r)
       ConcatParser.new(self, r)
     end
@@ -414,7 +410,7 @@ module TDParser
         r12 = r1.parsers[1]
         r21 = r2.parsers[0]
         r22 = r2.parsers[1]
-        if r11.same?(r21)
+        if r11 == r21
           share, r12, r22, = shared_sequence(r12, r22)
           if share
             return [r11 - share, r12, r22]
