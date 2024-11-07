@@ -5,7 +5,7 @@ require 'sample_xml'
 
 class SampleXMLTest < Test::Unit::TestCase
   test 'sample XML' do
-    seq = XMLTranslator.translate(<<~EOS)
+    seq = XMLTranslator.translate(<<~XML)
       <?xml version="1.0" ?>
       <!DOCTYPE body [
        <!ELEMENT body (#PCDATA, strong*)>
@@ -16,10 +16,10 @@ class SampleXMLTest < Test::Unit::TestCase
         <a><b><c>hoge</c></b></a>
         <b>b?</b>
       </list>
-    EOS
+    XML
     doc = REXML::Document.new
     seq.each { |x| doc.add(x) }
-    assert_equal <<~EOS, doc.to_s
+    assert_equal <<~XML, doc.to_s
       <?xml version='1.0'?>
       <!DOCTYPE body [
       <!ELEMENT body (#PCDATA, strong*)>
@@ -30,6 +30,6 @@ class SampleXMLTest < Test::Unit::TestCase
        <AB><C>hoge</C></AB>
        <B>b?</B>
       </LIST>
-    EOS
+    XML
   end
 end
