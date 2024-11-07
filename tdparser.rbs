@@ -133,7 +133,9 @@ module TDParser
 
     def prepare: (TokenBuffer? buff) -> TokenBuffer
     def recover: (TokenBuffer? buff, untyped ts) -> TokenBuffer
-    def to_proc: -> ^(*untyped) -> untyped
+    def to_proc: -> ^(*untyped) -> nil
+    def to_s: -> String
+    def call: (*(TokenBuffer | false)? args) -> nil
     def optimize: (?false _default) -> Parser
     def -: (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r) -> ConcatParser
     def +: (ActionParser | ChoiceParser | ConcatParser | ParallelParser | Parser r) -> ParallelParser
