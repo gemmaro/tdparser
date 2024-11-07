@@ -31,6 +31,14 @@ module TDParser
   alias chain_right chainr
   def self.define: (*untyped _args) -> untyped
 
+  class Grammar
+    include TDParser
+
+    alias define instance_eval
+    def respond_to_missing?: -> true
+    def method_missing: (:rule | :token sym, *:rule | :token args) -> nil
+  end
+
   class Token
     attr_accessor kind: untyped
     attr_accessor value: String
@@ -143,10 +151,10 @@ module TDParser
   end
 
   class NonTerminalParser < Parser
-    attr_reader context: Grammar | TDParser
+    attr_reader context: TDParser
     attr_reader symbol: untyped
     attr_reader options: Array[untyped]
-    def initialize: (Grammar | TDParser context, untyped sym, *untyped options) -> void
+    def initialize: (TDParser context, untyped sym, *untyped options) -> void
     def call: (untyped tokens, untyped buff) -> nil
     def ==: (untyped r) -> bool
     def to_s: -> String
@@ -289,13 +297,5 @@ module TDParser
     def to_s: -> String
     def ==: (untyped r) -> false
     def same?: (untyped _r) -> false
-  end
-
-  class Grammar
-    include TDParser
-
-    def define: -> untyped
-    def g_method_missing: (untyped sym, *untyped args) -> (NonTerminalParser | true)
-    alias method_missing g_method_missing
   end
 end
