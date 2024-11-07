@@ -408,10 +408,8 @@ module TDParser
 
     def shared_sequence(r1, r2)
       if r1.is_a?(ConcatParser) && r2.is_a?(ConcatParser)
-        r11 = r1.parsers[0]
-        r12 = r1.parsers[1]
-        r21 = r2.parsers[0]
-        r22 = r2.parsers[1]
+        r11, r12, = r1.parsers
+        r21, r22, = r2.parsers
         if r11 == r21
           share, r12, r22, = shared_sequence(r12, r22)
           if share
