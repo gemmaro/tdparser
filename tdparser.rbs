@@ -5,6 +5,7 @@ module TDParser
   VERSION: String
   FailParser: Class
 
+  def self.xml_token_generator: (untyped src) -> Enumerator[bot, bot]
   def rule: (untyped sym, *untyped opts) -> NonTerminalParser
   def token: (untyped x, ?:=== eqsym) -> TerminalParser
   def backref: (untyped x, ?:=== eqsym) -> BackrefParser
@@ -60,12 +61,6 @@ module TDParser
 
   class StringTokenizer < BasicStringTokenizer
     def initialize: (untyped rule, ?nil ignore) -> void
-  end
-
-  class XMLTokenGenerator
-    @xparser: untyped
-
-    def initialize: (untyped src) -> void
   end
 
   class XMLArray < Array[untyped]

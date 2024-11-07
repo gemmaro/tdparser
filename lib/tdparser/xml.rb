@@ -5,15 +5,10 @@ require 'rexml/parsers/pullparser'
 require 'rexml/document'
 
 module TDParser
-  class XMLTokenGenerator < TDParser::TokenGenerator
-    def initialize(src)
-      @xparser = REXML::Parsers::BaseParser.new(src)
-      super() { |g|
-        while @xparser.has_next?
-          e = @xparser.pull
-          g.yield(e)
-        end
-      }
+  def self.xml_token_generator(src)
+    parser = REXML::Parsers::BaseParser.new(src)
+    Enumerator.new do |y|
+      y << parser.pull while parser.has_next?
     end
   end
 
