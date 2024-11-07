@@ -32,8 +32,7 @@ translator = TDParser.define { |g|
     ((g.xml * 0) >> proc { |x| x[0].collect { |y| y[0] } }) |
 
   def translate(src)
-    gen = TDParser::XMLTokenGenerator.new(src)
-    xmlseq.parse(gen)
+    xmlseq.parse(TDParser.xml_token_generator(src))
   end
 }
 

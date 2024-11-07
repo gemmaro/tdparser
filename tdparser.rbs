@@ -4,6 +4,7 @@
 module TDParser
   VERSION: String
 
+  def self.xml_token_generator: (untyped src) -> Enumerator[bot, bot]
   def rule: (untyped sym, *untyped opts) -> NonTerminalParser
   def token: (untyped x, ?:=== eqsym) -> TerminalParser
   def backref: (untyped x, ?:=== eqsym) -> BackrefParser
