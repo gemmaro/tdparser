@@ -464,6 +464,24 @@ module TDParser
         super(default)
       end
     end
+
+    private
+
+    def shared_sequence(r1, r2)
+      if r1.is_a?(ConcatParser) && r2.is_a?(ConcatParser)
+        r11, r12, = r1.parsers
+        r21, r22, = r2.parsers
+        if r11 == r21
+          share, r12, r22, = shared_sequence(r12, r22)
+          if share
+            return [r11 - share, r12, r22]
+          else
+            return [r11, r12, r22]
+          end
+        end
+      end
+      [nil, r1, r2]
+    end
   end
 
   class ParallelParser < CompositeParser # :nodoc:
