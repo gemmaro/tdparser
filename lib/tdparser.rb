@@ -219,6 +219,7 @@ module TDParser
   class NonTerminalParser < Parser # :nodoc:
     attr_reader :context, :symbol, :options
     def initialize(context, sym, *options)
+      super()
       @context = context
       @symbol = sym
       @options = options
@@ -251,6 +252,7 @@ module TDParser
     attr_reader :symbol, :equality
 
     def initialize(obj, eqsym)
+      super()
       @symbol   = obj
       @equality = eqsym
     end
@@ -280,6 +282,7 @@ module TDParser
     attr_accessor :parsers
 
     def initialize(*parsers)
+      super()
       @parsers = parsers
     end
 
@@ -685,6 +688,7 @@ module TDParser
     attr_reader :label, :equality
 
     def initialize(label, eqsym)
+      super()
       @label = label
       @equality  = eqsym
     end
@@ -713,6 +717,7 @@ module TDParser
     attr_reader :stack, :equality
 
     def initialize(stack, eqsym)
+      super()
       @stack = stack
       @equality = eqsym
     end
@@ -741,6 +746,7 @@ module TDParser
     attr_reader :condition
 
     def initialize(&condition)
+      super()
       @condition = condition
     end
 
@@ -770,6 +776,7 @@ module TDParser
     attr_reader :state
 
     def initialize(s)
+      super()
       @state = s
     end
 
