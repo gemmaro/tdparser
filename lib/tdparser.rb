@@ -186,12 +186,10 @@ module TDParser
     def parse(tokens = nil, buff = nil, &blk)
       buff ||= TokenBuffer.new
       if  blk.nil?
-        if ( tokens.respond_to?(:shift) && tokens.respond_to?(:unshift) )
+        if ( tokens.respond_to?(:shift) && tokens.respond_to?(:unshift) ) || !tokens.respond_to?(:each)
           @tokens = tokens
-        elsif  tokens.respond_to?(:each)
-          @tokens = TokenGenerator.new(tokens)
         else
-          @tokens = tokens
+          @tokens = TokenGenerator.new(tokens)
         end
       else
         @tokens = TokenGenerator.new(&blk)
