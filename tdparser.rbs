@@ -100,7 +100,6 @@ module TDParser
 
     def initialize: (?nil args) -> void
     def next: -> bot
-    def next?: -> false
     def to_a: -> Array[untyped]
     def shift: -> nil
     def unshift: (*untyped token) -> Array[untyped]

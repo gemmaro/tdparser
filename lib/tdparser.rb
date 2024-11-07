@@ -24,30 +24,19 @@ module TDParser
       @enumerator.next
     end
 
-    def next?
-      begin
-        @enumerator.peek
-        true
-      rescue StopIteration
-        false
-      end
-    end
-
     def to_a
       @enumerator.to_a
     end
 
     def shift
-      if @buffer.empty?
-        if next?
-          token = self.next
-        else
-          token = nil
-        end
-      else
-        token = @buffer.shift
+      @buffer.any? and return @buffer.shift
+
+      begin
+        @enumerator.peek
+        self.next
+      rescue StopIteration
+        nil
       end
-      token
     end
 
     def unshift(*token)
