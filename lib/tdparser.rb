@@ -39,7 +39,7 @@ module TDParser
 
     def shift
       if @buffer.empty?
-        if self.next?
+        if next?
           token = self.next
         else
           token = nil
