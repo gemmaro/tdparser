@@ -1,4 +1,4 @@
-require 'test/unit'
+require "test_helper"
 require 'tdparser'
 require 'tdparser/utils'
 require 'tdparser/xml'
