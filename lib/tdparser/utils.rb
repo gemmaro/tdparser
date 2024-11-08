@@ -52,7 +52,6 @@ module TDParser
               next unless reg =~ sstr
 
               x.yield(Token.new(kind, sstr))
-              yielded = true
               break
             end
           else
