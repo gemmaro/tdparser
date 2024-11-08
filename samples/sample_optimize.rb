@@ -1,4 +1,4 @@
-require 'tdp'
+require 'tdparser'
 require 'benchmark'
 require 'pp'
 

@@ -1,4 +1,4 @@
-require 'tdp'
+require 'tdparser'
 
 parser = TDParser.define{|g|
   g.lp = "("

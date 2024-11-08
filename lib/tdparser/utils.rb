@@ -1,4 +1,4 @@
-require 'tdp'
+require 'tdparser'
 
 module TDParser
   class Token

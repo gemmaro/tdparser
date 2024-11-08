@@ -1,4 +1,4 @@
-require 'tdp'
+require 'tdparser'
 require 'rexml/parsers/pullparser'
 require 'rexml/document'
 

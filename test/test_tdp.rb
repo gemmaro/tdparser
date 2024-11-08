@@ -1,7 +1,7 @@
 require 'test/unit'
-require 'tdp'
-require 'tdp/utils'
-require 'tdp/xml'
+require 'tdparser'
+require 'tdparser/utils'
+require 'tdparser/xml'
 
 class Tokens
   include Enumerable

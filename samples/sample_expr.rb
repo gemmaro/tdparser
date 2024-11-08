@@ -1,8 +1,8 @@
 # -*- ruby -*-
 # writing grammars using chainl().
 
-require 'tdp'
-require 'tdp/utils'
+require 'tdparser'
+require 'tdparser/utils'
 
 parser = TDParser.define{|g|
   g.plus = "+"
