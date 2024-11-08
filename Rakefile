@@ -6,7 +6,7 @@ require 'rake/testtask'
 RDoc::Task.new do |rdoc|
   readme = "README"
   rdoc.main = readme
-  rdoc.rdoc_files.include("lib/**/*.rb", readme, "doc/faq.rdoc")
+  rdoc.rdoc_files.include("lib/**/*.rb", readme, "doc/*.rdoc")
 end
 
 Rake::TestTask.new do |t|
