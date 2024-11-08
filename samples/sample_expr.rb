@@ -1,33 +1,34 @@
 # frozen_string_literal: true
+
 # -*- ruby -*-
 # writing grammars using chainl().
 
 require 'tdparser'
 require 'tdparser/utils'
 
-parser = TDParser.define{|g|
-  g.plus = "+"
-  g.minus = "-"
-  g.mult = "*"
-  g.div = "/"
+parser = TDParser.define do |g|
+  g.plus = '+'
+  g.minus = '-'
+  g.mult = '*'
+  g.div = '/'
 
   g.expr1 =
-    chainl(prim, mult|div, plus|minus){|x|
+    chainl(prim, mult | div, plus | minus) do |x|
       case x[1]
-      when "+"
+      when '+'
         x[0] + x[2]
-      when "-"
+      when '-'
         x[0] - x[2]
-      when "*"
+      when '*'
         x[0] * x[2]
-      when "/"
+      when '/'
         x[0] / x[2]
       end
-    }
+    end
 
   g.prim =
-    token(:int) >> proc{|x| x[0].value.to_i } |
-    token("(") - expr1 - token(")") >> proc{|x| x[1] }
+    (token(:int) >> proc { |x| x[0].value.to_i }) |
+    ((token('(') - expr1 - token(')')) >> proc { |x| x[1] })
 
   def parse(str)
     tokenizer = TDParser::StringTokenizer[
@@ -36,15 +37,15 @@ parser = TDParser.define{|g|
     ]
     expr1.parse(tokenizer.generate(str))
   end
-}
+end
 
-if ENV["TEST"]
+if ENV['TEST']
   SampleExprParser = parser
   return
 end
 
-puts("1 = " + parser.parse("1").to_s)
-puts("1+10 = " + parser.parse("1+10").to_s)
-puts("2-1*20+18 = " + parser.parse("2 - 1 * 20 + 18").to_s)
-puts("2-(1-20) = " + parser.parse("2 - (1 - 20)").to_s)
-puts("1+2-3 = " + parser.parse("1 + 2 - 3").to_s)
+puts("1 = #{parser.parse('1')}")
+puts("1+10 = #{parser.parse('1+10')}")
+puts("2-1*20+18 = #{parser.parse('2 - 1 * 20 + 18')}")
+puts("2-(1-20) = #{parser.parse('2 - (1 - 20)')}")
+puts("1+2-3 = #{parser.parse('1 + 2 - 3')}")

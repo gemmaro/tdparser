@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # -*- ruby -*-
 # caching constructed grammars
 
@@ -9,35 +10,35 @@ class Sample4Parser
   include TDParser
 
   def expr1
-    rule(:expr2) - ((token("+")|token("-")) - rule(:expr2))*0 >> proc{|x|
-      x[1].inject(x[0]){|n,y|
+    (rule(:expr2) - (((token('+') | token('-')) - rule(:expr2)) * 0)) >> proc { |x|
+      x[1].inject(x[0]) do |n, y|
         case y[0]
-        when "+"
+        when '+'
           n + y[1]
-        when "-"
+        when '-'
           n - y[1]
         end
-      }
+      end
     }
   end
 
   def expr2
-    rule(:prim) - ((token("*")|token("/")) - rule(:prim))*0 >> proc{|x|
+    (rule(:prim) - (((token('*') | token('/')) - rule(:prim)) * 0)) >> proc { |x|
       n = x[0]
-      x[1].inject(x[0]){|n,y|
+      x[1].inject(x[0]) do |n, y|
         case y[0]
-        when "*"
+        when '*'
           n * y[1]
-        when "/"
+        when '/'
           n / y[1]
         end
-      }
+      end
     }
   end
 
   def prim
-    token(:int) >> proc{|x| x[0].value.to_i } |
-    token("(") - rule(:expr1) - token(")") >> proc{|x| x[1] }
+    (token(:int) >> proc { |x| x[0].value.to_i }) |
+      ((token('(') - rule(:expr1) - token(')')) >> proc { |x| x[1] })
   end
 
   def parse(str)
@@ -63,15 +64,15 @@ class FastParser < Sample4Parser
   end
 
   def parse(str)
-    tokens = str.split(/(?:\s+)|([\(\)\+\-\*\/])/).select{|x| x != ""}
+    tokens = str.split(%r{(?:\s+)|([()+\-*/])}).reject { |x| x == '' }
     expr1.parse(tokens)
   end
 end
 
-ENV["TEST"] and return
+ENV.fetch('TEST', nil) and return
 
 parser = Sample4Parser.new
-puts("1+10 = " + parser.parse("1+10").to_s)
-puts("2-1*20+18 = " + parser.parse("2 - 1 * 20 + 18").to_s)
-puts("2-(1-20) = " + parser.parse("2 - (1 - 20)").to_s)
-puts("1+2-3 = " + parser.parse("1 + 2 - 3").to_s)
+puts("1+10 = #{parser.parse('1+10')}")
+puts("2-1*20+18 = #{parser.parse('2 - 1 * 20 + 18')}")
+puts("2-(1-20) = #{parser.parse('2 - (1 - 20)')}")
+puts("1+2-3 = #{parser.parse('1 + 2 - 3')}")

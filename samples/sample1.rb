@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 # -*- ruby -*-
 # adder-substractor
 
@@ -8,28 +9,28 @@ class MyParser
   include TDParser
 
   def expr
-    token(/\d+/) - ((token("+")|token("-")) - token(/\d+/))*0 >> proc{|x|
+    (token(/\d+/) - (((token('+') | token('-')) - token(/\d+/)) * 0)) >> proc { |x|
       n = x[0].to_i
-      x[1].inject(n){|acc,i|
+      x[1].inject(n) do |acc, i|
         case i[0]
-        when "-"
+        when '-'
           acc - i[1].to_i
-        when "+"
+        when '+'
           acc + i[1].to_i
         end
-      }
+      end
     }
   end
 
   def parse(str)
-    tokens = str.split(/(?:\s+)|([\+\-\*\/])/).select{|x| x != ""}
+    tokens = str.split(%r{(?:\s+)|([+\-*/])}).reject { |x| x == '' }
     expr.parse(tokens)
   end
 end
 
-ENV["TEST"] and return
+ENV.fetch('TEST', nil) and return
 
 parser = MyParser.new
-puts("1+10 = " + parser.parse("1+10").to_s())
-puts("2-1-20 = " + parser.parse("2 - 1 - 20").to_s())
-puts("1+2-3 = " + parser.parse("1 + 2 - 3").to_s())
+puts("1+10 = #{parser.parse('1+10')}")
+puts("2-1-20 = #{parser.parse('2 - 1 - 20')}")
+puts("1+2-3 = #{parser.parse('1 + 2 - 3')}")

@@ -1,9 +1,11 @@
 # frozen_string_literal: true
+
 require 'tdparser'
 
 module TDParser
   class Token
     attr_accessor :kind, :value
+
     def initialize(kind, value)
       @kind = kind
       @value = value
@@ -11,8 +13,8 @@ module TDParser
 
     def ==(other)
       (other.class == self.class) &&
-      (@kind == other.kind) &&
-      (@value == other.value)
+        (@kind == other.kind) &&
+        (@value == other.value)
     end
 
     def ===(other)
@@ -25,45 +27,45 @@ module TDParser
   end
 
   class BasicStringTokenizer
-    def self.[](rule, ignore=nil)
-      self.new(rule, ignore)
+    def self.[](rule, ignore = nil)
+      new(rule, ignore)
     end
 
-    def initialize(rule, ignore=nil)
-      require("strscan")
+    def initialize(rule, ignore = nil)
+      require('strscan')
       @rule = rule
-      @scan_pattern = Regexp.new(@rule.keys.join("|"))
+      @scan_pattern = Regexp.new(@rule.keys.join('|'))
       @ignore_pattern = ignore
     end
 
     def generate(str)
       scanner = StringScanner.new(str)
-      TDParser::TokenGenerator.new{|x|
-        while(!scanner.empty?)
-          if (@ignore_pattern)
-            while(scanner.scan(@ignore_pattern))
+      TDParser::TokenGenerator.new do |x|
+        until scanner.empty?
+          if @ignore_pattern
+            while scanner.scan(@ignore_pattern)
             end
           end
           sstr = scanner.scan(@scan_pattern)
-          if (sstr)
-            @rule.each{|reg,kind|
-              if (reg =~ sstr)
-                x.yield(Token.new(kind, sstr))
-                yielded = true
-                break
-              end
-            }
+          if sstr
+            @rule.each do |reg, kind|
+              next unless reg =~ sstr
+
+              x.yield(Token.new(kind, sstr))
+              yielded = true
+              break
+            end
           else
             c = scanner.scan(/./)
             x.yield(c)
           end
         end
-      }
+      end
     end
   end
 
   class StringTokenizer < BasicStringTokenizer
-    def initialize(rule, ignore=nil)
+    def initialize(rule, ignore = nil)
       super(rule, ignore || /\s+/)
     end
   end
@@ -74,15 +76,14 @@ module TDParser
       @terminated = false
     end
 
-    def terminate()
+    def terminate
       @terminated = true
     end
 
-    def shift()
-      if (@terminated)
-        return nil
-      end
-      while(empty?())
+    def shift
+      return nil if @terminated
+
+      while empty?
       end
       super()
     end
