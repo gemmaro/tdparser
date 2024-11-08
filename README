@@ -1,7 +1,5 @@
 = TDParser
 
-  Copyright(C) 2003, 2004, 2005, 2006 Takaaki Tateishi <ttate@ttsky.net>
-
 This is a top-down parser combinator library for Ruby (LL(k) parser),
 and is a successor of TDP4R.
 
@@ -26,5 +24,8 @@ among production rules.  In addition, TDParser can be viewed as an
 internal DSL for writing LL(k) grammars because of (3).
 
 == License
+
+  Copyright(C) 2003, 2004, 2005, 2006 Takaaki Tateishi <ttate@ttsky.net>
+  Copyright(C) 2024                   gemmaro          <gemmaro.dev@gmail.com>
 
 See COPYING.

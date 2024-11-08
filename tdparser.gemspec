@@ -5,8 +5,8 @@ require_relative "lib/tdparser/version"
 Gem::Specification.new do |spec|
   spec.name = "tdparser"
   spec.version = TDParser::VERSION
-  spec.authors = ["Takaaki Tateishi"]
-  spec.email = ["ttate@ttsky.net"]
+  spec.authors = ["Takaaki Tateishi", "gemmaro"]
+  spec.email = ["ttate@ttsky.net", "gemmaro.dev@gmail.com"]
 
   spec.summary = "Top down parser library"
   spec.description = "TDParser (formerly TDP4R) is a top-down parser library that consists of parser combinators and utility functions."
