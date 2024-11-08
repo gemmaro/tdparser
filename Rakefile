@@ -2,6 +2,7 @@
 
 $LOAD_PATH << File.join(__dir__, '../lib')
 
+require 'bundler/gem_tasks'
 require 'rdoc/task'
 require 'rake/testtask'
 
