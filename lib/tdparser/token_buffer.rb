@@ -1,9 +1,11 @@
+require "forwardable"
+
 module TDParser
-  class TokenBuffer < Array
+  class TokenBuffer
     attr_accessor :map, :state
 
     def initialize(*args)
-      super(*args)
+      @array = Array.new(args)
       @map = {}
     end
 
@@ -12,7 +14,7 @@ module TDParser
       when Symbol, String
         @map[idx]
       else
-        super(idx)
+        @array[idx]
       end
     end
 
@@ -21,13 +23,21 @@ module TDParser
       when Symbol, String
         @map[idx] = val
       else
-        super(idx, val)
+        @array[idx] = val
       end
     end
 
     def clear
-      super()
+      @array.clear
       @map.clear
     end
+
+    class << self
+      alias [] new
+    end
+
+    extend Forwardable
+    def_delegators :@array, :each, :unshift, :insert, :reverse, :join, :pop, :push, :to_a
+    include Enumerable
   end
 end

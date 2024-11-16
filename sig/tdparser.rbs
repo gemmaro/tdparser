@@ -123,13 +123,18 @@ module TDParser
     def unshift: (*untyped token) -> Array[untyped]
   end
 
-  class TokenBuffer < Array[untyped]
+  class TokenBuffer
+    extend Forwardable
+    # include Enumerable # TODO: Somehow cause error.
+    @array: Array[untyped]
+
     attr_accessor map: Hash[untyped, untyped]
     attr_accessor state: untyped
     def initialize: (*untyped args) -> void
     def []: (untyped idx) -> nil
     def []=: (untyped idx, untyped val) -> untyped
-    def clear: -> Hash[untyped, untyped]
+    def clear: -> void
+    alias self.[] self.new
   end
 
   class Sequence < Array[untyped]
