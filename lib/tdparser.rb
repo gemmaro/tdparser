@@ -654,17 +654,21 @@ module TDParser
   end
 
   class ReferenceParser < Parser
-    def __backref__(xs, eqsym)
+    private
+
+    def back_ref(xs, eqsym)
       x = xs.shift
       xs.inject(token(x, eqsym)) do |acc, x|
         case x
         when Sequence
-          acc - __backref__(x, eqsym)
+          acc - back_ref(x, eqsym)
         else
           acc - token(x, eqsym)
         end
       end
     end
+
+    alias __backref__ back_ref
 
     def same?(_r)
       false
@@ -684,7 +688,7 @@ module TDParser
       if ys.nil? || ys.empty?
         nil
       else
-        __backref__(ys.dup, @equality).call(tokens, buff)
+        back_ref(ys.dup, @equality).call(tokens, buff)
       end
     end
 
@@ -712,7 +716,7 @@ module TDParser
       if ys.nil? || ys.empty?
         nil
       else
-        __backref__(ys.dup, @equality).call(tokens, buff)
+        back_ref(ys.dup, @equality).call(tokens, buff)
       end
     end
 
@@ -789,9 +793,11 @@ module TDParser
     TerminalParser.new(x, eqsym)
   end
 
-  def backref(x, eqsym = :===)
+  def back_ref(x, eqsym = :===)
     BackrefParser.new(x, eqsym)
   end
+
+  alias backref back_ref
 
   def stackref(stack, eqsym = :===)
     StackrefParser.new(stack, eqsym)
