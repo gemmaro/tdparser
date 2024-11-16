@@ -846,7 +846,7 @@ module TDParser
 
   alias leftrec left_rec
 
-  def rightrec(*rules, &act)
+  def right_rec(*rules, &act)
     f = proc do |x|
       x[0].reverse.inject(x[1]) do |acc, y|
         ys = y.dup
@@ -857,6 +857,8 @@ module TDParser
     base = rules.pop
     rules.collect { |r| ((r * 0) - base) >> f }.inject(fail) { |acc, r| r | acc }
   end
+
+  alias rightrec right_rec
 
   def chainl(base, *infixes, &)
     infixes.inject(base) do |acc, r|
