@@ -834,7 +834,7 @@ module TDParser
   end
   alias condition condition_rule
 
-  def leftrec(*rules, &act)
+  def left_rec(*rules, &act)
     f = proc do |x|
       x[1].inject(x[0]) do |acc, y|
         act.call(Sequence[acc, *y])
@@ -843,6 +843,8 @@ module TDParser
     base = rules.shift
     rules.collect { |r| (base - (r * 0)) >> f }.inject(fail) { |acc, r| r | acc }
   end
+
+  alias leftrec left_rec
 
   def rightrec(*rules, &act)
     f = proc do |x|
