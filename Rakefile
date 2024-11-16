@@ -16,3 +16,7 @@ Rake::TestTask.new do |t|
   t.libs << 'samples' << 'test'
   t.test_files = FileList['test/*_test.rb']
 end
+
+task :gensig do
+  sh 'typeprof', '-o', 'sig/tdparser.gen.rbs', 'sig/tdparser.rbs', *Dir['lib/**/*.rb']
+end
