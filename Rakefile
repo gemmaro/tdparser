@@ -18,5 +18,5 @@ Rake::TestTask.new do |t|
 end
 
 task :gensig do
-  sh 'typeprof', '-o', 'sig/tdparser.gen.rbs', 'sig/tdparser.rbs', *Dir['lib/**/*.rb']
+  sh 'typeprof', '-r', 'forwardable', '-r', 'strscan', '-r', 'enumerable', '-o', 'sig/tdparser.gen.rbs', 'sig/tdparser.rbs', *Dir['lib/**/*.rb']
 end
