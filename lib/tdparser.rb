@@ -868,11 +868,13 @@ module TDParser
 
   alias chainl chain_left
 
-  def chainr(base, *infixes, &)
+  def chain_right(base, *infixes, &)
     infixes.inject(base) do |acc, r|
       rightrec(acc - r, acc, &)
     end
   end
+
+  alias chainr chain_right
 
   class Grammar
     include TDParser
