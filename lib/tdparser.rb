@@ -799,9 +799,11 @@ module TDParser
 
   alias backref back_ref
 
-  def stackref(stack, eqsym = :===)
+  def stack_ref(stack, eqsym = :===)
     StackrefParser.new(stack, eqsym)
   end
+
+  alias stackref stack_ref
 
   def state(s)
     StateParser.new(s)
