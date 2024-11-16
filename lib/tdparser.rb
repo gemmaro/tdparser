@@ -52,7 +52,7 @@ module TDParser
   end
 
   class TokenBuffer < Array
-    attr_accessor :map
+    attr_accessor :map, :state
 
     def initialize(*args)
       super(*args)
@@ -75,14 +75,6 @@ module TDParser
       else
         super(idx, val)
       end
-    end
-
-    def state
-      @map[:__state__]
-    end
-
-    def state=(s)
-      @map[:__state__] = s
     end
 
     def clear
