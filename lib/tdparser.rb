@@ -860,11 +860,13 @@ module TDParser
 
   alias rightrec right_rec
 
-  def chainl(base, *infixes, &)
+  def chain_left(base, *infixes, &)
     infixes.inject(base) do |acc, r|
       leftrec(acc, r - acc, &)
     end
   end
+
+  alias chainl chain_left
 
   def chainr(base, *infixes, &)
     infixes.inject(base) do |acc, r|
