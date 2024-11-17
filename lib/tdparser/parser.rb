@@ -13,10 +13,6 @@ module TDParser
 
     def call(*args); end
 
-    # def [](*args)
-    #  call(*args)
-    # end
-
     def optimize(_default = false)
       dup
     end
