@@ -1,4 +1,5 @@
 module TDParser
+  ParserException: Class | singleton(RuntimeError)
   VERSION: String
   include BufferUtils
 
@@ -74,6 +75,8 @@ module TDParser
   end
 
   module XMLParser
+    XMLTokenGenerator: singleton(XMLTokenGenerator) | singleton(XMLTokenGenerator)
+
     def start_element: (?singleton(String) name) -> untyped
     def end_element: (?singleton(String) name) -> untyped
     def element: (?singleton(String) elem) -> untyped
@@ -93,12 +96,6 @@ module TDParser
     def any_node: -> untyped
     def dom_constructor: -> untyped
 
-    class XMLTokenGenerator
-      @xparser: untyped
-
-      def initialize: (untyped src) -> void
-    end
-
     class XArray < Array[untyped]
       def ===: (untyped ary) -> bool
     end
@@ -106,9 +103,6 @@ module TDParser
     class XHash < Hash[untyped, untyped]
       def ===: (untyped h) -> bool
     end
-  end
-
-  class ParserException < RuntimeError
   end
 
   class TokenGenerator
@@ -330,5 +324,11 @@ module TDParser
 
     alias define instance_eval
     def method_missing: (untyped sym, *untyped args) -> (NonTerminalParser | true)
+  end
+
+  class XMLTokenGenerator
+    @xparser: untyped
+
+    def initialize: (untyped src) -> void
   end
 end
