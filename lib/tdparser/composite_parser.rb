@@ -1,5 +1,5 @@
 module TDParser
-  class CompositeParser < Parser
+  class CompositeParser < Parser # :nodoc:
     attr_accessor :parsers
 
     def initialize(*parsers)

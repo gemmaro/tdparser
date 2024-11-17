@@ -1,5 +1,5 @@
 module TDParser
-  class StackParser < CompositeParser
+  class StackParser < CompositeParser # :nodoc:
     attr_reader :stack
 
     def initialize(parser, stack)

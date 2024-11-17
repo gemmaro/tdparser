@@ -18,7 +18,7 @@ module TDParser
       end
     end
 
-    class XArray < Array
+    class XArray < Array # :nodoc:
       def ===(ary)
         return true if super(ary)
         return false unless ary.is_a?(Array)
@@ -34,7 +34,7 @@ module TDParser
       end
     end
 
-    class XHash < Hash
+    class XHash < Hash # :nodoc:
       def ===(h)
         return true if super(h)
         return false unless h.is_a?(Hash)

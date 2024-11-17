@@ -1,5 +1,5 @@
 module TDParser
-  class TerminalParser < Parser
+  class TerminalParser < Parser # :nodoc:
     attr_reader :symbol, :equality
 
     def initialize(obj, eqsym)

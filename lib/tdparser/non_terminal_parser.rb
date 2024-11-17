@@ -1,5 +1,5 @@
 module TDParser
-  class NonTerminalParser < Parser
+  class NonTerminalParser < Parser # :nodoc:
     attr_reader :context, :symbol, :options
 
     def initialize(context, sym, *options)

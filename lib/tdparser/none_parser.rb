@@ -1,5 +1,5 @@
 module TDParser
-  class NoneParser < Parser
+  class NoneParser < Parser # :nodoc:
     def call(tokens, _buff)
       t = tokens.shift
       return unless t.nil?

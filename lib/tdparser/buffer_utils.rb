@@ -1,5 +1,5 @@
 module TDParser
-  module BufferUtils
+  module BufferUtils # :nodoc:
     def prepare(buff)
       b = TokenBuffer.new
       b.map = buff.map

@@ -1,5 +1,5 @@
 module TDParser
-  class ActionParser < CompositeParser
+  class ActionParser < CompositeParser # :nodoc:
     attr_reader :action
 
     def initialize(parser, act)

@@ -1,5 +1,5 @@
 module TDParser
-  class StateParser < Parser
+  class StateParser < Parser # :nodoc:
     attr_reader :state
 
     def initialize(s)

@@ -1,5 +1,5 @@
 module TDParser
-  class IterationParser < CompositeParser
+  class IterationParser < CompositeParser # :nodoc:
     attr_reader :min, :range
 
     def initialize(parser, n, range)

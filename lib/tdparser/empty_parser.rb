@@ -1,5 +1,5 @@
 module TDParser
-  class EmptyParser < Parser
+  class EmptyParser < Parser # :nodoc:
     def call(_tokens, _buff)
       Sequence[nil]
     end

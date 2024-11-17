@@ -1,5 +1,5 @@
 module TDParser
-  class Grammar
+  class Grammar # :nodoc:
     include TDParser
 
     alias define instance_eval

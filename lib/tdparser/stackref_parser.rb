@@ -1,5 +1,5 @@
 module TDParser
-  class StackrefParser < ReferenceParser
+  class StackrefParser < ReferenceParser # :nodoc:
     attr_reader :stack, :equality
 
     def initialize(stack, eqsym)

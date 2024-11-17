@@ -1,5 +1,5 @@
 module TDParser
-  class BackrefParser < ReferenceParser
+  class BackrefParser < ReferenceParser # :nodoc:
     attr_reader :label, :equality
 
     def initialize(label, eqsym)

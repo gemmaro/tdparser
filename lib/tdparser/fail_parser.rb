@@ -1,5 +1,5 @@
 module TDParser
-  class FailParser < Parser
+  class FailParser < Parser # :nodoc:
     def call(_tokens, _buff)
       nil
     end

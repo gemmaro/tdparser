@@ -1,5 +1,5 @@
 module TDParser
-  class LabelParser < CompositeParser
+  class LabelParser < CompositeParser # :nodoc:
     attr_reader :label
 
     def initialize(parser, label)

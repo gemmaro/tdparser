@@ -1,5 +1,5 @@
 module TDParser
-  class NegativeParser < CompositeParser
+  class NegativeParser < CompositeParser # :nodoc:
     def call(tokens, buff)
       b = prepare(buff)
       r = @parsers[0].call(tokens, b)

@@ -1,5 +1,5 @@
 module TDParser
-  class ReferenceParser < Parser
+  class ReferenceParser < Parser # :nodoc:
     private
 
     def back_ref(xs, eqsym)

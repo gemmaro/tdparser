@@ -1,5 +1,5 @@
 module TDParser
-  class ConcatParser < CompositeParser
+  class ConcatParser < CompositeParser # :nodoc:
     def call(tokens, buff)
       if (x = @parsers[0].call(tokens, buff)).nil?
         nil

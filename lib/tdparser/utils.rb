@@ -3,7 +3,7 @@
 require 'tdparser'
 
 module TDParser
-  class Token
+  class Token # :nodoc:
     attr_accessor :kind, :value
 
     def initialize(kind, value)
@@ -26,7 +26,7 @@ module TDParser
     end
   end
 
-  class BasicStringTokenizer
+  class BasicStringTokenizer # :nodoc:
     def self.[](rule, ignore = nil)
       new(rule, ignore)
     end
@@ -69,7 +69,7 @@ module TDParser
     end
   end
 
-  class WaitingTokenGenerator < TDParser::TokenGenerator
+  class WaitingTokenGenerator < TDParser::TokenGenerator # :nodoc:
     def initialize(*args)
       super(*args)
       @terminated = false

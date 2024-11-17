@@ -1,5 +1,5 @@
 module TDParser
-  class ChoiceParser < CompositeParser
+  class ChoiceParser < CompositeParser # :nodoc:
     def call(tokens, buff)
       b = prepare(buff)
       if (x = @parsers[0].call(tokens, b)).nil?

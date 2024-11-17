@@ -1,5 +1,5 @@
 module TDParser
-  class ConditionParser < Parser
+  class ConditionParser < Parser # :nodoc:
     attr_reader :condition
 
     def initialize(&condition)

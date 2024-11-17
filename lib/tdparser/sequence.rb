@@ -1,5 +1,5 @@
 module TDParser
-  class Sequence < Array
+  class Sequence < Array # :nodoc:
     def +(other)
       dup.concat(other)
     end

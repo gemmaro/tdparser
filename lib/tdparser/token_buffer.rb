@@ -1,7 +1,7 @@
 require "forwardable"
 
 module TDParser
-  class TokenBuffer
+  class TokenBuffer # :nodoc:
     attr_accessor :map, :state
 
     def initialize(*args)
