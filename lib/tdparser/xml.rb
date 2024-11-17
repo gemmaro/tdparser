@@ -5,18 +5,20 @@ require 'rexml/parsers/pullparser'
 require 'rexml/document'
 
 module TDParser
-  module XMLParser
-    class XMLTokenGenerator < TDParser::TokenGenerator
-      def initialize(src)
-        @xparser = REXML::Parsers::BaseParser.new(src)
-        super()  do |g|
-          while @xparser.has_next?
-            e = @xparser.pull
-            g.yield(e)
-          end
+  class XMLTokenGenerator < TDParser::TokenGenerator
+    def initialize(src)
+      @xparser = REXML::Parsers::BaseParser.new(src)
+      super()  do |g|
+        while @xparser.has_next?
+          e = @xparser.pull
+          g.yield(e)
         end
       end
     end
+  end
+
+  module XMLParser
+    XMLTokenGenerator = ::TDParser::XMLTokenGenerator # TODO: Delete in later version
 
     class XArray < Array # :nodoc:
       def ===(ary)
