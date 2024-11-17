@@ -1,5 +1,13 @@
 ## [Unreleased]
 
+## 1.6.0 - 2024-11-17
+
+* Add more readable method aliases.
+* Make token buffer's state accessible attribute.
+* Split files such as parsers.  You might need to require individual files.
+* Change token buffer class not to inherit from array class.
+* Move XML token generator class to upper namespace.
+
 ## 1.5.1 - 2024-11-10
 
 This is a maintenance release, no user facing changes.
