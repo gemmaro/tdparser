@@ -21,17 +21,16 @@ Gem::Specification.new do |spec|
     end
   end
 
-  homepage = "https://git.disroot.org/gemmaro/tdparser"
-  spec.homepage = homepage
-
-  spec.require_paths = ['lib']
+  spec.homepage = homepage = "https://git.disroot.org/gemmaro/#{name}"
   spec.metadata = {
     'rubygems_mfa_required' => 'true',
-    'bug_tracker_uri' => "#{homepage}/issues",
-    'changelog_uri' => "#{homepage}/src/branch/main/CHANGELOG.md",
-    'documentation_uri' => 'https://www.rubydoc.info/gems/tcepsni',
-    'homepage_uri' => homepage,
-    'source_code_uri' => homepage,
-    'wiki_uri' => "#{homepage}//wiki",
+    'bug_tracker_uri'       => "#{homepage}/issues",
+    'changelog_uri'         => "#{homepage}/src/branch/main/CHANGELOG.md",
+    'documentation_uri'     => "https://gemmaro.github.io/#{name}",
+    'homepage_uri'          => homepage,
+    'source_code_uri'       => homepage,
+    'wiki_uri'              => "#{homepage}/wiki",
   }
+
+  spec.require_paths = ['lib']
 end
