@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>guide - RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../";
+  var index_rel_prefix = "../";
+</script>
+
+<script src="../js/navigation.js" defer></script>
+<script src="../js/search.js" defer></script>
+<script src="../js/search_index.js" defer></script>
+<script src="../js/searcher.js" defer></script>
+<script src="../js/darkfish.js" defer></script>
+
+<link href="../css/fonts.css" rel="stylesheet">
+<link href="../css/rdoc.css" rel="stylesheet">
+
+
+<body id="top" role="document" class="file">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="../index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="../table_of_contents.html#pages">Pages</a>
+    <a href="../table_of_contents.html#classes">Classes</a>
+    <a href="../table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+<div class="nav-section">
+  <h3>Table of Contents</h3>
+
+  <ul class="link-list" role="directory">
+    <li><a href="#label-TDParser+Programmers+Guide">TDParser Programmers Guide</a>
+    <li><a href="#label-Defining+Rules+in+Module">Defining Rules in Module</a>
+    <li><a href="#label-Defining+Rules+using+TDParser.define-28-29">Defining Rules using <code>TDParser.define()</code></a>
+    <li><a href="#label-Parser+Combinators">Parser Combinators</a>
+    <li><a href="#label-StringTokenizer"><code>StringTokenizer</code></a>
+  </ul>
+</div>
+
+
+  <div id="project-metadata">
+    
+<div id="fileindex-section" class="nav-section">
+  <h3>Pages</h3>
+
+  <ul class="link-list">
+    <li><a href="../README.html">README</a>
+    <li><a href="../doc/faq_rdoc.html">faq</a>
+    <li><a href="../doc/guide_rdoc.html">guide</a>
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-label="Page doc/guide.rdoc">
+
+<h1 id="label-TDParser+Programmers+Guide"><a href="../TDParser.html"><code>TDParser</code></a> Programmers Guide<span><a href="#label-TDParser+Programmers+Guide">&para;</a> <a href="#top">&uarr;</a></span></h1>
+
+<p><a href="../TDParser.html"><code>TDParser</code></a> is a Ruby component that helps us to construct a top-down parser using method calls.  This document describes how to use <a href="../TDParser.html"><code>TDParser</code></a> in two styles.  Both of styles are similar to one of JavaCC on the surface.  However, one is a style in which we define rules of a grammar as methods (like shown in <code>sample4.rb</code>).  The other is a style in which each rule is defined as if it is a property of a grammar (see also <code>sample5.rb</code>).</p>
+
+<h2 id="label-Defining+Rules+in+Module">Defining Rules in Module<span><a href="#label-Defining+Rules+in+Module">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<p>The following class is a parser class, and it accepts expressions that consists of digits and <code>+</code>.</p>
+
+<pre class="ruby"><span class="ruby-keyword">class</span> <span class="ruby-constant">MyParser</span>
+  <span class="ruby-identifier">include</span> <span class="ruby-constant">TDParser</span>
+
+  <span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">expr</span>
+    <span class="ruby-identifier">token</span>(<span class="ruby-regexp">/\d+/</span>) <span class="ruby-operator">-</span> <span class="ruby-identifier">token</span>(<span class="ruby-string">&quot;+&quot;</span>) <span class="ruby-operator">-</span> <span class="ruby-identifier">rule</span>(<span class="ruby-value">:expr</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">proc</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">to_i</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">x</span>[<span class="ruby-value">2</span>] } <span class="ruby-operator">|</span>
+    <span class="ruby-identifier">token</span>(<span class="ruby-regexp">/\d+/</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">proc</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">to_i</span> }
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>In this class, the method <code>expr</code> represents the following production rule.</p>
+
+<pre>expr := int &#39;+&#39; expr
+      | int</pre>
+
+<p>In addition, at the first line of the method <code>expr</code>, values accepted by <code>token(/\d+/)</code>, <code>token(&quot;+&quot;)</code> and <code>rule(:expr)</code> are assigned to <code>x[0]</code>, <code>x[1]</code> and <code>x[2]</code> respectively.  After that, in order to parse <code>1 + 2</code>, we first split it into an array of tokens like <code>[&quot;1&quot;, &quot;+&quot;, &quot;2&quot;]</code>, and then call the <code>parse</code> method of a parser object, which is created by <code>MyParser.new()</code>, as follows.</p>
+
+<pre class="ruby"><span class="ruby-identifier">parser</span> = <span class="ruby-constant">MyParser</span>.<span class="ruby-identifier">new</span>()
+<span class="ruby-identifier">parser</span>.<span class="ruby-identifier">expr</span>.<span class="ruby-identifier">parse</span>([<span class="ruby-string">&quot;1&quot;</span>, <span class="ruby-string">&quot;+&quot;</span>, <span class="ruby-string">&quot;2&quot;</span>])
+</pre>
+
+<p>Note that we can pass one of the following objects to the parse method.</p>
+<ul><li>
+<p>an Enumerable object.  E.g.: <code>expr.parse([&quot;1&quot;, &quot;+&quot;, &quot;2&quot;])</code></p>
+</li><li>
+<p>an object which has methods ‘shift’ and ‘unshift’. E.g.:</p>
+
+<pre>expr.parse(TDParser::TokenGenerator{|x|
+             x.yield(&quot;1&quot;); x.yield(&quot;+&quot;); x.yield(&quot;2&quot;)
+           })</pre>
+</li><li>
+<p>a block.  E.g.: <code>expr.parse{|x| x.yield(&quot;1&quot;); x.yield(&quot;+&quot;); x.yield(&quot;2&quot;) }</code></p>
+</li></ul>
+
+<p>In that syntax, <code>+</code> is right-associative.  However, we <em>can’t</em> write as follows.</p>
+
+<pre class="ruby"><span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">expr</span>
+  <span class="ruby-identifier">rule</span>(<span class="ruby-value">:expr</span>) <span class="ruby-operator">-</span> <span class="ruby-identifier">token</span>(<span class="ruby-string">&quot;+&quot;</span>) <span class="ruby-operator">-</span> <span class="ruby-identifier">token</span>(<span class="ruby-regexp">/\d+/</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">proc</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">to_i</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">x</span>[<span class="ruby-value">2</span>].<span class="ruby-identifier">to_i</span> }
+  <span class="ruby-identifier">token</span>(<span class="ruby-regexp">/\d+/</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">proc</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">to_i</span> }
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>This problem is called left-recursion problem.  So we have to use one of the following rules instead.</p>
+
+<pre class="ruby"><span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">expr</span>
+  <span class="ruby-identifier">token</span>(<span class="ruby-regexp">/\d+/</span>) <span class="ruby-operator">-</span> (<span class="ruby-identifier">token</span>(<span class="ruby-string">&quot;+&quot;</span>) <span class="ruby-operator">-</span> <span class="ruby-identifier">token</span>(<span class="ruby-regexp">/\d+/</span>))<span class="ruby-operator">*</span><span class="ruby-value">0</span> <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">proc</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">x</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">inject</span>(<span class="ruby-identifier">x</span>[<span class="ruby-value">0</span>]){<span class="ruby-operator">|</span><span class="ruby-identifier">acc</span>,<span class="ruby-identifier">y</span><span class="ruby-operator">|</span>
+      <span class="ruby-keyword">case</span> <span class="ruby-identifier">y</span>[<span class="ruby-value">0</span>]
+      <span class="ruby-keyword">when</span> <span class="ruby-string">&quot;+&quot;</span>
+        <span class="ruby-identifier">acc</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">y</span>[<span class="ruby-value">1</span>]
+      <span class="ruby-keyword">end</span>
+    }
+  }
+<span class="ruby-keyword">end</span>
+
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">expr</span>  <span class="ruby-comment"># javacc style</span>
+  <span class="ruby-identifier">n</span> = <span class="ruby-keyword">nil</span>
+  (<span class="ruby-identifier">token</span>(<span class="ruby-regexp">/\d+/</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">proc</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">n</span> = <span class="ruby-identifier">x</span> }) <span class="ruby-operator">-</span>
+  (<span class="ruby-identifier">token</span>(<span class="ruby-string">&quot;+&quot;</span>) <span class="ruby-operator">-</span> <span class="ruby-identifier">rule</span>(<span class="ruby-regexp">/\d+/</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">proc</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">y</span><span class="ruby-operator">|</span>
+    <span class="ruby-keyword">case</span> <span class="ruby-identifier">y</span>[<span class="ruby-value">0</span>]
+    <span class="ruby-keyword">when</span> <span class="ruby-string">&quot;+&quot;</span>
+      <span class="ruby-identifier">n</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">y</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">to_i</span>
+    <span class="ruby-keyword">end</span>
+  })<span class="ruby-operator">*</span><span class="ruby-value">0</span> <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">proc</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">n</span> }
+<span class="ruby-keyword">end</span>
+</pre>
+
+<p>In the rules, <code>(...)*N</code> represents <em>N</em> or more rules <code>(...)</code>.  <code>x[1]</code> has multiple sequences of tokens accepted by <code>(...)*0</code>.  For example, if <code>[&quot;1&quot;, &quot;+&quot;,&quot;1&quot;,&quot;+&quot;,&quot;2&quot;]</code> is parsed by the rule: <code>token(/\d+/) - (token(&quot;+&quot;) - token(/\d+/))*0</code>, we obtain <code>[[&quot;+&quot;, &quot;1&quot;], [&quot;+&quot;, &quot;2&quot;]]</code> by <code>x[1]</code>.</p>
+
+<h2 id="label-Defining+Rules+using+TDParser.define-28-29">Defining Rules using <code>TDParser.define()</code><span><a href="#label-Defining+Rules+using+TDParser.define-28-29">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<p>The rule defined in the first sample script, shown in the previous section, can also be defined as follows.</p>
+
+<pre class="ruby"><span class="ruby-identifier">parser</span> = <span class="ruby-constant">TDParser</span>.<span class="ruby-identifier">define</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">g</span><span class="ruby-operator">|</span>
+  <span class="ruby-identifier">g</span>.<span class="ruby-identifier">expr</span> =
+    <span class="ruby-identifier">g</span>.<span class="ruby-identifier">token</span>(<span class="ruby-regexp">/\d+/</span>) <span class="ruby-operator">-</span> <span class="ruby-identifier">g</span>.<span class="ruby-identifier">token</span>(<span class="ruby-string">&quot;+&quot;</span>) <span class="ruby-operator">-</span> <span class="ruby-identifier">g</span>.<span class="ruby-identifier">expr</span> <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">proc</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">to_i</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">x</span>[<span class="ruby-value">2</span>] } <span class="ruby-operator">|</span>
+    <span class="ruby-identifier">g</span>.<span class="ruby-identifier">token</span>(<span class="ruby-regexp">/\d+/</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">proc</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">to_i</span> }
+}
+</pre>
+
+<p>(See also <code>sample5.rb</code> and <code>sample6.rb</code>)</p>
+
+<h2 id="label-Parser+Combinators">Parser Combinators<span><a href="#label-Parser+Combinators">&para;</a> <a href="#top">&uarr;</a></span></h2>
+<ul><li>
+<p>Constructors</p>
+<ul><li>
+<p><code>token(obj)</code></p>
+</li><li>
+<p><code>rule(method)</code></p>
+</li><li><dl class="rdoc-list note-list"><dt><code>any()</code>
+<dd>
+<p>any token</p>
+</dd></dl>
+</li><li><dl class="rdoc-list note-list"><dt><code>none()</code>
+<dd>
+<p>no more token</p>
+</dd></dl>
+</li><li><dl class="rdoc-list note-list"><dt><code>empty()</code>
+<dd>
+<p>empty</p>
+</dd></dl>
+</li><li><dl class="rdoc-list note-list"><dt><code>fail()</code>
+<dd>
+<p>failure</p>
+</dd></dl>
+</li><li><dl class="rdoc-list note-list"><dt><code>backref(label)</code>
+<dd>
+<p>back reference</p>
+</dd></dl>
+</li><li><dl class="rdoc-list note-list"><dt><code>stackref(stack)</code>
+<dd>
+<p>stack reference</p>
+</dd></dl>
+</li></ul>
+</li><li>
+<p>Operators</p>
+<ul><li><dl class="rdoc-list note-list"><dt><code>rule - rule</code>
+<dd>
+<p>sequence</p>
+</dd></dl>
+</li><li><dl class="rdoc-list note-list"><dt><code>rule | rule</code>
+<dd>
+<p>choice</p>
+</dd></dl>
+</li><li><dl class="rdoc-list note-list"><dt><code>rule * n</code>
+<dd>
+<p>iteration</p>
+</dd></dl>
+</li><li><dl class="rdoc-list note-list"><dt><code>rule * n..m</code>
+<dd>
+<p>iteration</p>
+</dd></dl>
+</li><li><dl class="rdoc-list note-list"><dt><code>rule / label</code>
+<dd>
+<p>label</p>
+</dd></dl>
+</li><li><dl class="rdoc-list note-list"><dt><code>rule % stack</code>
+<dd>
+<p>stack</p>
+</dd></dl>
+</li><li><dl class="rdoc-list note-list"><dt><code>~ rule</code>
+<dd>
+<p>negative lookahead</p>
+</dd></dl>
+</li></ul>
+</li><li>
+<p>Utility Functions</p>
+<ul><li><dl class="rdoc-list note-list"><dt><code>leftrec(base, rule1, ..., ruleN, &amp;action)</code>
+<dd>
+<p>This constructs the following rule:</p>
+</dd></dl>
+
+<pre>base - ruleN* &gt;&gt; action&#39; |
+... |
+base - rule1* &gt;&gt; action&#39; |
+fail()</pre>
+</li><li><dl class="rdoc-list note-list"><dt><code>rightrec(rule1, ..., ruleN, base, &amp;action)</code>
+<dd>
+<p>This constructs the following rule:</p>
+</dd></dl>
+
+<pre>ruleN* - base &gt;&gt; action&#39; |
+... |
+rule1* - base &gt;&gt; action&#39; |
+fail()</pre>
+</li><li>
+<p><code>chainl(base, infix1, ..., infixN, &amp;action)</code></p>
+</li><li>
+<p><code>chainr(base, infix1, ..., infixN, &amp;action)</code></p>
+</li></ul>
+</li></ul>
+
+<h2 id="label-StringTokenizer"><code>StringTokenizer</code><span><a href="#label-StringTokenizer">&para;</a> <a href="#top">&uarr;</a></span></h2>
+
+<p>There is a simple tokenizer called <a href="../TDParser/StringTokenizer.html"><code>TDParser::StringTokenizer</code></a> in the library <code>tdparser/utils</code>.  (See <code>MyParser#parse</code> in <code>sample2.rb</code>)</p>
+
+</main>
+
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="https://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="https://ruby.github.io/rdoc/">RDoc</a> 6.4.0.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+

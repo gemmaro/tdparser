@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>module TDParser - RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+  var index_rel_prefix = "./";
+</script>
+
+<script src="./js/navigation.js" defer></script>
+<script src="./js/search.js" defer></script>
+<script src="./js/search_index.js" defer></script>
+<script src="./js/searcher.js" defer></script>
+<script src="./js/darkfish.js" defer></script>
+
+<link href="./css/fonts.css" rel="stylesheet">
+<link href="./css/rdoc.css" rel="stylesheet">
+
+
+<body id="top" role="document" class="module">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="./index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="./table_of_contents.html#pages">Pages</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    
+    
+    
+    
+<!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    <li ><a href="#method-c-define">::define</a>
+    <li ><a href="#method-i-any">#any</a>
+    <li ><a href="#method-i-any_rule">#any_rule</a>
+    <li ><a href="#method-i-back_ref">#back_ref</a>
+    <li ><a href="#method-i-backref">#backref</a>
+    <li ><a href="#method-i-chain_left">#chain_left</a>
+    <li ><a href="#method-i-chain_right">#chain_right</a>
+    <li ><a href="#method-i-chainl">#chainl</a>
+    <li ><a href="#method-i-chainr">#chainr</a>
+    <li ><a href="#method-i-condition">#condition</a>
+    <li ><a href="#method-i-condition_rule">#condition_rule</a>
+    <li ><a href="#method-i-empty">#empty</a>
+    <li ><a href="#method-i-empty_rule">#empty_rule</a>
+    <li ><a href="#method-i-fail">#fail</a>
+    <li ><a href="#method-i-fail_rule">#fail_rule</a>
+    <li ><a href="#method-i-left_rec">#left_rec</a>
+    <li ><a href="#method-i-leftrec">#leftrec</a>
+    <li ><a href="#method-i-none">#none</a>
+    <li ><a href="#method-i-none_rule">#none_rule</a>
+    <li ><a href="#method-i-right_rec">#right_rec</a>
+    <li ><a href="#method-i-rightrec">#rightrec</a>
+    <li ><a href="#method-i-rule">#rule</a>
+    <li ><a href="#method-i-stack_ref">#stack_ref</a>
+    <li ><a href="#method-i-stackref">#stackref</a>
+    <li ><a href="#method-i-state">#state</a>
+    <li ><a href="#method-i-token">#token</a>
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="module-TDParser">
+  <h1 id="module-TDParser" class="module">
+    module TDParser
+  </h1>
+
+  <section class="description">
+    
+  </section>
+
+  <section id="5Buntitled-5D" class="documentation-section">
+
+
+    <section class="constants-list">
+      <header>
+        <h3>Constants</h3>
+      </header>
+      <dl>
+        <dt id="VERSION">VERSION
+        <dd>
+      </dl>
+    </section>
+
+
+
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+      <div id="method-c-define" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">define</span><span
+            class="method-args">(*_args, &amp;)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          
+
+          <div class="method-source-code" id="define-source">
+            <pre><span class="ruby-comment"># File lib/tdparser.rb, line 131</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier ruby-title">define</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">_args</span>, <span class="ruby-operator">&amp;</span>)
+  <span class="ruby-identifier">klass</span> = <span class="ruby-constant">Class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">Grammar</span>)
+  <span class="ruby-identifier">g</span> = <span class="ruby-identifier">klass</span>.<span class="ruby-identifier">new</span>
+  <span class="ruby-keyword">begin</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-keyword">defined?</span>(<span class="ruby-identifier">g</span>.<span class="ruby-identifier">instance_exec</span>)
+      <span class="ruby-identifier">g</span>.<span class="ruby-identifier">instance_exec</span>(<span class="ruby-identifier">g</span>, <span class="ruby-operator">&amp;</span>)
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">g</span>.<span class="ruby-identifier">instance_eval</span>(<span class="ruby-operator">&amp;</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">g</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+    </section>
+
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+      <div id="method-i-any" class="method-detail method-alias">
+        <div class="method-heading">
+          <span class="method-name">any</span><span
+            class="method-args">()</span>
+        </div>
+
+        <div class="method-description">
+          
+
+        </div>
+
+
+        <div class="aliases">
+          Alias for: <a href="TDParser.html#method-i-any_rule">any_rule</a>
+        </div>
+      </div>
+
+      <div id="method-i-any_rule" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">any_rule</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          
+
+          <div class="method-source-code" id="any_rule-source">
+            <pre><span class="ruby-comment"># File lib/tdparser.rb, line 69</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">any_rule</span>
+  <span class="ruby-constant">AnyParser</span>.<span class="ruby-identifier">new</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+        <div class="aliases">
+          Also aliased as: <a href="TDParser.html#method-i-any">any</a>
+        </div>
+
+      </div>
+
+      <div id="method-i-back_ref" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">back_ref</span><span
+            class="method-args">(x, eqsym = :===)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          
+
+          <div class="method-source-code" id="back_ref-source">
+            <pre><span class="ruby-comment"># File lib/tdparser.rb, line 48</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">back_ref</span>(<span class="ruby-identifier">x</span>, <span class="ruby-identifier">eqsym</span> = <span class="ruby-value">:===</span>)
+  <span class="ruby-constant">BackrefParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">x</span>, <span class="ruby-identifier">eqsym</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+        <div class="aliases">
+          Also aliased as: <a href="TDParser.html#method-i-backref">backref</a>
+        </div>
+
+      </div>
+
+      <div id="method-i-backref" class="method-detail method-alias">
+        <div class="method-heading">
+          <span class="method-name">backref</span><span
+            class="method-args">(x, eqsym = :===)</span>
+        </div>
+
+        <div class="method-description">
+          
+
+        </div>
+
+
+        <div class="aliases">
+          Alias for: <a href="TDParser.html#method-i-back_ref">back_ref</a>
+        </div>
+      </div>
+
+      <div id="method-i-chain_left" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">chain_left</span><span
+            class="method-args">(base, *infixes, &amp;)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          
+
+          <div class="method-source-code" id="chain_left-source">
+            <pre><span class="ruby-comment"># File lib/tdparser.rb, line 115</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">chain_left</span>(<span class="ruby-identifier">base</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">infixes</span>, <span class="ruby-operator">&amp;</span>)
+  <span class="ruby-identifier">infixes</span>.<span class="ruby-identifier">inject</span>(<span class="ruby-identifier">base</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">acc</span>, <span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">leftrec</span>(<span class="ruby-identifier">acc</span>, <span class="ruby-identifier">r</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">acc</span>, <span class="ruby-operator">&amp;</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+        <div class="aliases">
+          Also aliased as: <a href="TDParser.html#method-i-chainl">chainl</a>
+        </div>
+
+      </div>
+
+      <div id="method-i-chain_right" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">chain_right</span><span
+            class="method-args">(base, *infixes, &amp;)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          
+
+          <div class="method-source-code" id="chain_right-source">
+            <pre><span class="ruby-comment"># File lib/tdparser.rb, line 123</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">chain_right</span>(<span class="ruby-identifier">base</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">infixes</span>, <span class="ruby-operator">&amp;</span>)
+  <span class="ruby-identifier">infixes</span>.<span class="ruby-identifier">inject</span>(<span class="ruby-identifier">base</span>) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">acc</span>, <span class="ruby-identifier">r</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">rightrec</span>(<span class="ruby-identifier">acc</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">r</span>, <span class="ruby-identifier">acc</span>, <span class="ruby-operator">&amp;</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+        <div class="aliases">
+          Also aliased as: <a href="TDParser.html#method-i-chainr">chainr</a>
+        </div>
+
+      </div>
+
+      <div id="method-i-chainl" class="method-detail method-alias">
+        <div class="method-heading">
+          <span class="method-name">chainl</span><span
+            class="method-args">(base, *infixes, &amp;)</span>
+        </div>
+
+        <div class="method-description">
+          
+
+        </div>
+
+
+        <div class="aliases">
+          Alias for: <a href="TDParser.html#method-i-chain_left">chain_left</a>
+        </div>
+      </div>
+
+      <div id="method-i-chainr" class="method-detail method-alias">
+        <div class="method-heading">
+          <span class="method-name">chainr</span><span
+            class="method-args">(base, *infixes, &amp;)</span>
+        </div>
+
+        <div class="method-description">
+          
+
+        </div>
+
+
+        <div class="aliases">
+          Alias for: <a href="TDParser.html#method-i-chain_right">chain_right</a>
+        </div>
+      </div>
+
+      <div id="method-i-condition" class="method-detail method-alias">
+        <div class="method-heading">
+          <span class="method-name">condition</span><span
+            class="method-args">(&amp;)</span>
+        </div>
+
+        <div class="method-description">
+          
+
+        </div>
+
+
+        <div class="aliases">
+          Alias for: <a href="TDParser.html#method-i-condition_rule">condition_rule</a>
+        </div>
+      </div>
+
+      <div id="method-i-condition_rule" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">condition_rule</span><span
+            class="method-args">(&amp;)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          
+
+          <div class="method-source-code" id="condition_rule-source">
+            <pre><span class="ruby-comment"># File lib/tdparser.rb, line 84</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">condition_rule</span>(<span class="ruby-operator">&amp;</span>)
+  <span class="ruby-constant">ConditionParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-operator">&amp;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+        <div class="aliases">
+          Also aliased as: <a href="TDParser.html#method-i-condition">condition</a>
+        </div>
+
+      </div>
+
+      <div id="method-i-empty" class="method-detail method-alias">
+        <div class="method-heading">
+          <span class="method-name">empty</span><span
+            class="method-args">(&amp;)</span>
+        </div>
+
+        <div class="method-description">
+          
+
+        </div>
+
+
+        <div class="aliases">
+          Alias for: <a href="TDParser.html#method-i-empty_rule">empty_rule</a>
+        </div>
+      </div>
+
+      <div id="method-i-empty_rule" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">empty_rule</span><span
+            class="method-args">(&amp;)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          
+
+          <div class="method-source-code" id="empty_rule-source">
+            <pre><span class="ruby-comment"># File lib/tdparser.rb, line 64</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">empty_rule</span>(<span class="ruby-operator">&amp;</span>)
+  <span class="ruby-constant">EmptyParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-operator">&amp;</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+        <div class="aliases">
+          Also aliased as: <a href="TDParser.html#method-i-empty">empty</a>
+        </div>
+
+      </div>
+
+      <div id="method-i-fail" class="method-detail method-alias">
+        <div class="method-heading">
+          <span class="method-name">fail</span><span
+            class="method-args">()</span>
+        </div>
+
+        <div class="method-description">
+          
+
+        </div>
+
+
+        <div class="aliases">
+          Alias for: <a href="TDParser.html#method-i-fail_rule">fail_rule</a>
+        </div>
+      </div>
+
+      <div id="method-i-fail_rule" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">fail_rule</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          
+
+          <div class="method-source-code" id="fail_rule-source">
+            <pre><span class="ruby-comment"># File lib/tdparser.rb, line 79</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">fail_rule</span>
+  <span class="ruby-constant">FailParser</span>.<span class="ruby-identifier">new</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+        <div class="aliases">
+          Also aliased as: <a href="TDParser.html#method-i-fail">fail</a>
+        </div>
+
+      </div>
+
+      <div id="method-i-left_rec" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">left_rec</span><span
+            class="method-args">(*rules, &amp;act)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          
+
+          <div class="method-source-code" id="left_rec-source">
+            <pre><span class="ruby-comment"># File lib/tdparser.rb, line 89</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">left_rec</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">rules</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">act</span>)
+  <span class="ruby-identifier">f</span> = <span class="ruby-identifier">proc</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">x</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">inject</span>(<span class="ruby-identifier">x</span>[<span class="ruby-value">0</span>]) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">acc</span>, <span class="ruby-identifier">y</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">act</span>.<span class="ruby-identifier">call</span>(<span class="ruby-constant">Sequence</span>[<span class="ruby-identifier">acc</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">y</span>])
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">base</span> = <span class="ruby-identifier">rules</span>.<span class="ruby-identifier">shift</span>
+  <span class="ruby-identifier">rules</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span> (<span class="ruby-identifier">base</span> <span class="ruby-operator">-</span> (<span class="ruby-identifier">r</span> <span class="ruby-operator">*</span> <span class="ruby-value">0</span>)) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">f</span> }.<span class="ruby-identifier">inject</span>(<span class="ruby-identifier">fail</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">acc</span>, <span class="ruby-identifier">r</span><span class="ruby-operator">|</span> <span class="ruby-identifier">r</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">acc</span> }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+        <div class="aliases">
+          Also aliased as: <a href="TDParser.html#method-i-leftrec">leftrec</a>
+        </div>
+
+      </div>
+
+      <div id="method-i-leftrec" class="method-detail method-alias">
+        <div class="method-heading">
+          <span class="method-name">leftrec</span><span
+            class="method-args">(*rules, &amp;act)</span>
+        </div>
+
+        <div class="method-description">
+          
+
+        </div>
+
+
+        <div class="aliases">
+          Alias for: <a href="TDParser.html#method-i-left_rec">left_rec</a>
+        </div>
+      </div>
+
+      <div id="method-i-none" class="method-detail method-alias">
+        <div class="method-heading">
+          <span class="method-name">none</span><span
+            class="method-args">()</span>
+        </div>
+
+        <div class="method-description">
+          
+
+        </div>
+
+
+        <div class="aliases">
+          Alias for: <a href="TDParser.html#method-i-none_rule">none_rule</a>
+        </div>
+      </div>
+
+      <div id="method-i-none_rule" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">none_rule</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          
+
+          <div class="method-source-code" id="none_rule-source">
+            <pre><span class="ruby-comment"># File lib/tdparser.rb, line 74</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">none_rule</span>
+  <span class="ruby-constant">NoneParser</span>.<span class="ruby-identifier">new</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+        <div class="aliases">
+          Also aliased as: <a href="TDParser.html#method-i-none">none</a>
+        </div>
+
+      </div>
+
+      <div id="method-i-right_rec" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">right_rec</span><span
+            class="method-args">(*rules, &amp;act)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          
+
+          <div class="method-source-code" id="right_rec-source">
+            <pre><span class="ruby-comment"># File lib/tdparser.rb, line 101</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">right_rec</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">rules</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">act</span>)
+  <span class="ruby-identifier">f</span> = <span class="ruby-identifier">proc</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">x</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">reverse</span>.<span class="ruby-identifier">inject</span>(<span class="ruby-identifier">x</span>[<span class="ruby-value">1</span>]) <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">acc</span>, <span class="ruby-identifier">y</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">ys</span> = <span class="ruby-identifier">y</span>.<span class="ruby-identifier">dup</span>
+      <span class="ruby-identifier">ys</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">acc</span>)
+      <span class="ruby-identifier">act</span>.<span class="ruby-identifier">call</span>(<span class="ruby-constant">Sequence</span>[<span class="ruby-operator">*</span><span class="ruby-identifier">ys</span>])
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">base</span> = <span class="ruby-identifier">rules</span>.<span class="ruby-identifier">pop</span>
+  <span class="ruby-identifier">rules</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span> ((<span class="ruby-identifier">r</span> <span class="ruby-operator">*</span> <span class="ruby-value">0</span>) <span class="ruby-operator">-</span> <span class="ruby-identifier">base</span>) <span class="ruby-operator">&gt;&gt;</span> <span class="ruby-identifier">f</span> }.<span class="ruby-identifier">inject</span>(<span class="ruby-identifier">fail</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">acc</span>, <span class="ruby-identifier">r</span><span class="ruby-operator">|</span> <span class="ruby-identifier">r</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">acc</span> }
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+        <div class="aliases">
+          Also aliased as: <a href="TDParser.html#method-i-rightrec">rightrec</a>
+        </div>
+
+      </div>
+
+      <div id="method-i-rightrec" class="method-detail method-alias">
+        <div class="method-heading">
+          <span class="method-name">rightrec</span><span
+            class="method-args">(*rules, &amp;act)</span>
+        </div>
+
+        <div class="method-description">
+          
+
+        </div>
+
+
+        <div class="aliases">
+          Alias for: <a href="TDParser.html#method-i-right_rec">right_rec</a>
+        </div>
+      </div>
+
+      <div id="method-i-rule" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">rule</span><span
+            class="method-args">(sym, *opts)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          
+
+          <div class="method-source-code" id="rule-source">
+            <pre><span class="ruby-comment"># File lib/tdparser.rb, line 40</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">rule</span>(<span class="ruby-identifier">sym</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">opts</span>)
+  <span class="ruby-constant">NonTerminalParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword">self</span>, <span class="ruby-identifier">sym</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">opts</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-stack_ref" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">stack_ref</span><span
+            class="method-args">(stack, eqsym = :===)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          
+
+          <div class="method-source-code" id="stack_ref-source">
+            <pre><span class="ruby-comment"># File lib/tdparser.rb, line 54</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">stack_ref</span>(<span class="ruby-identifier">stack</span>, <span class="ruby-identifier">eqsym</span> = <span class="ruby-value">:===</span>)
+  <span class="ruby-constant">StackrefParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">stack</span>, <span class="ruby-identifier">eqsym</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+        <div class="aliases">
+          Also aliased as: <a href="TDParser.html#method-i-stackref">stackref</a>
+        </div>
+
+      </div>
+
+      <div id="method-i-stackref" class="method-detail method-alias">
+        <div class="method-heading">
+          <span class="method-name">stackref</span><span
+            class="method-args">(stack, eqsym = :===)</span>
+        </div>
+
+        <div class="method-description">
+          
+
+        </div>
+
+
+        <div class="aliases">
+          Alias for: <a href="TDParser.html#method-i-stack_ref">stack_ref</a>
+        </div>
+      </div>
+
+      <div id="method-i-state" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">state</span><span
+            class="method-args">(s)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          
+
+          <div class="method-source-code" id="state-source">
+            <pre><span class="ruby-comment"># File lib/tdparser.rb, line 60</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">state</span>(<span class="ruby-identifier">s</span>)
+  <span class="ruby-constant">StateParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">s</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div id="method-i-token" class="method-detail ">
+        <div class="method-heading">
+          <span class="method-name">token</span><span
+            class="method-args">(x, eqsym = :===)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+
+        <div class="method-description">
+          
+
+          <div class="method-source-code" id="token-source">
+            <pre><span class="ruby-comment"># File lib/tdparser.rb, line 44</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier ruby-title">token</span>(<span class="ruby-identifier">x</span>, <span class="ruby-identifier">eqsym</span> = <span class="ruby-value">:===</span>)
+  <span class="ruby-constant">TerminalParser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">x</span>, <span class="ruby-identifier">eqsym</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+        </div>
+
+
+      </div>
+
+    </section>
+
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="https://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="https://ruby.github.io/rdoc/">RDoc</a> 6.4.0.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+
