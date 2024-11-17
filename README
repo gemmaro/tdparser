@@ -23,6 +23,11 @@ the feature of (2), we need not consider how to prevent conflicts
 among production rules.  In addition, TDParser can be viewed as an
 internal DSL for writing LL(k) grammars because of (3).
 
+Repository is located at:
+
+* Disroot[https://git.disroot.org/gemmaro/tdparser]
+* GitHub[https://github.com/gemmaro/tdparser] (for GitHub Pages)
+
 == License
 
   Copyright(C) 2003, 2004, 2005, 2006 Takaaki Tateishi <ttate@ttsky.net>
