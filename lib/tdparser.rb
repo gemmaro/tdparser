@@ -33,7 +33,7 @@ require "tdparser/state_parser"
 require "tdparser/grammar"
 
 module TDParser
-  ParserException = Class.new(RuntimeError)
+  ParserException = Class.new(RuntimeError) # :nodoc: Unused class
 
   include BufferUtils
 
