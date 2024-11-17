@@ -1,0 +1,11 @@
+#!/bin/sh
+set -eu
+tmp=$(mktemp -d)
+cp -r html/* "$tmp"
+pages=pages
+source=main
+git checkout $pages
+cp -r "$tmp"/* .
+git add .
+git commit -m "Update documentation."
+git checkout $source
